@@ -1,0 +1,87 @@
+﻿<%@ Master Language="C#" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<script runat="server">
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+
+        try
+        {
+            if (Session["username"].ToString() == "" || Session["username"] == null)
+            {
+                
+                Response.Redirect("~/Zaloguj.aspx");
+
+            }
+        }
+        catch (NullReferenceException) { Response.Redirect("~/Zaloguj.aspx"); }
+ 
+        string pht="photos/" + Session["username"] + "image.jpg";
+        string def = Server.MapPath("./") + "photos\\default.jpg";
+        string usrPhoto=Server.MapPath("./") + "photos\\" + Session["username"] + "image.jpg";
+        if (System.IO.File.Exists(usrPhoto))
+        {
+            photo.ImageUrl = pht;
+        }
+        else { photo.ImageUrl = "photos/default.jpg";
+        System.IO.File.Copy(def, usrPhoto);
+        }
+        
+       
+    }
+
+</script>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+
+    <title>Strona moja</title>
+    <style type="text/css">
+        
+    </style>
+
+    <script type="text/javascript">
+   
+
+        function showUploadConfirmation() {
+            alert("Zdjęcie załadowane!");
+        }
+    </script>
+    <link href="StyleSheet.css" rel="stylesheet" type="text/css" />
+</head>
+<body><form id="form1" runat="server">
+    <div id="Logo"><span class="log">Ktoszuka-tenznajdzie.pl</span><div class="men"><asp:Menu ID="MenuGlowne" runat="server" DataSourceID="MapaSerwisu" Orientation="Horizontal" CssClass="men" EnableTheming="True">
+            <DynamicHoverStyle CssClass="ZaznaczonyElementMenu" />
+            <DynamicMenuItemStyle CssClass="ElementMenuRozwijanego" />
+            <StaticHoverStyle CssClass="ZaznaczonyElementMenu" />
+            <StaticMenuItemStyle CssClass="ElementMenuNadrzednego" />
+        </asp:Menu></div>
+        </div>
+  
+    <div id="Menu">
+    <div id="ObszarLogowania">
+            <asp:LoginView ID="LoginView1" runat="server">
+                <AnonymousTemplate>
+                    <a href="Zarejestruj.aspx">Zarejestruj</a><br />
+                </AnonymousTemplate>
+                <LoggedInTemplate>
+                    Witaj
+                </LoggedInTemplate>
+            </asp:LoginView>
+            <asp:LoginName ID="LoginName2" runat="server" />
+&nbsp;| <asp:LoginStatus ID="LoginStatus2" runat="server" CssClass="LinkObszaruLogowania" LoginText="Zaloguj" LogoutAction="Redirect" LogoutPageUrl="~/Zaloguj.aspx" LogoutText="Wyloguj" />
+    </div>
+        
+     <p id="photo">  <asp:Image ID="photo" runat="server"  Width="100px" Height="100px"/></p> 
+      
+            <asp:SiteMapDataSource ID="MapaSerwisu" runat="server" ShowStartingNode="False" />
+       
+       </div>
+    <div id="Content">
+          <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
+        </asp:ContentPlaceHolder>
+
+    </div></form>
+</body>
+</html>
