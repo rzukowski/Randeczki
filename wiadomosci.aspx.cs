@@ -9,6 +9,7 @@ public partial class wiadomosci : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        String userid = Session["userid"].ToString();
+        Usr.DecrementNotification(userid);
     }
 }

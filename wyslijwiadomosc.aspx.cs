@@ -15,7 +15,7 @@ public partial class wyslijwiadomosc : System.Web.UI.Page
     {
         String touserid = Request.QueryString["userid"];
         String userid = Session["userid"].ToString();
-        if (Usr.SendMssg(userid, touserid, txtMessage.Text))
+        if (Usr.SendMssg(userid, touserid, txtMessage.Text) && Usr.IncrementNotification(touserid))
             lbl.Text = "Wiadomość wysłana";
         else
             lbl.Text = "Błąd wysyłania wiadomości";
