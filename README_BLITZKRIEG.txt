@@ -1,6 +1,7 @@
-
 // 18:57 2013-03-16
-darek: Hej Rafa³, doda³em ten plik do celów testowych, Gita.
-Myœlê ¿e mo¿e zostaæ, mo¿emy tu wpisywaæ ró¿ne informacje dla nas.
-Proponujê, najaktualniejsze u góry, w formacie np. tak jak zacz¹³em.
-Acha, Rafa³ jeszcze jedno, nie widzê pliku *.sln ...
+darek: Hej Rafaï¿½, dodaï¿½em ten plik do celï¿½w testowych, Gita.
+Myï¿½lï¿½ ï¿½e moï¿½e zostaï¿½, moï¿½emy tu wpisywaï¿½ rï¿½ï¿½ne informacje dla nas.
+Proponujï¿½, najaktualniejsze u gï¿½ry, w formacie np. tak jak zaczï¿½ï¿½em.
+Acha, Rafaï¿½ jeszcze jedno, nie widzï¿½ pliku *.sln ...
+
+Co do pliku .sln --> stwÃ³rz u siebie prosze nowy website, i z menu wybierz --> add existing website (i tutaj szukasz katalogu z plikami zrodlowymi)(
