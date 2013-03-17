@@ -1,7 +1,7 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" Title="Untitled Page" CodeFile="edytujprofil.aspx.cs" Inherits="edytujprofil" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="AjaxControlToolkit" %>
-
+<%@ Register assembly="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" namespace="System.Web.UI.WebControls" tagprefix="asp" %>
 <script runat="server">
 
 </script>
@@ -39,9 +39,9 @@
 <ControlStyle Width="100px"></ControlStyle>
             </asp:TemplateField>
 
-            <asp:TemplateField HeaderText="Płeć">
+             <asp:TemplateField HeaderText="Płeć">
                 <EditItemTemplate>
-                    <asp:DropDownList ID="DropDownList1" runat="server" DataSourceID="SqlDataSource2" DataTextField="plec" DataValueField="plec" SelectedValue='<%# Bind("plec") %>' Width="100px">
+                    <asp:DropDownList ID="DropDownList1" runat="server" DataSourceID="SqlDataSource2" DataTextField="plec" DataValueField="plec" SelectedValue='<%# Bind("plec") %>' Width="100px" AppendDataBoundItems="True">
                     </asp:DropDownList>
                 </EditItemTemplate>
                 <InsertItemTemplate>
@@ -50,17 +50,18 @@
                 <ItemTemplate>
                     <asp:Label ID="Label1" runat="server" Text='<%# Bind("plec") %>'></asp:Label>
                 </ItemTemplate>
-            </asp:TemplateField>
+</asp:TemplateField>
 
             <asp:CommandField ShowEditButton="True" CancelText="Anuluj" DeleteText="Usuń" EditText="Edytuj" UpdateText="Zmień" CausesValidation="False" HeaderStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center" FooterStyle-HorizontalAlign="Center" InsertVisible="True" ShowDeleteButton="False" />
             
         </Fields>
         <RowStyle Height="60px" HorizontalAlign="Left" VerticalAlign="Top" />
     </asp:DetailsView>
+                     
          &nbsp;</p>
     </div>
 <p style="height: 22px; width: 432px">
-    <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" SelectCommand="SELECT DISTINCT [plec] FROM [user_profile]"></asp:SqlDataSource>
+    <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" SelectCommand="SELECT DISTINCT [plec] FROM [plecDummy]"></asp:SqlDataSource>
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
         ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" 
         SelectCommand="SELECT userid,fullname,opis,plec,birthdate=(SUBSTRING(CAST(birthdate AS VARCHAR),0,11)) FROM [user_profile] WHERE ([userid] = @userid)"
@@ -74,9 +75,9 @@
             <asp:Parameter Name="userid" Type="Object" />
         </DeleteParameters>
         <UpdateParameters>
+            <asp:ControlParameter ControlID="DetailsView1$DropDownList1" Name="plec" PropertyName="SelectedValue" Type="String" />
             <asp:Parameter Name="fullname" Type="String" />
             <asp:Parameter Name="opis" Type="String" />
-            <asp:Parameter Name="plec" Type="String"/>
             <asp:Parameter Name="birthdate" Type="DateTime" />
             <asp:Parameter Name="userid" Type="Object" />
         </UpdateParameters>

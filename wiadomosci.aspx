@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" Title="Wiadomosci" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" Title="Wiadomosci" CodeFile="wiadomosci.aspx.cs" Inherits="wiadomosci"%>
 
 <%@ Register Assembly="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"
     Namespace="System.Web.UI.WebControls" TagPrefix="asp" %>
