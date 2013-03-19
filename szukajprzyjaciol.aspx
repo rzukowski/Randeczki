@@ -160,7 +160,11 @@
         <asp:ListItem>88</asp:ListItem>
         <asp:ListItem>89</asp:ListItem>
     </asp:DropDownList>
-&nbsp;</p>
+        &nbsp;</p>
+        <p>Województwo:
+    <asp:DropDownList ID="DropDownList4" runat="server" DataSourceID="SqlDataSource2" DataTextField="wojewodztwo" DataValueField="wojewodztwo_id"  Width="100px">
+</asp:DropDownList></p>
+
     <p>Płeć:
     <asp:DropDownList id="DropDownList1" runat="server" 
     autopostback="True">
@@ -200,7 +204,7 @@
              </td>
           </ItemTemplate>
        </asp:ListView>
-        
+        <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" SelectCommand="SELECT DISTINCT [wojewodztwo],[wojewodztwo_id] FROM [Wojewodztwa] ORDER BY [wojewodztwo] ASC"></asp:SqlDataSource>
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
             ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" 
             SelectCommand="Szukaj" SelectCommandType="StoredProcedure">
@@ -211,6 +215,8 @@
                     Type="String" />
                 <asp:ControlParameter ControlID="DropDownList3" Name="dateUp" PropertyName="Text" 
                     Type="String" />
+                <asp:ControlParameter ControlID="DropDownList4" Name="wojewodztwo_id" PropertyName="Text" 
+                    Type="Int32" />
                 <asp:SessionParameter Name="userid" SessionField="userid" Type="String" />
             </SelectParameters>
         </asp:SqlDataSource>

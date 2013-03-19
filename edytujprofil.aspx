@@ -52,6 +52,19 @@
                 </ItemTemplate>
 </asp:TemplateField>
 
+            <asp:TemplateField HeaderText="Województwo">
+                <EditItemTemplate>
+                    <asp:DropDownList ID="DropDownList2" runat="server" DataSourceID="SqlDataSource3" DataTextField="wojewodztwo" DataValueField="wojewodztwo_id" SelectedValue='<%# Bind("wojewodztwo_id") %>' Width="100px" AppendDataBoundItems="True">
+                    </asp:DropDownList>
+                </EditItemTemplate>
+                <InsertItemTemplate>
+                    <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("wojewodztwo_id") %>'></asp:TextBox>
+                </InsertItemTemplate>
+                <ItemTemplate>
+                    <asp:Label ID="Label1" runat="server" Text='<%# Bind("wojewodztwo_id") %>'></asp:Label>
+                </ItemTemplate>
+</asp:TemplateField>
+
             <asp:CommandField ShowEditButton="True" CancelText="Anuluj" DeleteText="Usuń" EditText="Edytuj" UpdateText="Zmień" CausesValidation="False" HeaderStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center" FooterStyle-HorizontalAlign="Center" InsertVisible="True" ShowDeleteButton="False" />
             
         </Fields>
@@ -61,13 +74,14 @@
          &nbsp;</p>
     </div>
 <p style="height: 22px; width: 432px">
+    <asp:SqlDataSource ID="SqlDataSource3" runat="server" ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" SelectCommand="SELECT DISTINCT [wojewodztwo],[wojewodztwo_id] FROM [Wojewodztwa] ORDER BY [wojewodztwo] ASC"></asp:SqlDataSource>
     <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" SelectCommand="SELECT DISTINCT [plec] FROM [plecDummy]"></asp:SqlDataSource>
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
         ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" 
-        SelectCommand="SELECT userid,fullname,opis,plec,birthdate=(SUBSTRING(CAST(birthdate AS VARCHAR),0,11)) FROM [user_profile] WHERE ([userid] = @userid)"
+        SelectCommand="SELECT userid,fullname,opis,plec,birthdate=(SUBSTRING(CAST(birthdate AS VARCHAR),0,11)),wojewodztwo_id FROM [user_profile] WHERE ([userid] = @userid)"
         DeleteCommand="DELETE FROM [user_profile] WHERE [userid] = @userid" 
-        InsertCommand="INSERT INTO [user_profile] ([userid], [fullname],[plec],[opis],[birthdate]) VALUES (@userid, @fullname, @plec, @opis, @birthdate)" 
-        UpdateCommand="UPDATE [user_profile] SET [fullname] = @fullname, [plec] = @plec, [opis]=@opis, [birthdate]=@birthdate WHERE [userid] = @userid">
+        InsertCommand="INSERT INTO [user_profile] ([userid], [fullname],[plec],[opis],[birthdate],[wojewodztwo_id]) VALUES (@userid, @fullname, @plec, @opis, @birthdate,@wojewodztwo_id)" 
+        UpdateCommand="UPDATE [user_profile] SET [fullname] = @fullname, [plec] = @plec, [opis]=@opis, [birthdate]=@birthdate,[wojewodztwo_id]=@wojewodztwo_id WHERE [userid] = @userid">
     <SelectParameters>
             <asp:SessionParameter Name="userid" SessionField="userid" Type="String" />
         </SelectParameters>
@@ -76,6 +90,7 @@
         </DeleteParameters>
         <UpdateParameters>
             <asp:ControlParameter ControlID="DetailsView1$DropDownList1" Name="plec" PropertyName="SelectedValue" Type="String" />
+            <asp:ControlParameter ControlID="DetailsView1$DropDownList2" Name="wojewodztwo_id" PropertyName="SelectedValue" Type="Int32" />
             <asp:Parameter Name="fullname" Type="String" />
             <asp:Parameter Name="opis" Type="String" />
             <asp:Parameter Name="birthdate" Type="DateTime" />

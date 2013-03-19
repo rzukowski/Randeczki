@@ -53,6 +53,11 @@ public class Usr
             cmd.Parameters.AddWithValue("@touserid", touserid);
             cmd.Parameters.AddWithValue("@message", message);
             cmd.ExecuteNonQuery();
+            SqlCommand cmd2 = new SqlCommand("insert into message_sent (sender_id,receiver_id,mssg,sentdate) values (@userid, @touserid,@message,getdate())", con);
+            cmd2.Parameters.AddWithValue("@userid", fromuserid);
+            cmd2.Parameters.AddWithValue("@touserid", touserid);
+            cmd2.Parameters.AddWithValue("@message", message);
+            cmd2.ExecuteNonQuery();
             return true;
         }
         catch (Exception ex)
