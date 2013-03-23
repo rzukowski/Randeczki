@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" Title="Untitled Page" CodeFile="edytujprofil.aspx.cs" Inherits="edytujprofil" %>
+﻿<%@ Language="C#" MasterPageFile="~/MasterPage.master" Title="Untitled Page" CodeFile="edytujprofil.aspx.cs" Inherits="edytujprofil" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="AjaxControlToolkit" %>
 <%@ Register assembly="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" namespace="System.Web.UI.WebControls" tagprefix="asp" %>
@@ -21,14 +21,14 @@
         Please Select…
        </div>
     <asp:Panel ID="pnlCustomers" runat="server" CssClass="MultipleSelectionDDL">
-            <asp:CheckBoxList ID="cblCustomerList" runat="server" onclick="spadaj(this)" DataSourceID="SqlDataSource5" DataTextField="sport_opis" DataValueField="sport_id">
+            <asp:CheckBoxList ID="cblCustomerList" runat="server" onclick="spadaj(this)" DataTextField="sport_opis" DataValueField="sport_id" Load="Cos">
             </asp:CheckBoxList>
         </asp:Panel>
         <br />
         <cc1:PopupControlExtender ID="pceSelections" runat="server" TargetControlID="divDDL"
                PopupControlID="pnlCustomers" Position="Bottom" OffsetY="-16" >
         </cc1:PopupControlExtender>
-         <asp:Button ID="Button2" runat="server" Text="Zmień" OnClick="Cos" />
+         <asp:Button ID="Button2" runat="server" Text="Zmień"  />
 
 
 

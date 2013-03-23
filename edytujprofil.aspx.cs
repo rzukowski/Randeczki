@@ -17,12 +17,45 @@ public partial class edytujprofil : System.Web.UI.Page
        
     }
 
+    protected void DataSource()
+    {
+        Dictionary<int,string> sporty = new Dictionary<int,string>();
+        SqlConnection con = new SqlConnection(ConnectionString);
+        con.Open();
+
+        SqlCommand cmd = new SqlCommand("SELECT DISTINCT [sport_id],[sport_opis] FROM [Sport]", con);
+          
+        try
+          {
+              using (SqlDataReader reader = cmd.ExecuteReader())
+              {
+                  while (reader.Read())
+                      sporty.Add(reader.GetInt32(0),reader.GetString(1));
+                  reader.Close();
+              }
+          }
+          catch (Exception ex)
+          {
+
+              HttpContext.Current.Trace.Write(ex.Message);
+          }
+          finally
+          {
+              con.Close();
+          }
+
+
+    }
+
+
     protected void Cos(object sender, EventArgs e)
     {
+
+        //metoda do zaznaczenia elementów z bazy danych usera w liscie rozwijanej (sport)
         List<string> sporty = new List<string>();
         SqlConnection con = new SqlConnection(ConnectionString);
         string userid = Session["userid"].ToString();
-        ContentPlaceHolder cph = (ContentPlaceHolder)this.Master.FindControl("ContentPlaceHolder1");
+        
         con.Open();
 
         SqlCommand cmd = new SqlCommand("SELECT sport_opis FROM Sport WHERE Sport.sport_id IN (SELECT sport_id FROM user_sport WHERE userid = @userid)", con);
