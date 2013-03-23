@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Data.SqlClient;
 public partial class edytujprofil : System.Web.UI.Page
@@ -13,7 +12,50 @@ public partial class edytujprofil : System.Web.UI.Page
     public static string ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["FriendsConnectionString"].ConnectionString;
 
     protected void Page_Load(object sender, EventArgs e)
+    {   
+       
+       
+    }
+
+    protected void Cos(object sender, EventArgs e)
     {
+        List<string> sporty = new List<string>();
+        SqlConnection con = new SqlConnection(ConnectionString);
+        string userid = Session["userid"].ToString();
+        ContentPlaceHolder cph = (ContentPlaceHolder)this.Master.FindControl("ContentPlaceHolder1");
+        con.Open();
+
+        SqlCommand cmd = new SqlCommand("SELECT sport_opis FROM Sport WHERE Sport.sport_id IN (SELECT sport_id FROM user_sport WHERE userid = @userid)", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+        try
+        {
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                    sporty.Add(reader.GetString(0));
+                reader.Close();
+            }
+        }
+        catch (Exception ex)
+        {
+
+            HttpContext.Current.Trace.Write(ex.Message);
+        }
+        finally
+        {
+            con.Close();
+        }
+        if (sporty.Count > 0)
+        {
+            CheckBoxList checkedListBox1 = (CheckBoxList)pnlCustomers.FindControl("cblCustomerList");
+            foreach (ListItem li in checkedListBox1.Items)
+            {
+                if (sporty.Contains(li.Text))
+                {
+                    li.Selected = true;
+                }
+            }
+        }
 
     }
     protected void ProcessUpload(object sender, AjaxControlToolkit.AsyncFileUploadEventArgs e)
@@ -70,4 +112,22 @@ public partial class edytujprofil : System.Web.UI.Page
 
         }
     }
+    protected void CheckBox(object sender, EventArgs e)
+    {
+    string bigText="";
+    ContentPlaceHolder cph = (ContentPlaceHolder)this.Master.FindControl("ContentPlaceHolder1");
+    CheckBoxList cbl = cph.FindControl("cblCustomerList") as CheckBoxList;
+    foreach (ListItem li in cbl.Items)
+        {
+        if (li.Text!=null)
+        {
+            bigText = bigText + li.Text + " ";
+        }
+        }
+    bigText = bigText.Trim();
+    
+    Label myLabel = cph.FindControl("iloscwiadomosci") as Label;
+    myLabel.Text = bigText;
+    }
+
 }

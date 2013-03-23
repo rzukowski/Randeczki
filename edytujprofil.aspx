@@ -2,17 +2,42 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="AjaxControlToolkit" %>
 <%@ Register assembly="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" namespace="System.Web.UI.WebControls" tagprefix="asp" %>
+
 <script runat="server">
 
 </script>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+    <asp:Label ID="iloscwiadomosc" runat="server"></asp:Label>
+    <script type="text/javascript">
+    </script>
+
     <h2 class="ulubieni">Edytuj profil</h2>
+
+    <p align="center">
+ 
+   
+     <div id="divDDL" class="divDDL" runat="server">
+        Please Select…
+       </div>
+    <asp:Panel ID="pnlCustomers" runat="server" CssClass="MultipleSelectionDDL">
+            <asp:CheckBoxList ID="cblCustomerList" runat="server" onclick="spadaj(this)" DataSourceID="SqlDataSource5" DataTextField="sport_opis" DataValueField="sport_id">
+            </asp:CheckBoxList>
+        </asp:Panel>
+        <br />
+        <cc1:PopupControlExtender ID="pceSelections" runat="server" TargetControlID="divDDL"
+               PopupControlID="pnlCustomers" Position="Bottom" OffsetY="-16" >
+        </cc1:PopupControlExtender>
+         <asp:Button ID="Button2" runat="server" Text="Zmień" OnClick="Cos" />
+
+
+
+    </p>
 <p align="center">
      <div style="border-width: 0px; width:418px; margin-left:auto; margin-right:auto; height: 277px;">
     <asp:DetailsView ID="DetailsView1" runat="server" AutoGenerateRows="False" 
         DataKeyNames="userid" DataSourceID="SqlDataSource1" DefaultMode="Edit" 
-        Height="179px" Width="415px" style="margin-right: 82px; margin-left: 0px;" OnPageIndexChanging="DetailsView1_PageIndexChanging" BorderStyle="None" GridLines="None" >
+        Height="179px" Width="415px" style="margin-right: 82px; margin-left: 0px;" BorderStyle="None" GridLines="None" >
         <CommandRowStyle Height="50px" />
         <EmptyDataRowStyle HorizontalAlign="Left" />
         <Fields>
@@ -64,15 +89,17 @@
                     <asp:Label ID="Label1" runat="server" Text='<%# Bind("wojewodztwo_id") %>'></asp:Label>
                 </ItemTemplate>
 </asp:TemplateField>
-
-            <asp:CommandField ShowEditButton="True" CancelText="Anuluj" DeleteText="Usuń" EditText="Edytuj" UpdateText="Zmień" CausesValidation="False" HeaderStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center" FooterStyle-HorizontalAlign="Center" InsertVisible="True" ShowDeleteButton="False" />
+<asp:CommandField ShowEditButton="True" CancelText="Anuluj" DeleteText="Usuń" EditText="Edytuj" UpdateText="Zmień" CausesValidation="False" HeaderStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center" FooterStyle-HorizontalAlign="Center" InsertVisible="True" ShowDeleteButton="False" />
             
         </Fields>
+
         <RowStyle Height="60px" HorizontalAlign="Left" VerticalAlign="Top" />
     </asp:DetailsView>
-                     
+
+
+
+         <br />                   
          &nbsp;</p>
-    </div>
 <p style="height: 22px; width: 432px">
     <asp:SqlDataSource ID="SqlDataSource3" runat="server" ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" SelectCommand="SELECT DISTINCT [wojewodztwo],[wojewodztwo_id] FROM [Wojewodztwa] ORDER BY [wojewodztwo] ASC"></asp:SqlDataSource>
     <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" SelectCommand="SELECT DISTINCT [plec] FROM [plecDummy]"></asp:SqlDataSource>
@@ -104,6 +131,10 @@
             <asp:Parameter Name="birthdate" Type="DateTime" />
         </InsertParameters>
     </asp:SqlDataSource>
+
+    <asp:SqlDataSource ID="SqlDataSource5" runat="server" ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" SelectCommand="SELECT DISTINCT [sport_id],[sport_opis] FROM [Sport]">
+    </asp:SqlDataSource>
+
 </p>
      <script type="text/javascript">
          function uploadComplete(sender, args) {
@@ -114,24 +145,60 @@
              // img.src = "/photos/" + args.get_fileName();
              // imgDisplay.src = img.src;
          }
+         function spadaj() {
+             var hdnCount = 0;
+             //getSelectionCount();
+             // ChangeDiv();
+             function ChangeDiv() {
+                 if (hdnCount > 0) {
+                     var div = document.getElementById('<%="divDDL.ClientID"%>');
+                     if (hdnCount < 5) { div.innerHTML = hdnCount + " elemeny"; }
+                     else { div.innerHTML = hdnCount + " elementów"; }
+
+                 }
+             }
+             function getSelectionCount() {
+                 alert("getSelectionCount");
+                 var cbl = document.getElementById('<%="pnlCustomers$cblCustomerList.ClientID"%>');
+                 var browser = navigator.appName;
+                 var pos = 0;
+                 if (browser.indexOf("Microsoft") >= 0) {
+                     pos = 0;
+                 }
+                 else {
+                     pos = 1;
+                 }
+                 var tbody = cbl.childNodes[pos];
+                 var length = (tbody.childNodes.length - pos);
+                 hdnCount = 0;
+                 for (i = 0; i < length; i++) {
+                     var td = tbody.childNodes[i].childNodes[pos];
+                     var chk = td.childNodes[0];
+                     if (chk.checked) {
+                         hdnCount++;
+                     }
+                 }
+
+             }
+         }
+
+
+
 </script>
     <h3 class="ulubieni" dir="rtl">Zmień zdjęcie</h3>
 Wybierz plik : 
     <asp:ScriptManager   
-            ID="ScriptManager1"  
+            ID="ScriptManager2"  
             runat="server"  
             >  
         </asp:ScriptManager>  
     <cc1:asyncfileupload ID="AsyncFileUpload1" runat="server" OnClientUploadComplete="uploadComplete"
             OnUploadedComplete="ProcessUpload" ErrorBackColor="White" UploaderStyle="Modern" ViewStateMode="Disabled" CompleteBackColor="White" Height="33px" />
-    <asp:Label ID="lblMsg" runat="server"></asp:Label>
-   <asp:Label runat="server" Text=" " ID="uploadResult" />
-
-    <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource1" style="margin-right: 42px" Width="148px">
-    </asp:GridView>
+    <asp:Label ID="Label4" runat="server"></asp:Label>
+   <asp:Label runat="server" Text=" " ID="Label5" />
 
 <p align="center">
     <a href="javascript: history.go(-1)">Powrót</a></p>
-
+    
 </asp:Content>
 
