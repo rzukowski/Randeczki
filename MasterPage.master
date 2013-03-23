@@ -21,7 +21,7 @@
             <StaticHoverStyle CssClass="ZaznaczonyElementMenu" />
             <StaticMenuItemStyle CssClass="ElementMenuNadrzednego" />
         </asp:Menu>
-        <asp:Label ID="NowaWiadomosc" runat="server"></asp:Label>
+        <asp:Label ID="NowaWiadomosc" runat="server" CssClass=""></asp:Label>
         </div>
         </div>
   
