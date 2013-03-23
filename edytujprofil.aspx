@@ -9,31 +9,29 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <asp:Label ID="iloscwiadomosc" runat="server"></asp:Label>
-    <script type="text/javascript">
-    </script>
-
+    
     <h2 class="ulubieni">Edytuj profil</h2>
-
-    <p align="center">
- 
-   
+    
+    <%-- Check box rozwijany ze sportami --%>
+   <h4 class="center"> Sport</h4>
      <div id="divDDL" class="divDDL" runat="server">
-        Please Select…
+        Proszę wybrać…
        </div>
     <asp:Panel ID="pnlCustomers" runat="server" CssClass="MultipleSelectionDDL">
-            <asp:CheckBoxList ID="cblCustomerList" runat="server" onclick="spadaj(this)" DataTextField="sport_opis" DataValueField="sport_id" Load="Cos">
+            <asp:CheckBoxList ID="cblCustomerList" runat="server" onclick="CountSelected(this)" ViewStateMode="Disabled">
             </asp:CheckBoxList>
         </asp:Panel>
         <br />
         <cc1:PopupControlExtender ID="pceSelections" runat="server" TargetControlID="divDDL"
-               PopupControlID="pnlCustomers" Position="Bottom" OffsetY="-16" >
+               PopupControlID="pnlCustomers" Position="Bottom" OffsetY="-10" >
         </cc1:PopupControlExtender>
-         <asp:Button ID="Button2" runat="server" Text="Zmień"  />
+    <p class="center" >
+         <asp:Button ID="Button2" runat="server" Text="Zmień"  onclik="Update_User_Sport_Table"/>
 
-
+        </p>
 
     </p>
-<p align="center">
+
      <div style="border-width: 0px; width:418px; margin-left:auto; margin-right:auto; height: 277px;">
     <asp:DetailsView ID="DetailsView1" runat="server" AutoGenerateRows="False" 
         DataKeyNames="userid" DataSourceID="SqlDataSource1" DefaultMode="Edit" 
@@ -49,7 +47,7 @@
 <ControlStyle Height="50px" Width="300px"></ControlStyle>
             </asp:BoundField>
 
-            <asp:TemplateField HeaderText="Data Urodzin" ControlStyle-Width="100px">
+            <asp:TemplateField HeaderText="Data Urodzin" ControlStyle-Width="100px" ControlStyle-BorderStyle="NotSet">
                 <EditItemTemplate>
                     <asp:TextBox ID="TextBox1" runat="server" Text='<%#  Bind("birthdate") %>' Height="22px" Width="300px"></asp:TextBox>
                     <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ControlToValidate="TextBox1" ErrorMessage="Format daty urodzin: yyyy-MM-dd (np. 1977-12-20)" ValidationExpression="^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$" Display="Dynamic" Font-Size="13px" Font-Underline="False"></asp:RegularExpressionValidator>
@@ -95,11 +93,11 @@
 
         <RowStyle Height="60px" HorizontalAlign="Left" VerticalAlign="Top" />
     </asp:DetailsView>
-
+</div>
 
 
          <br />                   
-         &nbsp;</p>
+
 <p style="height: 22px; width: 432px">
     <asp:SqlDataSource ID="SqlDataSource3" runat="server" ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" SelectCommand="SELECT DISTINCT [wojewodztwo],[wojewodztwo_id] FROM [Wojewodztwa] ORDER BY [wojewodztwo] ASC"></asp:SqlDataSource>
     <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" SelectCommand="SELECT DISTINCT [plec] FROM [plecDummy]"></asp:SqlDataSource>
@@ -132,11 +130,10 @@
         </InsertParameters>
     </asp:SqlDataSource>
 
-    <asp:SqlDataSource ID="SqlDataSource5" runat="server" ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" SelectCommand="SELECT DISTINCT [sport_id],[sport_opis] FROM [Sport]">
-    </asp:SqlDataSource>
-
 </p>
      <script type="text/javascript">
+
+         //info o uploadowanym zdjęciu
          function uploadComplete(sender, args) {
              alert("Zdjęcie wrzucone!");
              var imgDisplay = $get("photo");
@@ -145,21 +142,26 @@
              // img.src = "/photos/" + args.get_fileName();
              // imgDisplay.src = img.src;
          }
-         function spadaj() {
+
+         //funckja do obliczania zaznaczonych kategorii sport
+         function CountSelected() {
              var hdnCount = 0;
-             //getSelectionCount();
-             // ChangeDiv();
+             getSelectionCount();
+             ChangeDiv();
+
+             //zmiana tekstu diva
              function ChangeDiv() {
                  if (hdnCount > 0) {
-                     var div = document.getElementById('<%="divDDL.ClientID"%>');
-                     if (hdnCount < 5) { div.innerHTML = hdnCount + " elemeny"; }
+                     var div = document.getElementById('<%=divDDL.ClientID%>');
+                     if (hdnCount == 1) { div.innerHTML = "1 element"; }
+                     else if (hdnCount < 5) { div.innerHTML = hdnCount + " elementy"; }
                      else { div.innerHTML = hdnCount + " elementów"; }
 
                  }
              }
+             //zliczanie zaznaczonych elementów
              function getSelectionCount() {
-                 alert("getSelectionCount");
-                 var cbl = document.getElementById('<%="pnlCustomers$cblCustomerList.ClientID"%>');
+                 var cbl = document.getElementById('<%=pnlCustomers.FindControl("cblCustomerList").ClientID%>');
                  var browser = navigator.appName;
                  var pos = 0;
                  if (browser.indexOf("Microsoft") >= 0) {

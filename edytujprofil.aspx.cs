@@ -12,46 +12,50 @@ public partial class edytujprofil : System.Web.UI.Page
     public static string ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["FriendsConnectionString"].ConnectionString;
 
     protected void Page_Load(object sender, EventArgs e)
-    {   
-       
-       
-    }
-
-    protected void DataSource()
     {
-        Dictionary<int,string> sporty = new Dictionary<int,string>();
-        SqlConnection con = new SqlConnection(ConnectionString);
-        con.Open();
-
-        SqlCommand cmd = new SqlCommand("SELECT DISTINCT [sport_id],[sport_opis] FROM [Sport]", con);
-          
         try
-          {
-              using (SqlDataReader reader = cmd.ExecuteReader())
-              {
-                  while (reader.Read())
-                      sporty.Add(reader.GetInt32(0),reader.GetString(1));
-                  reader.Close();
-              }
-          }
-          catch (Exception ex)
-          {
+        {
+            BuildCheckBox();
+        }
+        catch (Exception ex)
+        {
 
-              HttpContext.Current.Trace.Write(ex.Message);
-          }
-          finally
-          {
-              con.Close();
-          }
+        }
 
+       
+       
+    }
+
+    protected void BuildCheckBox()
+    {
+        SqlConnection con = new SqlConnection(ConnectionString);
+
+        //dodaje do checkboxlist elementy
+        // Dictionary<int, string> sportyCat = DataSource();
+        CheckBoxList checkedListBox1 = (CheckBoxList)pnlCustomers.FindControl("cblCustomerList");
+        SqlCommand cmd = new SqlCommand("SELECT DISTINCT [sport_id],[sport_opis] FROM [Sport]", con);
+        con.Open();
+        SqlDataReader reader = cmd.ExecuteReader();
+
+        checkedListBox1.DataSource = reader;
+        checkedListBox1.DataTextField = "sport_opis";
+        checkedListBox1.DataValueField = "sport_id";
+        checkedListBox1.DataBind();
+
+        //        foreach (KeyValuePair<int, string> pair in sportyCat)
+        //         {
+        //            
+        //         checkedListBox1.Items.Add(new ListItem(pair.Key.ToString(),pair.Value));
+        //        }
+
+        //idz do metody zaznaczającej dane z bazy
+        SelectCheckBox();
 
     }
 
-
-    protected void Cos(object sender, EventArgs e)
+    //metoda do zaznaczenia elementów z bazy danych usera w liscie rozwijanej (sport)
+    protected void SelectCheckBox()
     {
-
-        //metoda do zaznaczenia elementów z bazy danych usera w liscie rozwijanej (sport)
         List<string> sporty = new List<string>();
         SqlConnection con = new SqlConnection(ConnectionString);
         string userid = Session["userid"].ToString();
@@ -89,8 +93,31 @@ public partial class edytujprofil : System.Web.UI.Page
                 }
             }
         }
+        if(sporty.Count==1){
+            divDDL.InnerText = "1 element";
+        }
+        else if (sporty.Count < 5)
+        {
+
+            divDDL.InnerText = sporty.Count + " elementy";
+
+        }
+        else
+        {
+            divDDL.InnerText = sporty.Count + " elementów";
+
+        }
+    }
+
+    //metoda updajtująca tabelę User_Sport
+    protected void Update_User_Sport_Table()
+    {
+
+
+
 
     }
+
     protected void ProcessUpload(object sender, AjaxControlToolkit.AsyncFileUploadEventArgs e)
     {
         //ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "size", "top.$get(\"" + uploadResult.ClientID + "\").innerHTML = 'Uploaded size: " + AsyncFileUpload1.FileBytes.Length.ToString() + "';", true);
@@ -113,7 +140,7 @@ public partial class edytujprofil : System.Web.UI.Page
 
     }
 
-    
+    /*
     protected void ddl_ItemUpdating(object sender, DetailsViewUpdateEventArgs e)
     {
 
@@ -145,6 +172,7 @@ public partial class edytujprofil : System.Web.UI.Page
 
         }
     }
+    
     protected void CheckBox(object sender, EventArgs e)
     {
     string bigText="";
@@ -162,5 +190,38 @@ public partial class edytujprofil : System.Web.UI.Page
     Label myLabel = cph.FindControl("iloscwiadomosci") as Label;
     myLabel.Text = bigText;
     }
+      
+    //pobiera z tabeli Sport dane sport_id oraz sport_opis
+    protected Dictionary<int,string> DataSource()
+    {
+        Dictionary<int,string> sporty = new Dictionary<int,string>();
+        SqlConnection con = new SqlConnection(ConnectionString);
+        con.Open();
 
+        SqlCommand cmd = new SqlCommand("SELECT DISTINCT [sport_id],[sport_opis] FROM [Sport]", con);
+          
+        try
+          {
+              using (SqlDataReader reader = cmd.ExecuteReader())
+              {
+                  while (reader.Read())
+                      sporty.Add(reader.GetInt32(0),reader.GetString(1));
+                  reader.Close();
+              }
+          }
+          catch (Exception ex)
+          {
+
+              HttpContext.Current.Trace.Write(ex.Message);
+          }
+          finally
+          {
+              con.Close();
+              
+          }
+
+        return sporty;
+    }     * 
+     * 
+    */
 }
