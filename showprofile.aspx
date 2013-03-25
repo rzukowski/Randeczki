@@ -13,16 +13,19 @@
                 Type="String" />
         </SelectParameters>
     </asp:SqlDataSource>
-    <asp:FormView ID="FormView1" runat="server" DataSourceID="SqlDataSource1">
+    <asp:FormView ID="FormView1" runat="server" DataSourceID="SqlDataSource1" OnItemCreated="SelectSporty">
         <ItemTemplate>
            <h3><%# Eval("username") %></h3>
             <img src='photos/<%# Eval("username") %>image.jpg' alt="No Photo" width="100px" height="100px" />
             <p />
             <span class="black">Płeć:</span> <%# Eval("plec") %>
             <br />
+            <span class="black">Wojewodztwo: <%# Eval("wojewodztwo") %><br />
+
           <span class="black">Data Urodzin:</span> <%# Eval("birthdate") %>
             <br />
            <span class="black">O mnie:</span> <%# Eval("opis") %><br />
+            <span class="black">Uprawiany sport: <asp:Label ID="Sporty" runat="server"></asp:Label><br />
             <a href='wyslijwiadomosc.aspx?userid=<%# Eval("userid") %>'> Wyslij wiadomość</a>
          </ItemTemplate>
 </asp:FormView>

@@ -1,10 +1,19 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="szukajprzyjaciol.aspx.cs" Inherits="szukajprzyjaciol" Title="Untitled Page" %>
-
 <%@ Register assembly="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" namespace="System.Web.UI.WebControls" tagprefix="asp" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="AjaxControlToolkit" %>
+
 
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+    <asp:ScriptManager   
+            ID="ScriptManager2"  
+            runat="server"  
+            >  
+        </asp:ScriptManager>  
+  
+
     <h2>Szukaj</h2>
     <p>&nbsp;<p>Wiek od :&nbsp;&nbsp;&nbsp;&nbsp;
     <asp:DropDownList ID="DropDownList2" runat="server">
@@ -161,18 +170,32 @@
         <asp:ListItem>89</asp:ListItem>
     </asp:DropDownList>
         &nbsp;</p>
-        <p>Województwo:
-    <asp:DropDownList ID="DropDownList4" runat="server" DataSourceID="SqlDataSource2" DataTextField="wojewodztwo" DataValueField="wojewodztwo_id"  Width="100px">
-</asp:DropDownList></p>
 
     <p>Płeć:
-    <asp:DropDownList id="DropDownList1" runat="server" 
-    autopostback="True">
+    <asp:DropDownList id="DropDownList1" runat="server" >
   <asp:listitem>Kobieta</asp:listitem>
   <asp:listitem>Mężczyzna</asp:listitem>
 </asp:DropDownList>
     </p>
-        <asp:Button ID="btnSearch" runat="server" Text="Szukaj" />
+        </p>
+    Województwo:
+    <%-- Check box rozwijany z wojewodztwami --%>
+        <div id="divDDL" class="divDDL" runat="server">
+        Województwo
+       </div>
+    <asp:Panel ID="pnlWojewodztwa" runat="server" CssClass="MultipleSelectionDDL">
+            <asp:CheckBoxList ID="cblWojewodztwa" runat="server" >
+            </asp:CheckBoxList>
+        </asp:Panel>
+        <br />
+        <cc1:PopupControlExtender ID="pceSelections" runat="server" TargetControlID="divDDL"
+               PopupControlID="pnlWojewodztwa" Position="Bottom" OffsetY="-1" >
+        </cc1:PopupControlExtender>
+       
+    <p class="center" >
+
+
+        <asp:Button ID="btnSearch" runat="server" Text="Szukaj" OnClick="AddWojewodztwoParameter"/>
     &nbsp;</p>
     <p>
         <asp:ListView ID="ListView1" runat="server" DataSourceID="SqlDataSource1" GroupItemCount ="2">
@@ -204,7 +227,7 @@
              </td>
           </ItemTemplate>
        </asp:ListView>
-        <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" SelectCommand="SELECT DISTINCT [wojewodztwo],[wojewodztwo_id] FROM [Wojewodztwa] ORDER BY [wojewodztwo] ASC"></asp:SqlDataSource>
+
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
             ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" 
             SelectCommand="Szukaj" SelectCommandType="StoredProcedure">
@@ -215,9 +238,8 @@
                     Type="String" />
                 <asp:ControlParameter ControlID="DropDownList3" Name="dateUp" PropertyName="Text" 
                     Type="String" />
-                <asp:ControlParameter ControlID="DropDownList4" Name="wojewodztwo_id" PropertyName="Text" 
-                    Type="Int32" />
                 <asp:SessionParameter Name="userid" SessionField="userid" Type="String" />
+                <asp:Parameter Name="wojewodztwo_id" />
             </SelectParameters>
         </asp:SqlDataSource>
     </p>

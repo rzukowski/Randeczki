@@ -17,15 +17,15 @@
         Proszę wybrać…
        </div>
     <asp:Panel ID="pnlCustomers" runat="server" CssClass="MultipleSelectionDDL">
-            <asp:CheckBoxList ID="cblCustomerList" runat="server" onclick="CountSelected(this)" ViewStateMode="Disabled">
+            <asp:CheckBoxList ID="cblCustomerList" runat="server" onclick="CountSelected(this)">
             </asp:CheckBoxList>
         </asp:Panel>
         <br />
         <cc1:PopupControlExtender ID="pceSelections" runat="server" TargetControlID="divDDL"
-               PopupControlID="pnlCustomers" Position="Bottom" OffsetY="-10" >
+               PopupControlID="pnlCustomers" Position="Bottom" OffsetY="-1" >
         </cc1:PopupControlExtender>
     <p class="center" >
-         <asp:Button ID="Button2" runat="server" Text="Zmień"  onclik="Update_User_Sport_Table"/>
+         <asp:Button ID="Button2" runat="server" Text="Zmień" OnClick="Update_User_Sport_Table"/>
 
         </p>
 
@@ -98,7 +98,7 @@
          <br />                   
 
 <p style="height: 22px; width: 432px">
-    <asp:SqlDataSource ID="SqlDataSource3" runat="server" ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" SelectCommand="SELECT DISTINCT [wojewodztwo],[wojewodztwo_id] FROM [Wojewodztwa] ORDER BY [wojewodztwo] ASC"></asp:SqlDataSource>
+    <asp:SqlDataSource ID="SqlDataSource3" runat="server" ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" SelectCommand="SELECT DISTINCT [wojewodztwo],[wojewodztwo_id] FROM [Wojewodztwa] ORDER BY [wojewodztwo_id] DESC"></asp:SqlDataSource>
     <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" SelectCommand="SELECT DISTINCT [plec] FROM [plecDummy]"></asp:SqlDataSource>
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
         ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" 

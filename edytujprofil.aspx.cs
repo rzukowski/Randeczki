@@ -13,16 +13,18 @@ public partial class edytujprofil : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        try
+        if (!IsPostBack)
         {
-            BuildCheckBox();
-        }
-        catch (Exception ex)
-        {
+            try
+            {
+                BuildCheckBox();
+            }
+            catch (Exception ex)
+            {
+
+            }
 
         }
-
-       
        
     }
 
@@ -53,13 +55,12 @@ public partial class edytujprofil : System.Web.UI.Page
 
     }
 
-    //metoda do zaznaczenia elementów z bazy danych usera w liscie rozwijanej (sport)
-    protected void SelectCheckBox()
+    //metoda pobierająca wszystkie kategorie sportu uprawiane przez danego usera (tabela user_sport);
+    protected List<string> GetSportsFromUserSportTable(string userid)
     {
-        List<string> sporty = new List<string>();
         SqlConnection con = new SqlConnection(ConnectionString);
-        string userid = Session["userid"].ToString();
-        
+        List<string> sporty = new List<string>();
+
         con.Open();
 
         SqlCommand cmd = new SqlCommand("SELECT sport_opis FROM Sport WHERE Sport.sport_id IN (SELECT sport_id FROM user_sport WHERE userid = @userid)", con);
@@ -82,6 +83,18 @@ public partial class edytujprofil : System.Web.UI.Page
         {
             con.Close();
         }
+        return sporty;
+
+    }
+
+    //metoda do zaznaczenia elementów z bazy danych usera w liscie rozwijanej (sport)
+    protected void SelectCheckBox()
+    {
+        List<string> sporty = new List<string>();
+        string userid = Session["userid"].ToString();
+
+        sporty = GetSportsFromUserSportTable(userid);
+
         if (sporty.Count > 0)
         {
             CheckBoxList checkedListBox1 = (CheckBoxList)pnlCustomers.FindControl("cblCustomerList");
@@ -110,10 +123,86 @@ public partial class edytujprofil : System.Web.UI.Page
     }
 
     //metoda updajtująca tabelę User_Sport
-    protected void Update_User_Sport_Table()
+    protected void Update_User_Sport_Table(object sender, EventArgs e)
     {
+       
+        string userid = Session["userid"].ToString();
+        int selectedSportsNumber = 0;
+        List<string> sporty = GetSportsFromUserSportTable(userid);
+        CheckBoxList checkedListBox1 = (CheckBoxList)pnlCustomers.FindControl("cblCustomerList");
+        foreach (ListItem li in checkedListBox1.Items)
+        {
+            if (li.Selected && !sporty.Contains(li.Text) )
+            {
+                try
+                {
+                    ExecuteCommandInsert(li.Value, userid);
+                    selectedSportsNumber++;
+                }
+                catch (Exception ex)
+                {
+                    HttpContext.Current.Trace.Write(ex.Message);
+                }
+            }
+            else if (!li.Selected && sporty.Contains(li.Text))
+            {
+                try
+                {
+                    ExecuteCommandDelete(li.Value, userid);
+
+                }
+                catch (Exception ex)
+                {
+                    HttpContext.Current.Trace.Write(ex.Message);
+                }
+
+            }
+            else if (li.Selected && sporty.Contains(li.Text))
+            {
+                selectedSportsNumber++;
+            }
+        }
+        
+        if (selectedSportsNumber == 1)
+        {
+            divDDL.InnerText = "1 element";
+        }
+        else if (selectedSportsNumber < 5 && selectedSportsNumber > 0)
+        {
+
+            divDDL.InnerText = selectedSportsNumber + " elementy";
+
+        }
+        else
+        {
+            divDDL.InnerText = selectedSportsNumber + " elementów";
+
+        }
+
+    }
+    //metoda wykonująca inserta do user_sport
+    protected void ExecuteCommandInsert(string id,string userid)
+    {
+        SqlConnection con = new SqlConnection(ConnectionString);
+        con.Open();
+        SqlCommand cmd = new SqlCommand("INSERT INTO user_sport VALUES (@userid,@id)", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+        cmd.Parameters.AddWithValue("@id", id);
+        cmd.ExecuteNonQuery(); 
+        con.Close();
 
 
+    }
+
+    protected void ExecuteCommandDelete(string id, string userid)
+    {
+        SqlConnection con = new SqlConnection(ConnectionString);
+        con.Open();
+        SqlCommand cmd = new SqlCommand("DELETE FROM user_sport WHERE userid=@userid AND sport_id = @id", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+        cmd.Parameters.AddWithValue("@id", id);
+        cmd.ExecuteNonQuery();
+        con.Close();
 
 
     }
