@@ -13,6 +13,10 @@
     
     <%-- Check box rozwijany ze sportami --%>
    <h4 class="center"> Sport</h4>
+    <asp:ScriptManager ID="ScriptManager1" runat="server">
+    </asp:ScriptManager>
+    <asp:UpdatePanel runat="server" id="UpdatePanel" updatemode="Conditional">
+         <ContentTemplate>
      <div id="divDDL" class="divDDL" runat="server">
         Proszę wybrać…
        </div>
@@ -28,7 +32,8 @@
          <asp:Button ID="Button2" runat="server" Text="Zmień" OnClick="Update_User_Sport_Table"/>
 
         </p>
-
+             </ContentTemplate>
+        </asp:UpdatePanel>
     </p>
 
      <div style="border-width: 0px; width:418px; margin-left:auto; margin-right:auto; height: 277px;">
@@ -188,10 +193,7 @@
 </script>
     <h3 class="ulubieni" dir="rtl">Zmień zdjęcie</h3>
 Wybierz plik : 
-    <asp:ScriptManager   
-            ID="ScriptManager2"  
-            runat="server"  
-            >  
+  
         </asp:ScriptManager>  
     <cc1:asyncfileupload ID="AsyncFileUpload1" runat="server" OnClientUploadComplete="uploadComplete"
             OnUploadedComplete="ProcessUpload" ErrorBackColor="White" UploaderStyle="Modern" ViewStateMode="Disabled" CompleteBackColor="White" Height="33px" />

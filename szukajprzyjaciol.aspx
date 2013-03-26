@@ -178,9 +178,8 @@
 </asp:DropDownList>
     </p>
         </p>
-    Województwo:
     <%-- Check box rozwijany z wojewodztwami --%>
-        <div id="divDDL" class="divDDL" runat="server">
+        <div id="divDDL2" class="divDDL2" runat="server">
         Województwo
        </div>
     <asp:Panel ID="pnlWojewodztwa" runat="server" CssClass="MultipleSelectionDDL">
@@ -188,7 +187,7 @@
             </asp:CheckBoxList>
         </asp:Panel>
         <br />
-        <cc1:PopupControlExtender ID="pceSelections" runat="server" TargetControlID="divDDL"
+        <cc1:PopupControlExtender ID="pceSelections" runat="server" TargetControlID="divDDL2"
                PopupControlID="pnlWojewodztwa" Position="Bottom" OffsetY="-1" >
         </cc1:PopupControlExtender>
        
