@@ -15,6 +15,13 @@ public partial class addfriend : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Session["username"].ToString() == "" || Session["username"] == null)
+        {
+
+            Response.Redirect("~/Zaloguj.aspx");
+
+        }
+
         String friendid = Request.QueryString["userid"];
         String username = Request.QueryString["username"];
         String userid = Session["userid"].ToString();

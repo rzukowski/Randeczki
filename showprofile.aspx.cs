@@ -15,6 +15,14 @@ public partial class showprofile : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+
+        if (Session["username"].ToString() == "" || Session["username"] == null)
+        {
+
+            Response.Redirect("~/Zaloguj.aspx");
+
+        }
+
        // String username = Request.QueryString["username"];
       //  String pth = Server.MapPath("./") + username + "image.jpg";
      //   if (System.IO.File.Exists(pth))
@@ -27,6 +35,75 @@ public partial class showprofile : System.Web.UI.Page
     //        photoProfile.ImageUrl = "photos/default.jpg";
             //ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "image", "top.$get(\"photoProfile\").src = 'photos/default.jpg';", true);
     //    }
+        SaveVisited();
+
+    }
+
+
+    protected void SaveVisited()
+    {
+
+        string odwiedzanyid = Request.QueryString["userid"];
+        string odwiedzilid = Session["userid"].ToString();
+        DateTime date = DateTime.Now;
+        SqlConnection con = new SqlConnection(ConnectionString);
+        if (!GetTime(odwiedzanyid,odwiedzilid,date))
+        {
+            try
+            {
+                
+                SqlCommand cmd = new SqlCommand("INSERT INTO Viewed (OdwiedzanyId,OdwiedzilId,Data,viewed) VALUES (@odwiedzanyid,@odwiedzilid,@date,0)", con);
+                cmd.Parameters.AddWithValue("@odwiedzanyid", odwiedzanyid);
+                cmd.Parameters.AddWithValue("@odwiedzilid", odwiedzilid);
+                cmd.Parameters.AddWithValue("@date", date);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                HttpContext.Current.Trace.Write(ex.Message);
+
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+    }
+
+    //sprawdza czy user przez ostatnią godzinę odwiedzał danego usera (jeśli tak, to nie zapisujemy informacji o odwiedzinach w bazie)
+    public bool GetTime(string odwiedzanyid, string odwiedzilid, DateTime date)
+    {
+        SqlConnection con = new SqlConnection(ConnectionString);
+        bool hasRows;
+        SqlCommand cmd = new SqlCommand("SELECT * FROM Viewed where OdwiedzanyId = @odwiedzanyid AND OdwiedzilId= @odwiedzilid AND DATEDIFF(hour,Data,@date)<1 ",con);
+        cmd.Parameters.AddWithValue("@odwiedzanyid", odwiedzanyid);
+        cmd.Parameters.AddWithValue("@odwiedzilid", odwiedzilid);
+        cmd.Parameters.AddWithValue("@date", date);
+        con.Open();
+
+        try
+        {
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.HasRows)
+                   hasRows = true;
+                else
+                   hasRows = false;
+            }
+        }
+        catch (Exception ex)
+        {
+
+            HttpContext.Current.Trace.Write(ex.Message);
+            hasRows = true;
+        }
+        finally
+        {
+            con.Close();
+        }
+
+        return hasRows;
 
     }
 

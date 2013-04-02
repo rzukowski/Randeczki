@@ -46,6 +46,8 @@
       
             <asp:SiteMapDataSource ID="MapaSerwisu" runat="server" ShowStartingNode="False" />
        
+        Odwiedzili:<a href="Odwiedzili.aspx"><asp:Label runat="server" ID="OdwiedziliNew"></asp:Label><asp:Label runat="server" ID="OdwiedziliTotal"></asp:Label></a>
+
        </div>
     <div id="Content">
           <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">

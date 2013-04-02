@@ -9,6 +9,13 @@ public partial class wiadomosci : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Session["username"].ToString() == "" || Session["username"] == null)
+        {
+
+            Response.Redirect("~/Zaloguj.aspx");
+
+        }
+
         String userid = Session["userid"].ToString();
         Usr.DecrementNotification(userid);
     }

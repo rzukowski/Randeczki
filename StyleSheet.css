@@ -73,6 +73,11 @@ div#Content {
     width:500px;
     top:5px;
 }
+#OdwiedziliNew {
+    font-weight:bold;
+    font-size:24px;
+}
+
 #menu {
     position: relative;
 }

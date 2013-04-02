@@ -9,6 +9,11 @@ public partial class SkrzynkaOdbiorcza : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Session["username"].ToString() == "" || Session["username"] == null)
+        {
 
+            Response.Redirect("~/Zaloguj.aspx");
+
+        }
     }
 }
