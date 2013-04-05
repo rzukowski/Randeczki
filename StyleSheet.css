@@ -8,6 +8,40 @@
     font-family:'Comic Sans MS';
     bottom: 1px;
 }
+ul.zakladki {
+    margin:auto;
+    width: 50%;
+    overflow: hidden;
+    border-bottom:1px solid black;
+    text-align:center;
+
+}
+
+ul.zakladki li{
+
+   display:inline-block;
+   *display:inline; /*IE7*/
+   *zoom:1; /*IE7*/
+    list-style: none;
+    border-color:black;
+    border:1px solid white;
+    
+}
+
+
+
+ul.zakladki li a {
+    float: left;
+    padding: 5px;
+    background: #75CE07;
+    color: black;
+    
+}
+
+ul.zakladki li a:hover {
+    background: #80FF80;
+}
+
 #LoginView1{ color: red; }
 .auto-style1 {
             width: 23%;       }

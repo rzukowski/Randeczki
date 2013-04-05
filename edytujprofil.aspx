@@ -8,9 +8,48 @@
 </script>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //dla każdego miejsca z tabami
+            $('.zakladki').each(function () {
+                var $li = $(this).children('li');
+                //przy wejsciu na strone ukrywamy tresc tabow i pokazujemy tylko aktywny...
+                $li.each(function () { //pętla po wszystkich tabach
+                    var $trescTaba = $($(this).children('a').attr('href')); //pobieramy blok o id pobranym z linka-taba
+                    if ($(this).hasClass('active')) { //jeżeli ten tab ma klasę aktywną
+                        $trescTaba.show(); //to pobrany przed chwilą blok pokazujemy
+                    } else {
+                        $trescTaba.hide(); //jeżeli takiej klasy nie ma to blok ukrywamy
+                    }
+                });
+
+                $li.click(function () { $(this).children('a').click() });
+                //po kliknięciu na link...
+                $li.children('a').click(function () {
+                    //usuwamy z tabów klasę active
+                    $li.removeClass('active');
+                    //ukrywamy wszystkie taby               
+                    $li.each(function () {
+                        $($(this).children('a').attr('href')).hide();
+                    });
+                    //ustawiamy klikniętemu tabowi klasę aktywną
+                    $(this).parent().addClass('active');
+                    $($(this).attr('href')).show("slow");
+                    //nie chcemy wykonać domyślnej akcji dla linka
+                    return false;
+                });
+            });
+        });
+    </script>
     <h2 class="ulubieni">Edytuj profil</h2>
-    
+
+    <ul class="zakladki">
+        <li class="active"><a href="#Zainteresowania" class="active">Zainteresowania</a></li>
+        <li><a href="#Dane">Dane osobowe</a></li>
+        <li><a href="#Zdjecie">Zmiana zdjęcia</a></li>
+</ul>
+
+    <div id="Zainteresowania">
     <%-- Check box rozwijany ze sportami --%>
    <h4 class="center"> Sport</h4>
     <asp:ScriptManager ID="ScriptManager1" runat="server">
@@ -35,7 +74,8 @@
              </ContentTemplate>
         </asp:UpdatePanel>
     </p>
-
+        </div>
+    <div id="Dane">
      <div style="border-width: 0px; width:418px; margin-left:auto; margin-right:auto; height: 277px;">
     <asp:DetailsView ID="DetailsView1" runat="server" AutoGenerateRows="False" 
         DataKeyNames="userid" DataSourceID="SqlDataSource1" DefaultMode="Edit" 
@@ -98,7 +138,7 @@
         <RowStyle Height="60px" HorizontalAlign="Left" VerticalAlign="Top" />
     </asp:DetailsView>
 </div>
-
+</div>
 
          <br />                   
 
@@ -191,7 +231,8 @@
 
 
 </script>
-    <h3 class="ulubieni" dir="rtl">Zmień zdjęcie</h3>
+    <div id="Zdjecie">
+            <h3 class="ulubieni" dir="rtl">Zmień zdjęcie</h3>
 Wybierz plik : 
   
         </asp:ScriptManager>  
@@ -199,6 +240,7 @@ Wybierz plik :
             OnUploadedComplete="ProcessUpload" ErrorBackColor="White" UploaderStyle="Modern" ViewStateMode="Disabled" CompleteBackColor="White" Height="33px" />
     <asp:Label ID="Label4" runat="server"></asp:Label>
    <asp:Label runat="server" Text=" " ID="Label5" />
+        </div>
 
 <p align="center">
     <a href="javascript: history.go(-1)">Powrót</a></p>

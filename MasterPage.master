@@ -8,10 +8,11 @@
     <style type="text/css">
         
     </style>
-    
-    <script type="text/javascript">
+    <script type="text/javascript" src="Scripts/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="Scripts/jquery-1.9.1.intellisense.js"></script>
+<script type="text/javascript" src="Scripts/jquery-1.9.1.min.js"></script>
 
-    </script>
+    
     <link href="StyleSheet.css" rel="stylesheet" type="text/css" />
 </head>
 <body><form id="form1" runat="server">

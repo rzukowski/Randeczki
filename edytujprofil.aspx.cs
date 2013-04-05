@@ -13,11 +13,18 @@ public partial class edytujprofil : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (Session["username"].ToString() == "" || Session["username"] == null)
+        try
         {
+            if (Session["username"].ToString() == "" || Session["username"] == null)
+            {
 
+                Response.Redirect("~/Zaloguj.aspx");
+
+            }
+        }
+        catch
+        {
             Response.Redirect("~/Zaloguj.aspx");
-
         }
 
         if (!IsPostBack)
