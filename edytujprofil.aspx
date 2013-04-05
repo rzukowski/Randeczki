@@ -73,9 +73,14 @@
         </p>
              </ContentTemplate>
         </asp:UpdatePanel>
-    </p>
+
+
+
+   
         </div>
     <div id="Dane">
+        <asp:UpdatePanel runat="server" id="UpdatePanel1" updatemode="Conditional">
+         <ContentTemplate>
      <div style="border-width: 0px; width:418px; margin-left:auto; margin-right:auto; height: 277px;">
     <asp:DetailsView ID="DetailsView1" runat="server" AutoGenerateRows="False" 
         DataKeyNames="userid" DataSourceID="SqlDataSource1" DefaultMode="Edit" 
@@ -138,6 +143,8 @@
         <RowStyle Height="60px" HorizontalAlign="Left" VerticalAlign="Top" />
     </asp:DetailsView>
 </div>
+             </ContentTemplate>
+        </asp:UpdatePanel>
 </div>
 
          <br />                   

@@ -197,6 +197,8 @@
         <asp:Button ID="btnSearch" runat="server" Text="Szukaj" OnClick="AddWojewodztwoParameter"/>
     &nbsp;</p>
     <p>
+        <asp:UpdatePanel runat="server" id="UpdatePanel1" updatemode="Conditional">
+         <ContentTemplate>
         <asp:ListView ID="ListView1" runat="server" DataSourceID="SqlDataSource1" GroupItemCount ="2">
         <GroupTemplate>
          <tr>
@@ -226,6 +228,18 @@
              </td>
           </ItemTemplate>
        </asp:ListView>
+        <asp:DataPager ID="lvDataPager1" runat="server" PagedControlID="ListView1" PageSize="1">
+            <Fields>
+                <asp:NumericPagerField ButtonType="Link" />
+            </Fields>
+        </asp:DataPager>
+
+        </ContentTemplate>
+            <Triggers>
+<asp:AsyncPostBackTrigger ControlID="btnSearch"
+     EventName="Click" />
+</Triggers>
+        </asp:UpdatePanel>
 
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
             ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" 
