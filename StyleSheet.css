@@ -35,9 +35,21 @@ ul.zakladki li a {
     padding: 5px;
     background: #75CE07;
     color: black;
+        -moz-border-radius:5px; /* FF */
+-webkit-border-radius:5px; /* przeglądarki z webkitem (Safari, Chrome itp.) */
+
+-khtml-border-radius:5px; /* przeglądarki typu K-meleon (typowo Linuxowe) */
+
+border-radius:5px; /* pozostałe przeglądarki */
+
+behavior:url(border-radius.htc); /* dodatek dla badzIEwnej przeglądarki */
     
 }
+li.active a.active{
+    background: #80FF80;
 
+
+}
 ul.zakladki li a:hover {
     background: #80FF80;
 }

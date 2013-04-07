@@ -43,6 +43,10 @@ public partial class szukajprzyjaciol : System.Web.UI.Page
                 }
 
             }
+            else if(checkedListBox1.Items.Count==0)
+            { 
+                wojewodztwa = GetAllWojewodztwa(); 
+            }
 
         }
 

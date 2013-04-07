@@ -28,12 +28,14 @@
                 $li.children('a').click(function () {
                     //usuwamy z tabów klasę active
                     $li.removeClass('active');
+                    $li.children('a').removeClass('active');
                     //ukrywamy wszystkie taby               
                     $li.each(function () {
                         $($(this).children('a').attr('href')).hide();
                     });
                     //ustawiamy klikniętemu tabowi klasę aktywną
                     $(this).parent().addClass('active');
+                    $(this).addClass('active');
                     $($(this).attr('href')).show("slow");
                     //nie chcemy wykonać domyślnej akcji dla linka
                     return false;
@@ -42,18 +44,39 @@
         });
     </script>
     <h2 class="ulubieni">Edytuj profil</h2>
-
+    <asp:ScriptManager ID="ScriptManager1" runat="server">
+    </asp:ScriptManager>
     <ul class="zakladki">
         <li class="active"><a href="#Zainteresowania" class="active">Zainteresowania</a></li>
         <li><a href="#Dane">Dane osobowe</a></li>
         <li><a href="#Zdjecie">Zmiana zdjęcia</a></li>
+        <li><a href="#Wyglad">Wygląd</a></li>
 </ul>
+
+    <div id="Wyglad">
+        <P>
+            <asp:UpdatePanel runat="server" id="UpdatePanel2" updatemode="Conditional">
+         <ContentTemplate>
+       Budowa ciała: <asp:RadioButtonList ID="DDLWyglad" runat="server" DataTextField="budowa_opis" DataValueField="budowa_id" Width="200px" AppendDataBoundItems="True"></asp:RadioButtonList>
+            <p>
+       Wzrost: <asp:TextBox ID="TBWzrost" runat="server" Height="22px" Width="20px"></asp:TextBox>cm
+                </p>
+            <p>
+        Waga: <asp:TextBox ID="TBWaga" runat="server" Height="22px" Width="20px"></asp:TextBox>kg
+            </p>
+             <p>
+        BMI: <asp:Label runat="server" id="LBmi"></asp:Label>
+            </p>
+            <asp:Button ID="UpdateWyglad" runat="server" Text="Zmień" OnClick="Update_Wyglad"/>
+             </ContentTemplate>
+             </asp:UpdatePanel>
+        </P>
+    </div>
 
     <div id="Zainteresowania">
     <%-- Check box rozwijany ze sportami --%>
    <h4 class="center"> Sport</h4>
-    <asp:ScriptManager ID="ScriptManager1" runat="server">
-    </asp:ScriptManager>
+    
     <asp:UpdatePanel runat="server" id="UpdatePanel" updatemode="Conditional">
          <ContentTemplate>
      <div id="divDDL" class="divDDL" runat="server">
@@ -249,8 +272,6 @@ Wybierz plik :
    <asp:Label runat="server" Text=" " ID="Label5" />
         </div>
 
-<p align="center">
-    <a href="javascript: history.go(-1)">Powrót</a></p>
     
 </asp:Content>
 

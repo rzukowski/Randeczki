@@ -32,10 +32,14 @@ public partial class edytujprofil : System.Web.UI.Page
             try
             {
                 BuildCheckBox();
+                CheckWygladDropDownList();
+                FillWzrost();
+                FillWaga();
+                FillBMI();
             }
             catch (Exception ex)
             {
-
+                HttpContext.Current.Trace.Write(ex.Message);
             }
 
         }
@@ -64,6 +68,8 @@ public partial class edytujprofil : System.Web.UI.Page
         //         checkedListBox1.Items.Add(new ListItem(pair.Key.ToString(),pair.Value));
         //        }
 
+       
+        con.Close();
         //idz do metody zaznaczającej dane z bazy
         SelectCheckBox();
 
@@ -192,6 +198,7 @@ public partial class edytujprofil : System.Web.UI.Page
             divDDL.InnerText = selectedSportsNumber + " elementów";
 
         }
+    
 
     }
     //metoda wykonująca inserta do user_sport
@@ -202,8 +209,18 @@ public partial class edytujprofil : System.Web.UI.Page
         SqlCommand cmd = new SqlCommand("INSERT INTO user_sport VALUES (@userid,@id)", con);
         cmd.Parameters.AddWithValue("@userid", userid);
         cmd.Parameters.AddWithValue("@id", id);
-        cmd.ExecuteNonQuery(); 
-        con.Close();
+        try
+        {
+            cmd.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+        }
+        finally
+        {
+            con.Close();
+        }
 
 
     }
@@ -215,8 +232,18 @@ public partial class edytujprofil : System.Web.UI.Page
         SqlCommand cmd = new SqlCommand("DELETE FROM user_sport WHERE userid=@userid AND sport_id = @id", con);
         cmd.Parameters.AddWithValue("@userid", userid);
         cmd.Parameters.AddWithValue("@id", id);
-        cmd.ExecuteNonQuery();
-        con.Close();
+        try
+        {
+            cmd.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+        }
+        finally
+        {
+            con.Close();
+        }
 
 
     }
@@ -240,6 +267,257 @@ public partial class edytujprofil : System.Web.UI.Page
 
     protected void DetailsView1_PageIndexChanging(object sender, System.Web.UI.WebControls.DetailsViewPageEventArgs e)
     {
+
+    }
+
+    protected void CheckWygladDropDownList()
+    {
+        string userid = Session["userid"].ToString();
+        SqlConnection con = new SqlConnection(ConnectionString);
+        SqlCommand cmd = new SqlCommand("SELECT budowa_ciala_id FROM Wyglad WHERE userid = @userid", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+        con.Open();
+        try
+        {
+            DDLWyglad = FillWygladDropDownList();
+
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            if (reader.FieldCount != 0)
+            {
+                while(reader.Read())
+                    DDLWyglad.SelectedValue = reader.GetInt32(0).ToString();
+                reader.Close();
+
+
+            }
+        }
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+
+        }
+        finally
+        {
+
+            con.Close();
+        }
+
+    }
+
+    private string OkreslPlec()
+    {
+
+        string userid = Session["userid"].ToString();
+        string plec = "Null";
+        SqlConnection con = new SqlConnection(ConnectionString);
+        SqlCommand cmd = new SqlCommand("SELECT plec FROM user_profile WHERE userid = @userid", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+        con.Open();
+        try
+        {
+            
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+                plec = reader.GetString(0).ToString();
+            reader.Close();
+        }
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+
+        }
+        finally
+        {
+
+            con.Close();
+        }
+
+
+        return plec;
+
+    }
+
+    protected RadioButtonList FillWygladDropDownList()
+    {
+
+        SqlConnection con = new SqlConnection(ConnectionString);
+        con.Open();
+        SqlCommand cmd = new SqlCommand("SELECT budowa_ciala_id, budowa_ciala_opis FROM Budowa", con);
+        try
+        {
+            SqlDataReader reader = cmd.ExecuteReader();
+            DDLWyglad.DataSource = reader;
+            DDLWyglad.DataTextField = "budowa_ciala_opis";
+            DDLWyglad.DataValueField = "budowa_ciala_id";
+            DDLWyglad.DataBind();
+        }
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+
+        }
+        finally
+        {
+            con.Close();
+
+        }
+        return DDLWyglad;
+    }
+
+    protected void FillWzrost()
+    {   
+        string userid=Session["userid"].ToString();
+        double wzrost = 0.0;
+        SqlConnection con = new SqlConnection(ConnectionString);
+        con.Open();
+        SqlCommand cmd = new SqlCommand("SELECT wzrost FROM Wyglad where userid=@userid", con);
+        cmd.Parameters.AddWithValue("@userid",userid);
+
+        try
+        {
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+                wzrost = reader.GetInt32(0);
+            reader.Close();
+
+        }
+        catch(Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+        }
+        finally
+        {
+            con.Close();
+        }
+        if(wzrost!=0.0)
+            TBWzrost.Text = wzrost.ToString();
+
+    }
+
+    protected void FillWaga()
+    {
+        string userid = Session["userid"].ToString();
+        double waga = 0.0;
+        SqlConnection con = new SqlConnection(ConnectionString);
+        con.Open();
+        SqlCommand cmd = new SqlCommand("SELECT waga FROM Wyglad where userid=@userid", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+
+        try
+        {
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+                waga = reader.GetInt32(0);
+            reader.Close();
+
+        }
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+        }
+        finally
+        {
+            con.Close();
+        }
+        if(waga!=0.0)
+        TBWaga.Text = waga.ToString();
+
+    }
+
+    protected void FillBMI()
+    {
+        string userid = Session["userid"].ToString();
+        double waga = 0;
+        double wzrost = 0;
+        SqlConnection con = new SqlConnection(ConnectionString);
+        con.Open();
+        SqlCommand cmd = new SqlCommand("SELECT waga FROM Wyglad where userid=@userid", con);
+        SqlCommand cmd2 = new SqlCommand("SELECT wzrost FROM Wyglad where userid=@userid", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+        cmd2.Parameters.AddWithValue("@userid", userid);
+        try
+        {
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+                waga = reader.GetInt32(0);
+            reader.Close();
+            SqlDataReader reader2 = cmd2.ExecuteReader();
+            while (reader2.Read())
+                wzrost = reader2.GetInt32(0);
+            reader2.Close();
+
+        }
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+        }
+        finally
+        {
+            con.Close();
+        }
+
+        double bmi = 0;
+        if (waga != 0 && wzrost != 0)
+        {
+            bmi = waga / (Math.Pow(wzrost / 100, 2.0));
+            LBmi.Text = bmi.ToString().Substring(0, 5);
+        }
+        else
+            LBmi.Text = "";
+    }
+
+
+    protected void Update_Wyglad(object sender, EventArgs e)
+    {
+        int waga = 0;
+        int wzrost=0;
+        if(TBWaga.Text!="")
+            waga = Convert.ToInt32(TBWaga.Text);
+        if (TBWzrost.Text != "")
+            wzrost = Convert.ToInt32(TBWzrost.Text);
+        int budowa_ciala_id=0;
+        string userid = Session["userid"].ToString();
+        
+        SqlConnection con = new SqlConnection(ConnectionString);
+        SqlCommand cmd;
+        con.Open();
+        string command = null;
+        
+        
+
+        //select budowa_ciała_id
+        budowa_ciala_id = Convert.ToInt32(DDLWyglad.SelectedValue);
+        try
+        {
+            if (budowa_ciala_id == 0)
+            {
+                command = "UPDATE Wyglad set wzrost=@wzrost,waga=@waga,budowa_ciala_id=NULL WHERE userid = @userid";
+                cmd = new SqlCommand(command, con);
+            }
+            else
+            {
+                command = "UPDATE Wyglad set wzrost=@wzrost,waga=@waga,budowa_ciala_id=@budowa_ciala_id WHERE userid = @userid";
+                cmd = new SqlCommand(command, con);
+                cmd.Parameters.AddWithValue("@budowa_ciala_id", budowa_ciala_id);
+            }
+
+            cmd.Parameters.AddWithValue("@userid", userid);
+            cmd.Parameters.AddWithValue("@wzrost", wzrost);
+            cmd.Parameters.AddWithValue("@waga", waga);
+            cmd.ExecuteNonQuery();
+
+
+        }
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+        }
+        finally
+        {
+            con.Close();
+        }
+        FillBMI();
 
     }
 
