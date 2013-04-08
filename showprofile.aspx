@@ -22,7 +22,7 @@
             <br />
             <span class="black">Wojewodztwo: <%# Eval("wojewodztwo") %><br />
 
-          <span class="black">Data Urodzin:</span> <%# Eval("birthdate") %>
+          <span class="black">Wiek:</span> <%# Eval("Wiek") %>
             <br />
            <span class="black">O mnie:</span> <%# Eval("opis") %><br />
             <span class="black">Uprawiany sport: <asp:Label ID="Sporty" runat="server"></asp:Label><br />

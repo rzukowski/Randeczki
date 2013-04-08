@@ -7,6 +7,58 @@
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+    <script type="text/javascript">
+        function BindEvents() {
+           $(document).ready(function () {
+                $(".opis").each(function () {
+                    $(this).hide();
+                });
+           });
+            //tutaj skrypt do nadawania obiektom z klasa 'opis' i 'id' status visible (lub tez dopisywanie nowej klasy
+            //powodującej ze 'opis' bedzie jako chmurka
+           $("img").mouseover(function(e){
+               var href = $(this).attr('id');
+               var id = href.substring(0, href.length - 1);
+               var text = $("#" + id).text();
+               if (text == "") {
+                   text = "Brak opisu...";
+               }
+               else {
+                   if (text.length > 10) {
+                       var ii = 10;
+                       while (text.charAt(ii) != " " && ii!=text.length)
+                           ii++;
+                       if(ii!=text.length)
+                        text = text.substring(0, ii) + "...";
+                   }
+
+
+               }
+               $(this).after('<div id="tooltip"><div class="tipBody">' + text + '</div></div>');
+               $('#tooltip').css('top', e.pageY + 10);
+               $('#tooltip').css('left', e.pageX + 20);
+
+               $('#tooltip').fadeIn('500');
+               $('#tooltip').fadeTo('10', 0.8);
+
+           }).mousemove(function(e) { 
+               
+               $('#tooltip').css('top', e.pageY + 10 );
+               $('#tooltip').css('left', e.pageX + 20 );
+        
+           }).mouseout(function() {
+
+               $('div#tooltip').remove();
+
+           });
+
+        }
+
+        
+
+        </script>
+
+
     <asp:ScriptManager   
             ID="ScriptManager2"  
             runat="server"  
@@ -198,7 +250,11 @@
     &nbsp;</p>
     <p>
         <asp:UpdatePanel runat="server" id="UpdatePanel1" updatemode="Conditional">
+          
          <ContentTemplate>
+               <script type="text/javascript">
+                   Sys.Application.add_load(BindEvents);
+     </script>
         <asp:ListView ID="ListView1" runat="server" DataSourceID="SqlDataSource1" GroupItemCount ="2">
         <GroupTemplate>
          <tr>
@@ -216,9 +272,9 @@
              <table>
                 <tr><h3> <%# Eval("username") %></h3></tr>
                  <tr>
-                  <td> <img src='photos/<%# Eval("username") %>image.jpg'  alt="No Photo"  width="100px" height="100px" /></td>
+                  <td> <img src='photos/<%# Eval("username") %>image.jpg' id='<%# Eval("username") %>p' alt="No Photo"  width="100px" height="100px" /></td>
                   <td> 
-                     
+                     <p class="opis" id='<%# Eval("username") %>'><%# Eval("opis") %></p>
                      <a href='showprofile.aspx?userid=<%# Eval("userid") %>&username=<%# Eval("username") %>'>Pokaż profil</a> <br />
                      <a href='addfriend.aspx?userid=<%# Eval("userid") %>&username=<%# Eval("username") %>'> Dodaj do ulubionych</a> <br />
                        <a href='wyslijwiadomosc.aspx?userid=<%# Eval("userid") %>'> Wyslij wiadomość</a>
