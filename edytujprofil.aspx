@@ -9,11 +9,12 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <script type="text/javascript">
+        //funkcja do zakładek
         $(document).ready(function () {
             //dla każdego miejsca z tabami
             $('.zakladki').each(function () {
                 var $li = $(this).children('li');
-                //przy wejsciu na strone ukrywamy tresc tabow i pokazujemy tylko aktywny...
+                //przy wejsciu na strone ukrywamy tresc tabow i pokazujemy tylko aktywny
                 $li.each(function () { //pętla po wszystkich tabach
                     var $trescTaba = $($(this).children('a').attr('href')); //pobieramy blok o id pobranym z linka-taba
                     if ($(this).hasClass('active')) { //jeżeli ten tab ma klasę aktywną
@@ -42,9 +43,85 @@
                 });
             });
         });
+       //validacja danych
+        function Validate() {
+           return ValidateAll();
+           function ValidateAll() {
+               var plec = ValidatePlec();
+               var opis = ValidateOpis();
+               var birthDate = ValidateBirthDate();
+               // if (plec && opis && urodziny) {
+               if (opis && birthDate && plec) {
+
+                        
+                        return true;
+                   
+                }
+
+                return false;
+            }
+
+           function ValidateOpis() {
+           
+                var opisid = document.getElementById('Opis');
+                if (opisid.value != "") {
+
+                    return true;
+                }
+                else {
+                    var opisP = document.getElementById('OpisS');
+                    opisP.innerHTML = "Opis jest pusty";
+                    opisid.style.border = "1px solid #ff0000";
+                    return false;
+                }
+                return false;
+            }
+
+            function ValidateBirthDate() {
+                var birthDate = document.getElementById('DataUrodzin');
+                if (birthDate.value != "") {
+                    var match = birthDate.value.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/);
+                    if (match != null)
+                        return true;
+                    else {
+                        var opisP = document.getElementById('UrodzinyS');
+
+                    }
+                }
+                opisP.innerHTML = "Format urodzin: yyyy-mm-dd";
+                birthDate.style.border = "1px solid #ff0000";
+                return false;
+
+
+            }
+
+            function ValidatePlec() {
+                var plecid = document.getElementById('Plec')
+                var radioButt = plecid.getElementsByTagName("input");
+                var selected;
+                for (ii = 0; ii < radioButt.length; ii++) {
+
+                    if (radioButt[ii].checked) {
+
+                        return true;
+
+                    }
+
+
+
+                }
+                var plecS = document.getElementById('PlecS');
+                plecS.innerHTML = "Wybierz płeć";
+                return false;
+
+
+            }
+        }
+
     </script>
+    <script type="text/javascript" src="Scripts/validation_dane.js" ></script>
     <h2 class="ulubieni">Edytuj profil</h2>
-    <asp:ScriptManager ID="ScriptManager1" runat="server">
+    <asp:ScriptManager ID="ScriptManager1" runat="server" EnableScriptGlobalization="true">
     </asp:ScriptManager>
     <ul class="zakladki">
         <li class="active"><a href="#Zainteresowania" class="active">Zainteresowania</a></li>
@@ -55,6 +132,12 @@
 
     <div id="Wyglad">
         <P>
+               <asp:UpdateProgress ID="updProgress"
+        runat="server" AssociatedUpdatePanelID="UpdatePanel2">
+            <ProgressTemplate>           
+               <div id="update">Zapisywanie<br /><img alt="" src="images/ajax-loader.gif" /></div>           
+            </ProgressTemplate>
+        </asp:UpdateProgress>
             <asp:UpdatePanel runat="server" id="UpdatePanel2" updatemode="Conditional">
          <ContentTemplate>
        Budowa ciała: <asp:RadioButtonList ID="DDLWyglad" runat="server" DataTextField="budowa_opis" DataValueField="budowa_id" Width="200px" AppendDataBoundItems="True"></asp:RadioButtonList>
@@ -68,7 +151,11 @@
         BMI: <asp:Label runat="server" id="LBmi"></asp:Label>
             </p>
             <asp:Button ID="UpdateWyglad" runat="server" Text="Zmień" OnClick="Update_Wyglad"/>
+             <asp:UpdateProgress ID="UpdateProgress1" runat="server">
+    
+    </asp:UpdateProgress>
              </ContentTemplate>
+                
              </asp:UpdatePanel>
         </P>
     </div>
@@ -76,7 +163,12 @@
     <div id="Zainteresowania">
     <%-- Check box rozwijany ze sportami --%>
    <h4 class="center"> Sport</h4>
-    
+    <asp:UpdateProgress ID="UpdateProgress2"
+        runat="server" AssociatedUpdatePanelID="UpdatePanel">
+            <ProgressTemplate>           
+               <div id="update">Zapisywanie<br /><img alt="" src="images/ajax-loader.gif" /></div>           
+            </ProgressTemplate>
+        </asp:UpdateProgress>
     <asp:UpdatePanel runat="server" id="UpdatePanel" updatemode="Conditional">
          <ContentTemplate>
      <div id="divDDL" class="divDDL" runat="server">
@@ -102,107 +194,32 @@
    
         </div>
     <div id="Dane">
+        <asp:UpdateProgress ID="UpdateProgress3"
+        runat="server" AssociatedUpdatePanelID="UpdatePanel1">
+            <ProgressTemplate>           
+               <div id="update">Zapisywanie<br /><img alt="" src="images/ajax-loader.gif" /></div>           
+            </ProgressTemplate>
+        </asp:UpdateProgress>
+     
         <asp:UpdatePanel runat="server" id="UpdatePanel1" updatemode="Conditional">
          <ContentTemplate>
-     <div style="border-width: 0px; width:418px; margin-left:auto; margin-right:auto; height: 277px;">
-    <asp:DetailsView ID="DetailsView1" runat="server" AutoGenerateRows="False" 
-        DataKeyNames="userid" DataSourceID="SqlDataSource1" DefaultMode="Edit" 
-        Height="179px" Width="415px" style="margin-right: 82px; margin-left: 0px;" BorderStyle="None" GridLines="None" >
-        <CommandRowStyle Height="50px" />
-        <EmptyDataRowStyle HorizontalAlign="Left" />
-        <Fields>
-            <asp:BoundField DataField="userid" HeaderText="userid" ReadOnly="True" 
-                SortExpression="userid" Visible="False" />          
-             <asp:BoundField DataField="Opis" HeaderText="Opis" 
-                SortExpression="opis" ControlStyle-Height="50px" ControlStyle-Width="323px" >   
-
-<ControlStyle Height="50px" Width="300px"></ControlStyle>
-            </asp:BoundField>
-
-            <asp:TemplateField HeaderText="Data Urodzin" ControlStyle-Width="100px" ControlStyle-BorderStyle="NotSet">
-                <EditItemTemplate>
-                    <asp:TextBox ID="TextBox1" runat="server" Text='<%#  Bind("birthdate") %>' Height="22px" Width="300px"></asp:TextBox>
-                    <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ControlToValidate="TextBox1" ErrorMessage="Format daty urodzin: yyyy-MM-dd (np. 1977-12-20)" ValidationExpression="^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$" Display="Dynamic" Font-Size="13px" Font-Underline="False"></asp:RegularExpressionValidator>
-                </EditItemTemplate>
-                <InsertItemTemplate>
-                    <asp:TextBox ID="TextBox2" runat="server" Text='<%# Bind("birthdate") %>'></asp:TextBox>
-                </InsertItemTemplate>
-                <ItemTemplate>
-                    <asp:Label ID="Label2" runat="server" Text='<%# Bind("birthdate") %>'></asp:Label>
-                </ItemTemplate>
-
-<ControlStyle Width="100px"></ControlStyle>
-            </asp:TemplateField>
-
-             <asp:TemplateField HeaderText="Płeć">
-                <EditItemTemplate>
-                    <asp:DropDownList ID="DropDownList1" runat="server" DataSourceID="SqlDataSource2" DataTextField="plec" DataValueField="plec" SelectedValue='<%# Bind("plec") %>' Width="100px" AppendDataBoundItems="True">
-                    </asp:DropDownList>
-                </EditItemTemplate>
-                <InsertItemTemplate>
-                    <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("plec") %>'></asp:TextBox>
-                </InsertItemTemplate>
-                <ItemTemplate>
-                    <asp:Label ID="Label1" runat="server" Text='<%# Bind("plec") %>'></asp:Label>
-                </ItemTemplate>
-</asp:TemplateField>
-
-            <asp:TemplateField HeaderText="Województwo">
-                <EditItemTemplate>
-                    <asp:DropDownList ID="DropDownList2" runat="server" DataSourceID="SqlDataSource3" DataTextField="wojewodztwo" DataValueField="wojewodztwo_id" SelectedValue='<%# Bind("wojewodztwo_id") %>' Width="100px" AppendDataBoundItems="True">
-                    </asp:DropDownList>
-                </EditItemTemplate>
-                <InsertItemTemplate>
-                    <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("wojewodztwo_id") %>'></asp:TextBox>
-                </InsertItemTemplate>
-                <ItemTemplate>
-                    <asp:Label ID="Label1" runat="server" Text='<%# Bind("wojewodztwo_id") %>'></asp:Label>
-                </ItemTemplate>
-</asp:TemplateField>
-<asp:CommandField ShowEditButton="True" CancelText="Anuluj" DeleteText="Usuń" EditText="Edytuj" UpdateText="Zmień" CausesValidation="False" HeaderStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center" FooterStyle-HorizontalAlign="Center" InsertVisible="True" ShowDeleteButton="False" />
-            
-        </Fields>
-
-        <RowStyle Height="60px" HorizontalAlign="Left" VerticalAlign="Top" />
-    </asp:DetailsView>
-</div>
+             <cc1:CalendarExtender ID="CalendarExtender1" TargetControlId="DataUrodzin" runat="server" Format="yyyy-MM-dd"></cc1:CalendarExtender>
+<p>     Data urodzin*: <asp:TextBox ID="DataUrodzin" runat="server" Height="22px" Width="100px" ClientIDMode="Static"></asp:TextBox><span id="UrodzinyS" class="Validate"></span></p>
+<p>Płeć*: <asp:RadioButtonList ID="Plec" runat="server" Width="900px" RepeatLayout="Flow" RepeatDirection="Horizontal" ClientIDMode="Static"></asp:RadioButtonList><span id="PlecS" class="Validate"></span></p>
+<p>Województwo*: <asp:DropDownList ID="Wojewodztwa" runat="server" Width="100px" AppendDataBoundItems="True" ClientIDMode="Static"></asp:DropDownList></p>
+<p>Opis*: <asp:TextBox ID="Opis" runat="server" Width="300px" Height="60px" TextMode="multiline" ClientIDMode="Static"></asp:TextBox><span id="OpisS" class="Validate"></span></p>
+             <asp:Button ID="Button1" runat="server" Text="Zmień" OnClick="UpdateDane" OnClientClick="return Validate()" ClientIDMode="Static"/> 
+ 
              </ContentTemplate>
+           
         </asp:UpdatePanel>
+        
 </div>
+    
 
          <br />                   
 
-<p style="height: 22px; width: 432px">
-    <asp:SqlDataSource ID="SqlDataSource3" runat="server" ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" SelectCommand="SELECT DISTINCT [wojewodztwo],[wojewodztwo_id] FROM [Wojewodztwa] ORDER BY [wojewodztwo_id] DESC"></asp:SqlDataSource>
-    <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" SelectCommand="SELECT DISTINCT [plec] FROM [plecDummy]"></asp:SqlDataSource>
-    <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
-        ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" 
-        SelectCommand="SELECT userid,fullname,opis,plec,birthdate=(SUBSTRING(CAST(birthdate AS VARCHAR),0,11)),wojewodztwo_id FROM [user_profile] WHERE ([userid] = @userid)"
-        DeleteCommand="DELETE FROM [user_profile] WHERE [userid] = @userid" 
-        InsertCommand="INSERT INTO [user_profile] ([userid], [fullname],[plec],[opis],[birthdate],[wojewodztwo_id]) VALUES (@userid, @fullname, @plec, @opis, @birthdate,@wojewodztwo_id)" 
-        UpdateCommand="UPDATE [user_profile] SET [fullname] = @fullname, [plec] = @plec, [opis]=@opis, [birthdate]=@birthdate,[wojewodztwo_id]=@wojewodztwo_id WHERE [userid] = @userid">
-    <SelectParameters>
-            <asp:SessionParameter Name="userid" SessionField="userid" Type="String" />
-        </SelectParameters>
-        <DeleteParameters>
-            <asp:Parameter Name="userid" Type="Object" />
-        </DeleteParameters>
-        <UpdateParameters>
-            <asp:ControlParameter ControlID="DetailsView1$DropDownList1" Name="plec" PropertyName="SelectedValue" Type="String" />
-            <asp:ControlParameter ControlID="DetailsView1$DropDownList2" Name="wojewodztwo_id" PropertyName="SelectedValue" Type="Int32" />
-            <asp:Parameter Name="fullname" Type="String" />
-            <asp:Parameter Name="opis" Type="String" />
-            <asp:Parameter Name="birthdate" Type="DateTime" />
-            <asp:Parameter Name="userid" Type="Object" />
-        </UpdateParameters>
-        <InsertParameters>
-            <asp:Parameter Name="userid" Type="Object" />
-            <asp:Parameter Name="fullname" Type="String" />
-            <asp:Parameter Name="opis" Type="String" />
-            <asp:Parameter Name="plec" Type="String" />
-            <asp:Parameter Name="birthdate" Type="DateTime" />
-        </InsertParameters>
-    </asp:SqlDataSource>
+
 
 </p>
      <script type="text/javascript">

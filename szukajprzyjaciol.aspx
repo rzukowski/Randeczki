@@ -225,8 +225,8 @@
 
     <p>Płeć:
     <asp:DropDownList id="DropDownList1" runat="server" >
-  <asp:listitem>Kobieta</asp:listitem>
-  <asp:listitem>Mężczyzna</asp:listitem>
+  <asp:listitem Value="2">Kobieta</asp:listitem>
+  <asp:listitem Value="1">Mężczyzna</asp:listitem>
 </asp:DropDownList>
     </p>
         </p>
@@ -301,8 +301,8 @@
             ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" 
             SelectCommand="Szukaj" SelectCommandType="StoredProcedure">
             <SelectParameters>
-                <asp:ControlParameter ControlID="DropDownList1" Name="gender" PropertyName="Text" 
-                    Type="String" />
+                <asp:ControlParameter ControlID="DropDownList1" Name="gender" PropertyName="SelectedValue"
+                    />
                 <asp:ControlParameter ControlID="DropDownList2" Name="dateDown" PropertyName="Text" 
                     Type="String" />
                 <asp:ControlParameter ControlID="DropDownList3" Name="dateUp" PropertyName="Text" 

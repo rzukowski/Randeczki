@@ -194,4 +194,424 @@ public class Usr
 
     }
 
+    public static List<string> GetSporty(String userid)
+    {
+        List<string> sporty = new List<string>();
+        SqlConnection con = new SqlConnection(ConnectionString);
+        con.Open();
+
+        SqlCommand cmd = new SqlCommand("SELECT sport_opis FROM Sport WHERE Sport.sport_id IN (SELECT sport_id FROM user_sport WHERE userid = @userid)", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+        try
+        {
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                    sporty.Add(reader.GetString(0));
+                reader.Close();
+            }
+        }
+        catch (Exception ex)
+        {
+
+            HttpContext.Current.Trace.Write(ex.Message);
+        }
+        finally
+        {
+            con.Close();
+        }
+        return sporty;
+    }
+
+    //sprawdza czy user przez ostatnią godzinę odwiedzał danego usera (jeśli tak, to nie zapisujemy informacji o odwiedzinach w bazie)
+    public static bool GetTime(string odwiedzanyid, string odwiedzilid, DateTime date)
+    {
+        SqlConnection con = new SqlConnection(ConnectionString);
+        bool hasRows;
+        SqlCommand cmd = new SqlCommand("SELECT * FROM Viewed where OdwiedzanyId = @odwiedzanyid AND OdwiedzilId= @odwiedzilid AND DATEDIFF(hour,Data,@date)<1 ", con);
+        cmd.Parameters.AddWithValue("@odwiedzanyid", odwiedzanyid);
+        cmd.Parameters.AddWithValue("@odwiedzilid", odwiedzilid);
+        cmd.Parameters.AddWithValue("@date", date);
+        con.Open();
+
+        try
+        {
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.HasRows)
+                    hasRows = true;
+                else
+                    hasRows = false;
+            }
+        }
+        catch (Exception ex)
+        {
+
+            HttpContext.Current.Trace.Write(ex.Message);
+            hasRows = true;
+        }
+        finally
+        {
+            con.Close();
+        }
+
+        return hasRows;
+
+    }
+
+
+    public static void SaveVisited(string odwiedzanyid, string odwiedzilid )
+    {
+
+        
+        DateTime date = DateTime.Now;
+        SqlConnection con = new SqlConnection(ConnectionString);
+        if (!Usr.GetTime(odwiedzanyid, odwiedzilid, date))
+        {
+            try
+            {
+
+                SqlCommand cmd = new SqlCommand("INSERT INTO Viewed (OdwiedzanyId,OdwiedzilId,Data,viewed) VALUES (@odwiedzanyid,@odwiedzilid,@date,0)", con);
+                cmd.Parameters.AddWithValue("@odwiedzanyid", odwiedzanyid);
+                cmd.Parameters.AddWithValue("@odwiedzilid", odwiedzilid);
+                cmd.Parameters.AddWithValue("@date", date);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                HttpContext.Current.Trace.Write(ex.Message);
+
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+    }
+
+    public static Dictionary<int,string> SelectSportIdSportOpis(){
+        Dictionary<int, string> sporty = new Dictionary<int, string>();
+        SqlDataReader reader = null;
+        SqlConnection con = new SqlConnection(ConnectionString);
+        SqlCommand cmd = new SqlCommand("SELECT DISTINCT [sport_id],[sport_opis] FROM [Sport]", con);
+        con.Open();
+        try
+        {
+           reader = cmd.ExecuteReader();
+           while (reader.Read())
+           {
+               sporty.Add(reader.GetInt32(0), reader.GetString(1).ToString());
+
+           }
+        }
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+        }
+        finally
+        {
+            con.Close();
+            
+        }
+        return sporty;
+
+    }
+
+
+    public static void ExecuteCommandInsert(string id, string userid)
+    {
+        SqlConnection con = new SqlConnection(ConnectionString);
+        con.Open();
+        SqlCommand cmd = new SqlCommand("INSERT INTO user_sport VALUES (@userid,@id)", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+        cmd.Parameters.AddWithValue("@id", id);
+        try
+        {
+            cmd.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+        }
+        finally
+        {
+            con.Close();
+        }
+
+
+    }
+
+    public static void ExecuteCommandDelete(string id, string userid)
+    {
+        SqlConnection con = new SqlConnection(ConnectionString);
+        con.Open();
+        SqlCommand cmd = new SqlCommand("DELETE FROM user_sport WHERE userid=@userid AND sport_id = @id", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+        cmd.Parameters.AddWithValue("@id", id);
+        try
+        {
+            cmd.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+        }
+        finally
+        {
+            con.Close();
+        }
+
+
+    }
+
+    public static List<int> SelectBudowaCiala(String userid)
+    {
+        List<int> budowa = new List<int>();
+        SqlDataReader reader = null;
+        SqlConnection con = new SqlConnection(ConnectionString);
+        SqlCommand cmd = new SqlCommand("SELECT budowa_ciala_id FROM Wyglad WHERE userid = @userid", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+        con.Open();
+
+        try
+        {
+           reader  = cmd.ExecuteReader();
+           while (reader.Read())
+               budowa.Add(reader.GetInt32(0));
+
+        }
+
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+
+        }
+
+        finally
+        {
+            con.Close();
+
+        }
+
+        return budowa;
+
+
+    }
+
+    public static int GetWzrost(String userid)
+    {
+        int wzrost = 0;
+        SqlConnection con = new SqlConnection(ConnectionString);
+        con.Open();
+        SqlCommand cmd = new SqlCommand("SELECT wzrost FROM Wyglad where userid=@userid", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+
+        try
+        {
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+                wzrost = reader.GetInt32(0);
+            reader.Close();
+
+        }
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+        }
+        finally
+        {
+            con.Close();
+        }
+        return wzrost;
+
+
+    }
+
+    public static int GetWaga(string userid)
+    {
+        int waga = 0;
+        SqlConnection con = new SqlConnection(ConnectionString);
+        con.Open();
+        SqlCommand cmd = new SqlCommand("SELECT waga FROM Wyglad where userid=@userid", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+
+        try
+        {
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+                waga = reader.GetInt32(0);
+            reader.Close();
+
+        }
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+        }
+        finally
+        {
+            con.Close();
+        }
+        return waga;
+
+    }
+    
+    public static int GetPlecId(string userid){
+
+        int plec=0;
+        SqlConnection con = new SqlConnection(ConnectionString);
+        SqlCommand cmd = new SqlCommand("SELECT plec_id FROM user_profile WHERE userid = @userid", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+        con.Open();
+
+        try
+        {
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+                try { plec = reader.GetInt32(0); }
+                catch { }
+            reader.Close();
+
+
+        }
+
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+        }
+        finally
+        {
+            con.Close();
+        }
+        return plec;
+
+
+    }
+
+    public static void UpdateDane(string opis,string userid,string dataUrodzin,int plec,int wojewodztwo)
+    {
+        SqlConnection con = new SqlConnection(ConnectionString);
+        SqlCommand cmd = new SqlCommand("UPDATE user_profile set plec_id=@plec, birthdate=@birthdate, wojewodztwo_id=@wojewodztwo_id, opis=@opis  WHERE userid=@userid", con);
+        con.Open();
+        cmd.Parameters.AddWithValue("@plec", plec);
+        cmd.Parameters.AddWithValue("@userid", userid);
+        cmd.Parameters.AddWithValue("@wojewodztwo_id", wojewodztwo);
+        cmd.Parameters.AddWithValue("@opis", opis);
+        cmd.Parameters.AddWithValue("@birthdate", dataUrodzin);
+
+        try
+        {
+            cmd.ExecuteNonQuery();
+
+
+        }
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+
+        }
+        finally
+        {
+            con.Close();
+        }
+
+
+
+    }
+
+
+    public static string GetOpis(string userid)
+    {
+        SqlConnection con = new SqlConnection(ConnectionString);
+        SqlCommand cmd = new SqlCommand("SELECT opis FROM user_profile WHERE userid=@userid", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+        string opis = null;
+        con.Open();
+        try
+        {
+            SqlDataReader reader = cmd.ExecuteReader();
+            try
+            {
+                while (reader.Read())
+                    opis = reader.GetString(0);
+
+            }
+            catch { }
+        }
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+        }
+        finally
+        {
+
+            con.Close();
+        }
+        return opis;
+
+
+    }
+
+    public static int GetUserWojewodztwo(string userid)
+    {
+        SqlConnection con = new SqlConnection(ConnectionString);
+        SqlCommand cmd = new SqlCommand("SELECT wojewodztwo_id FROM user_profile WHERE userid = @userid", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+        int wojewodztwo = 17;
+        con.Open();
+        try
+        {
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+                try { wojewodztwo = reader.GetInt32(0); }
+                catch { }
+            reader.Close();
+
+
+        }
+
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+        }
+        finally
+        {
+            con.Close();
+        }
+        return wojewodztwo;
+    }
+
+
+    public static string GetUserBirthday(string userid)
+    {
+        string birthdate=null;
+        SqlConnection con = new SqlConnection(ConnectionString);
+        SqlCommand cmd = new SqlCommand("SELECT birthdate=(SUBSTRING(CAST(birthdate AS VARCHAR),0,11)) FROM user_profile WHERE userid = @userid", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+        con.Open();
+
+        try
+        {
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+                try { birthdate = reader.GetString(0); }
+                catch { }
+            reader.Close();
+
+
+        }
+
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+        }
+        finally
+        {
+            con.Close();
+        }
+        return birthdate;
+
+
+    }
+
 	}

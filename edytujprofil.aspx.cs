@@ -31,11 +31,15 @@ public partial class edytujprofil : System.Web.UI.Page
         {
             try
             {
+                FillWojewodztwo();
+                FillPlec();
+                FillDataUrodzin();
                 BuildCheckBox();
                 CheckWygladDropDownList();
                 FillWzrost();
                 FillWaga();
                 FillBMI();
+                BindOpis();
             }
             catch (Exception ex)
             {
@@ -48,18 +52,15 @@ public partial class edytujprofil : System.Web.UI.Page
 
     protected void BuildCheckBox()
     {
-        SqlConnection con = new SqlConnection(ConnectionString);
+       
 
         //dodaje do checkboxlist elementy
         // Dictionary<int, string> sportyCat = DataSource();
         CheckBoxList checkedListBox1 = (CheckBoxList)pnlCustomers.FindControl("cblCustomerList");
-        SqlCommand cmd = new SqlCommand("SELECT DISTINCT [sport_id],[sport_opis] FROM [Sport]", con);
-        con.Open();
-        SqlDataReader reader = cmd.ExecuteReader();
-
-        checkedListBox1.DataSource = reader;
-        checkedListBox1.DataTextField = "sport_opis";
-        checkedListBox1.DataValueField = "sport_id";
+        Dictionary<int,string> sporty = Usr.SelectSportIdSportOpis();
+        checkedListBox1.DataSource = sporty;
+        checkedListBox1.DataTextField = "Value";
+        checkedListBox1.DataValueField = "key";
         checkedListBox1.DataBind();
 
         //        foreach (KeyValuePair<int, string> pair in sportyCat)
@@ -67,45 +68,11 @@ public partial class edytujprofil : System.Web.UI.Page
         //            
         //         checkedListBox1.Items.Add(new ListItem(pair.Key.ToString(),pair.Value));
         //        }
-
-       
-        con.Close();
         //idz do metody zaznaczającej dane z bazy
         SelectCheckBox();
 
     }
 
-    //metoda pobierająca wszystkie kategorie sportu uprawiane przez danego usera (tabela user_sport);
-    protected List<string> GetSportsFromUserSportTable(string userid)
-    {
-        SqlConnection con = new SqlConnection(ConnectionString);
-        List<string> sporty = new List<string>();
-
-        con.Open();
-
-        SqlCommand cmd = new SqlCommand("SELECT sport_opis FROM Sport WHERE Sport.sport_id IN (SELECT sport_id FROM user_sport WHERE userid = @userid)", con);
-        cmd.Parameters.AddWithValue("@userid", userid);
-        try
-        {
-            using (SqlDataReader reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                    sporty.Add(reader.GetString(0));
-                reader.Close();
-            }
-        }
-        catch (Exception ex)
-        {
-
-            HttpContext.Current.Trace.Write(ex.Message);
-        }
-        finally
-        {
-            con.Close();
-        }
-        return sporty;
-
-    }
 
     //metoda do zaznaczenia elementów z bazy danych usera w liscie rozwijanej (sport)
     protected void SelectCheckBox()
@@ -113,7 +80,7 @@ public partial class edytujprofil : System.Web.UI.Page
         List<string> sporty = new List<string>();
         string userid = Session["userid"].ToString();
 
-        sporty = GetSportsFromUserSportTable(userid);
+        sporty = Usr.GetSporty(userid);
 
         if (sporty.Count > 0)
         {
@@ -145,10 +112,10 @@ public partial class edytujprofil : System.Web.UI.Page
     //metoda updajtująca tabelę User_Sport
     protected void Update_User_Sport_Table(object sender, EventArgs e)
     {
-       
+        System.Threading.Thread.Sleep(2000);
         string userid = Session["userid"].ToString();
         int selectedSportsNumber = 0;
-        List<string> sporty = GetSportsFromUserSportTable(userid);
+        List<string> sporty = Usr.GetSporty(userid);
         CheckBoxList checkedListBox1 = (CheckBoxList)pnlCustomers.FindControl("cblCustomerList");
         foreach (ListItem li in checkedListBox1.Items)
         {
@@ -156,7 +123,7 @@ public partial class edytujprofil : System.Web.UI.Page
             {
                 try
                 {
-                    ExecuteCommandInsert(li.Value, userid);
+                    Usr.ExecuteCommandInsert(li.Value, userid);
                     selectedSportsNumber++;
                 }
                 catch (Exception ex)
@@ -168,7 +135,7 @@ public partial class edytujprofil : System.Web.UI.Page
             {
                 try
                 {
-                    ExecuteCommandDelete(li.Value, userid);
+                    Usr.ExecuteCommandDelete(li.Value, userid);
 
                 }
                 catch (Exception ex)
@@ -202,51 +169,7 @@ public partial class edytujprofil : System.Web.UI.Page
 
     }
     //metoda wykonująca inserta do user_sport
-    protected void ExecuteCommandInsert(string id,string userid)
-    {
-        SqlConnection con = new SqlConnection(ConnectionString);
-        con.Open();
-        SqlCommand cmd = new SqlCommand("INSERT INTO user_sport VALUES (@userid,@id)", con);
-        cmd.Parameters.AddWithValue("@userid", userid);
-        cmd.Parameters.AddWithValue("@id", id);
-        try
-        {
-            cmd.ExecuteNonQuery();
-        }
-        catch (Exception ex)
-        {
-            HttpContext.Current.Trace.Write(ex.Message);
-        }
-        finally
-        {
-            con.Close();
-        }
-
-
-    }
-
-    protected void ExecuteCommandDelete(string id, string userid)
-    {
-        SqlConnection con = new SqlConnection(ConnectionString);
-        con.Open();
-        SqlCommand cmd = new SqlCommand("DELETE FROM user_sport WHERE userid=@userid AND sport_id = @id", con);
-        cmd.Parameters.AddWithValue("@userid", userid);
-        cmd.Parameters.AddWithValue("@id", id);
-        try
-        {
-            cmd.ExecuteNonQuery();
-        }
-        catch (Exception ex)
-        {
-            HttpContext.Current.Trace.Write(ex.Message);
-        }
-        finally
-        {
-            con.Close();
-        }
-
-
-    }
+    
 
     protected void ProcessUpload(object sender, AjaxControlToolkit.AsyncFileUploadEventArgs e)
     {
@@ -273,54 +196,18 @@ public partial class edytujprofil : System.Web.UI.Page
     protected void CheckWygladDropDownList()
     {
         string userid = Session["userid"].ToString();
-        SqlConnection con = new SqlConnection(ConnectionString);
-        SqlCommand cmd = new SqlCommand("SELECT budowa_ciala_id FROM Wyglad WHERE userid = @userid", con);
-        cmd.Parameters.AddWithValue("@userid", userid);
-        con.Open();
         try
         {
             DDLWyglad = FillWygladDropDownList();
 
-            SqlDataReader reader = cmd.ExecuteReader();
 
-            if (reader.FieldCount != 0)
-            {
-                while(reader.Read())
-                    DDLWyglad.SelectedValue = reader.GetInt32(0).ToString();
-                reader.Close();
+            List<int> budowa = Usr.SelectBudowaCiala(userid);
+
+            foreach (int budo in budowa)
+                DDLWyglad.SelectedValue = budo.ToString();
 
 
-            }
-        }
-        catch (Exception ex)
-        {
-            HttpContext.Current.Trace.Write(ex.Message);
-
-        }
-        finally
-        {
-
-            con.Close();
-        }
-
-    }
-
-    private string OkreslPlec()
-    {
-
-        string userid = Session["userid"].ToString();
-        string plec = "Null";
-        SqlConnection con = new SqlConnection(ConnectionString);
-        SqlCommand cmd = new SqlCommand("SELECT plec FROM user_profile WHERE userid = @userid", con);
-        cmd.Parameters.AddWithValue("@userid", userid);
-        con.Open();
-        try
-        {
             
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-                plec = reader.GetString(0).ToString();
-            reader.Close();
         }
         catch (Exception ex)
         {
@@ -330,11 +217,8 @@ public partial class edytujprofil : System.Web.UI.Page
         finally
         {
 
-            con.Close();
+           
         }
-
-
-        return plec;
 
     }
 
@@ -368,29 +252,9 @@ public partial class edytujprofil : System.Web.UI.Page
     protected void FillWzrost()
     {   
         string userid=Session["userid"].ToString();
-        double wzrost = 0.0;
-        SqlConnection con = new SqlConnection(ConnectionString);
-        con.Open();
-        SqlCommand cmd = new SqlCommand("SELECT wzrost FROM Wyglad where userid=@userid", con);
-        cmd.Parameters.AddWithValue("@userid",userid);
-
-        try
-        {
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-                wzrost = reader.GetInt32(0);
-            reader.Close();
-
-        }
-        catch(Exception ex)
-        {
-            HttpContext.Current.Trace.Write(ex.Message);
-        }
-        finally
-        {
-            con.Close();
-        }
-        if(wzrost!=0.0)
+        int wzrost = 0;
+        wzrost = Usr.GetWzrost(userid);
+        if(wzrost!=0)
             TBWzrost.Text = wzrost.ToString();
 
     }
@@ -398,29 +262,9 @@ public partial class edytujprofil : System.Web.UI.Page
     protected void FillWaga()
     {
         string userid = Session["userid"].ToString();
-        double waga = 0.0;
-        SqlConnection con = new SqlConnection(ConnectionString);
-        con.Open();
-        SqlCommand cmd = new SqlCommand("SELECT waga FROM Wyglad where userid=@userid", con);
-        cmd.Parameters.AddWithValue("@userid", userid);
-
-        try
-        {
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-                waga = reader.GetInt32(0);
-            reader.Close();
-
-        }
-        catch (Exception ex)
-        {
-            HttpContext.Current.Trace.Write(ex.Message);
-        }
-        finally
-        {
-            con.Close();
-        }
-        if(waga!=0.0)
+        int waga = 0;
+        waga = Usr.GetWaga(userid);
+        if(waga!=0)
         TBWaga.Text = waga.ToString();
 
     }
@@ -430,32 +274,8 @@ public partial class edytujprofil : System.Web.UI.Page
         string userid = Session["userid"].ToString();
         double waga = 0;
         double wzrost = 0;
-        SqlConnection con = new SqlConnection(ConnectionString);
-        con.Open();
-        SqlCommand cmd = new SqlCommand("SELECT waga FROM Wyglad where userid=@userid", con);
-        SqlCommand cmd2 = new SqlCommand("SELECT wzrost FROM Wyglad where userid=@userid", con);
-        cmd.Parameters.AddWithValue("@userid", userid);
-        cmd2.Parameters.AddWithValue("@userid", userid);
-        try
-        {
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-                waga = reader.GetInt32(0);
-            reader.Close();
-            SqlDataReader reader2 = cmd2.ExecuteReader();
-            while (reader2.Read())
-                wzrost = reader2.GetInt32(0);
-            reader2.Close();
-
-        }
-        catch (Exception ex)
-        {
-            HttpContext.Current.Trace.Write(ex.Message);
-        }
-        finally
-        {
-            con.Close();
-        }
+        waga = Usr.GetWaga(userid);
+        wzrost = Usr.GetWzrost(userid);
 
         double bmi = 0;
         if (waga != 0 && wzrost != 0)
@@ -470,6 +290,8 @@ public partial class edytujprofil : System.Web.UI.Page
 
     protected void Update_Wyglad(object sender, EventArgs e)
     {
+
+        System.Threading.Thread.Sleep(2000);
         int waga = 0;
         int wzrost=0;
         if(TBWaga.Text!="")
@@ -521,88 +343,99 @@ public partial class edytujprofil : System.Web.UI.Page
 
     }
 
-    /*
-    protected void ddl_ItemUpdating(object sender, DetailsViewUpdateEventArgs e)
+    protected void FillDataUrodzin()
     {
 
-        DropDownList ddl = DetailsView1.FindControl("DropDownList1") as DropDownList;
         string userid = Session["userid"].ToString();
-        if (ddl != null && userid != null)
-        {
-            string plec;
-            
-            plec = ddl.SelectedValue;
-            SqlConnection con = new SqlConnection(ConnectionString);
-            try
-            {
-                con.Open();
-                SqlCommand cmd = new SqlCommand("UPDATE user_profile SET plec = @plec WHERE userid = @userid", con);
-                cmd.Parameters.AddWithValue("@userid", userid);
-                cmd.Parameters.AddWithValue("@plec", plec);
-                cmd.ExecuteNonQuery();  
-            }
-            catch (Exception ex)
-            {
-                HttpContext.Current.Trace.Write(ex.Message);
-            }
-            finally
-            {
-                con.Close();
-            }
+        string birthdate = null;
+        birthdate = Usr.GetUserBirthday(userid);
 
+        if (birthdate != null)
+        {
+            DataUrodzin.Text = birthdate.ToString();
 
         }
+
     }
-    
-    protected void CheckBox(object sender, EventArgs e)
+
+    protected void FillPlec()
     {
-    string bigText="";
-    ContentPlaceHolder cph = (ContentPlaceHolder)this.Master.FindControl("ContentPlaceHolder1");
-    CheckBoxList cbl = cph.FindControl("cblCustomerList") as CheckBoxList;
-    foreach (ListItem li in cbl.Items)
-        {
-        if (li.Text!=null)
-        {
-            bigText = bigText + li.Text + " ";
-        }
-        }
-    bigText = bigText.Trim();
-    
-    Label myLabel = cph.FindControl("iloscwiadomosci") as Label;
-    myLabel.Text = bigText;
+
+        string userid = Session["userid"].ToString();
+        int plec = 0;
+        plec = Usr.GetPlecId(userid);
+
+        Plec.Items.Add(new ListItem("Mężczyzna","1"));
+        Plec.Items.Add(new ListItem("Kobieta", "2"));
+        Plec.DataBind();
+        if(plec!=0)
+        Plec.SelectedValue = plec.ToString();
+
     }
-      
-    //pobiera z tabeli Sport dane sport_id oraz sport_opis
-    protected Dictionary<int,string> DataSource()
+
+    protected void FillWojewodztwo()
     {
-        Dictionary<int,string> sporty = new Dictionary<int,string>();
+        string userid = Session["userid"].ToString();
+        int wojewodztwo = 17;
+
+        wojewodztwo = Usr.GetUserWojewodztwo(userid);
+        
+        BindWojewodztwa();
+ 
+        if (wojewodztwo != 17)
+            Wojewodztwa.SelectedValue = wojewodztwo.ToString();
+
+    }
+
+    protected void BindWojewodztwa()
+    {
         SqlConnection con = new SqlConnection(ConnectionString);
+        SqlCommand cmd = new SqlCommand("SELECT DISTINCT [wojewodztwo_id],[wojewodztwo] FROM [Wojewodztwa] ORDER BY [wojewodztwo_id] DESC", con);
+        
         con.Open();
-
-        SqlCommand cmd = new SqlCommand("SELECT DISTINCT [sport_id],[sport_opis] FROM [Sport]", con);
-          
         try
-          {
-              using (SqlDataReader reader = cmd.ExecuteReader())
-              {
-                  while (reader.Read())
-                      sporty.Add(reader.GetInt32(0),reader.GetString(1));
-                  reader.Close();
-              }
-          }
-          catch (Exception ex)
-          {
+        {
+            SqlDataReader reader = cmd.ExecuteReader();
+            Wojewodztwa.DataSource = reader;
+            Wojewodztwa.DataTextField = "wojewodztwo";
+            Wojewodztwa.DataValueField = "wojewodztwo_id";
+            Wojewodztwa.DataBind();
+        }
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+        }
+        finally
+        {
 
-              HttpContext.Current.Trace.Write(ex.Message);
-          }
-          finally
-          {
-              con.Close();
-              
-          }
+            con.Close();
+        }
+    }
 
-        return sporty;
-    }     * 
-     * 
-    */
+
+    protected void BindOpis()
+    {
+        string userid = Session["userid"].ToString();
+        string opis = null;
+        opis = Usr.GetOpis(userid);
+
+        if(opis!=null)
+            Opis.Text=opis;
+    }
+
+    protected void UpdateDane(object sender, EventArgs e)
+    {
+
+        System.Threading.Thread.Sleep(2000);
+        string opis = Opis.Text;
+        string userid = Session["userid"].ToString();
+        string dataUrodzin = DataUrodzin.Text;
+        int plec = Convert.ToInt32(Plec.SelectedItem.Value);
+        int wojewodztwo = Convert.ToInt32(Wojewodztwa.SelectedItem.Value);
+
+        Usr.UpdateDane(opis, userid, dataUrodzin, plec, wojewodztwo);
+
+
+    }
+
 }

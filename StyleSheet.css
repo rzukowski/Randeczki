@@ -1,4 +1,8 @@
 ﻿
+.ajax__calendar_footer {
+    display: none;
+}
+
 #tooltip {
     position:absolute;
     z-index:9999;
@@ -6,6 +10,31 @@
     font-size:16px;
     width:180px;
     
+}
+
+#update {
+    opacity:0.9;
+    filter:alpha(opacity=90); /* For IE8 and earlier */
+    position:fixed;
+    padding:10px;
+    font-size:16px;
+    color:black;
+    line-height:140%;
+    padding-bottom:10px;
+    text-align:center;
+    margin-left:20%;
+    border:1px solid black;
+    z-index:9999;
+    background-color:white;
+    width:400px;
+    height:100px;
+}
+    #update img {
+        padding:30px;
+    }
+
+.Validate {
+   margin-left:10px;
 }
 
 /* IE hack */
