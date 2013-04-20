@@ -3,6 +3,27 @@
     display: none;
 }
 
+img.UserPhoto {
+    float: left;
+}
+.OdwiedziliList p {
+    margin-top:0px;
+}
+.OdwiedziliList {
+    clear:both;
+    margin-bottom:10px;
+    margin-top:10px;
+    margin-left:4px;
+    padding-top:10px;
+    height:200px;
+    border-bottom:1px solid;
+}
+.Username {
+    clear:both;
+    font-size:25px;
+    margin-bottom:0px;
+}
+
 #tooltip {
     position:absolute;
     z-index:9999;
@@ -190,7 +211,9 @@ div#Content {
     top:0px;
     left:490px;
 }
-
+.ListedUserAttr {
+    list-style-type: none;
+}
 .logowanie {
     text-align:center;
     z-index: auto;
@@ -199,8 +222,22 @@ div#Content {
 }
 
 #users {
-    margin-left:10px;
+
+    margin-left:0px;
+    border-top:0;
+    border-bottom:4px;
+    border:0;
+    border-style: hidden;
 }
+
+tr.prof {
+    
+    border-width:0;
+    text-align:left;
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
 div#ObszarLogowania {
     padding:3px 1px 2px 3px;
     text-align:center;
@@ -235,12 +272,6 @@ a {
 }
 
 
-#prof {
-    border:1px groove;
-    text-align:center;
-    padding:10px;
-    width:160px;
-}
 
 .black {
     color: #000033;

@@ -49,11 +49,17 @@ public partial class showprofile : System.Web.UI.Page
     }
 
 
-   
 
-   
 
-    protected void SelectSporty(object sender, EventArgs e)
+    protected void FillLabels(object sender, EventArgs e)
+    {
+        SelectSporty();
+        FillWzrost();
+
+
+    }
+
+    protected void SelectSporty()
     {
       string userid = Request.QueryString["userid"];
       List<string> sporty = Usr.GetSporty(userid);
@@ -62,6 +68,51 @@ public partial class showprofile : System.Web.UI.Page
         Label sportyUsera = (Label)FormView1.FindControl("Sporty");
         sportyUsera.Text = string.Join(",", sporty);
 
+
+
+    }
+
+    protected void FillWzrost()
+    {
+        string userid = Request.QueryString["userid"];
+        int wzrost = Usr.GetWzrost(userid);
+        if (wzrost != null)
+        {
+            Label WzrostL = (Label)FormView1.FindControl("Wzrost");
+            WzrostL.Text = wzrost.ToString();
+        }
+
+
+
+
+    }
+
+    protected void FillWaga()
+    {
+        string userid = Request.QueryString["userid"];
+        int waga = Usr.GetWaga(userid);
+        if (waga != null)
+        {
+            Label Waga = (Label)FormView1.FindControl("Waga");
+            Waga.Text = waga.ToString();
+
+        }
+
+
+    }
+
+    protected void FillWyglad()
+    {
+        string userid = Request.QueryString["userid"];
+        string wyglad = Usr.SelectOpisCiala(userid);
+
+        if (wyglad != null)
+        {
+
+            Label Wyglad = (Label)FormView1.FindControl("Wyglad");
+            Wyglad.Text = wyglad;
+
+        }
 
 
     }

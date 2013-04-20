@@ -201,10 +201,9 @@ public partial class edytujprofil : System.Web.UI.Page
             DDLWyglad = FillWygladDropDownList();
 
 
-            List<int> budowa = Usr.SelectBudowaCiala(userid);
-
-            foreach (int budo in budowa)
-                DDLWyglad.SelectedValue = budo.ToString();
+            int budowa = Usr.SelectBudowaCiala(userid);
+            if(budowa!=0)
+            DDLWyglad.SelectedValue = budowa.ToString();
 
 
             

@@ -284,7 +284,7 @@
              </td>
           </ItemTemplate>
        </asp:ListView>
-        <asp:DataPager ID="lvDataPager1" runat="server" PagedControlID="ListView1" PageSize="1">
+        <asp:DataPager ID="lvDataPager1" runat="server" PagedControlID="ListView1" PageSize="10">
             <Fields>
                 <asp:NumericPagerField ButtonType="Link" />
             </Fields>

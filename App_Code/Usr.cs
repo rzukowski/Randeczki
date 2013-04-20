@@ -365,9 +365,9 @@ public class Usr
 
     }
 
-    public static List<int> SelectBudowaCiala(String userid)
+    public static int SelectBudowaCiala(String userid)
     {
-        List<int> budowa = new List<int>();
+        int budowa = 0;
         SqlDataReader reader = null;
         SqlConnection con = new SqlConnection(ConnectionString);
         SqlCommand cmd = new SqlCommand("SELECT budowa_ciala_id FROM Wyglad WHERE userid = @userid", con);
@@ -378,7 +378,7 @@ public class Usr
         {
            reader  = cmd.ExecuteReader();
            while (reader.Read())
-               budowa.Add(reader.GetInt32(0));
+               budowa=reader.GetInt32(0);
 
         }
 
@@ -398,6 +398,41 @@ public class Usr
 
 
     }
+
+    public static string SelectOpisCiala(String userid)
+    {
+        string budowa = null;
+        SqlDataReader reader = null;
+        SqlConnection con = new SqlConnection(ConnectionString);
+        SqlCommand cmd = new SqlCommand("SELECT budowa_ciala_opis FROM Budowa WHERE budowa_ciala_id = (SELECT budowa_ciala_id FROM Wyglad WHERE userid = @userid)", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+        con.Open();
+
+        try
+        {
+            reader = cmd.ExecuteReader();
+            while (reader.Read())
+                budowa = reader.GetString(0);
+
+        }
+
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+
+        }
+
+        finally
+        {
+            con.Close();
+
+        }
+
+        return budowa;
+
+
+    }
+
 
     public static int GetWzrost(String userid)
     {
