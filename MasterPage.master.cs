@@ -10,23 +10,20 @@ using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Data.SqlClient;
+using System.Web.Security;
+
+
 
 public partial class MasterPage : System.Web.UI.MasterPage
 {
+
+
     protected string UploadFolderPath = "~/photos/";
     public static string ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["FriendsConnectionString"].ConnectionString;
     protected void Page_Load(object sender, EventArgs e)
     {
-        try
-        {
-            if (Session["username"].ToString() == "" || Session["username"] == null)
-            {
-
-                Response.Redirect("~/Zaloguj.aspx");
-
-            }
-        }
-        catch (NullReferenceException) { Response.Redirect("~/Zaloguj.aspx"); }
+        if (!IsPostBack)
+            user.Text = Session["username"].ToString();
 
         string pht = "photos/" + Session["username"] + "image.jpg";
         string def = Server.MapPath("./") + "photos\\default.jpg";
@@ -144,4 +141,17 @@ public partial class MasterPage : System.Web.UI.MasterPage
 
 
     }
+    protected void LogOut(object sender, EventArgs e)
+    {
+        if (HttpContext.Current.Request.Cookies["UserSzukaj"] != null)
+        {
+            HttpCookie myCookie = new HttpCookie("UserSzukaj");
+            myCookie.Expires = DateTime.Now.AddDays(-1d);
+            Response.Cookies.Add(myCookie);
+        }
+        FormsAuthentication.SignOut();
+        Session.Abandon();
+        Response.Redirect("~/Zaloguj.aspx");
+    }
+
 }

@@ -1,7 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true"  MasterPageFile="~/MasterPage.master" Title="Untitled Page" CodeFile="Odwiedzili.aspx.cs" Inherits="Odwiedzili" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-    <asp:ListView ID="ListView1" runat="server" DataSourceID="SqlDataSource1" groupitemcount = "1" border-width="0">
+    <asp:ListView ID="ListView1" runat="server"  groupitemcount = "1" border-width="0">
      <LayoutTemplate>
             <div id="users" >
             <div id="groupPlaceHolder" runat="server">
@@ -36,7 +36,7 @@
     </asp:ListView>
     <asp:DataPager ID="lvDataPager1" runat="server" PagedControlID="ListView1" PageSize="4">
             <Fields>
-                <asp:NumericPagerField ButtonType="Link" />
+                <asp:NumericPagerField ButtonType="Link"/>
             </Fields>
         </asp:DataPager>
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" 

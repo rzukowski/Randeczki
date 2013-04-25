@@ -649,4 +649,103 @@ public class Usr
 
     }
 
+    public static string GetSaltFromUser(string username)
+    {
+
+        string salt = null;
+        SqlConnection con = new SqlConnection(ConnectionString);
+        SqlCommand cmd = new SqlCommand("SELECT PasswordSalt FROM aspnet_Membership WHERE userid = (SELECT userid FROM aspnet_Users WHERE UserName=@username)", con);
+        cmd.Parameters.AddWithValue("@username", username);
+        con.Open();
+
+        try
+        {
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+                try { salt = reader.GetString(0); }
+                catch { }
+            reader.Close();
+
+
+        }
+
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+        }
+        finally
+        {
+            con.Close();
+        }
+
+        return salt;
+
+    }
+
+
+    public static string GetUserToken(string username)
+    {
+
+        string token = null;
+        SqlConnection con = new SqlConnection(ConnectionString);
+        SqlCommand cmd = new SqlCommand("SELECT Token FROM aspnet_Membership WHERE userid = (SELECT userid FROM aspnet_Users WHERE UserName=@username)", con);
+        cmd.Parameters.AddWithValue("@username", username);
+        con.Open();
+
+        try
+        {
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+                try { token = reader.GetString(0); }
+                catch { }
+            reader.Close();
+
+
+        }
+
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+        }
+        finally
+        {
+            con.Close();
+        }
+
+        return token;
+
+    }
+
+    public static bool SaveTokenToDb(string token,string username){
+
+        bool updated = false;
+        SqlConnection con = new SqlConnection(ConnectionString);
+        SqlCommand cmd = new SqlCommand("UPDATE aspnet_Membership SET Token=@token WHERE userid= (SELECT userid from aspnet_Users WHERE username=@username)", con);
+        cmd.Parameters.AddWithValue("@username", username);
+        cmd.Parameters.AddWithValue("@token", token);
+        con.Open();
+
+        try
+        {
+            if(cmd.ExecuteNonQuery()>0)
+                updated = true;
+            
+
+        }
+
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+            updated = false;
+        }
+        finally
+        {
+            con.Close();
+        }
+
+        return updated;
+
+    }
+
+
 	}

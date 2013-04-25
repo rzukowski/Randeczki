@@ -10,14 +10,9 @@
 <body>
     <form id="form1" runat="server">
     <div id="Logo">
-        <span class="log">ktoszuka-tenznajdzie.pl</span><div class="men"><asp:Menu ID="MenuGlowne" runat="server" DataSourceID="MapaSerwisu" Orientation="Horizontal" CssClass="men" EnableTheming="True">
-            <DynamicHoverStyle CssClass="ZaznaczonyElementMenu" />
-            <DynamicMenuItemStyle CssClass="ElementMenuRozwijanego" />
-            <StaticHoverStyle CssClass="ZaznaczonyElementMenu" />
-            <StaticMenuItemStyle CssClass="ElementMenuNadrzednego" />
-        </asp:Menu></div></div>
+        <span class="log">ktoszuka-tenznajdzie.pl</span><div class="men"></div></div>
       
-            <asp:SiteMapDataSource ID="MapaSerwisu" runat="server" ShowStartingNode="False" />
+
        
     <div style="width:307px; margin-left:auto; margin-right:auto">
     

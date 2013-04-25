@@ -38,7 +38,22 @@ public partial class DataClassesDataContext : System.Data.Linq.DataContext
   partial void Insertmessage(message instance);
   partial void Updatemessage(message instance);
   partial void Deletemessage(message instance);
+  partial void InsertViewed(Viewed instance);
+  partial void UpdateViewed(Viewed instance);
+  partial void DeleteViewed(Viewed instance);
+  partial void InsertWyglad(Wyglad instance);
+  partial void UpdateWyglad(Wyglad instance);
+  partial void DeleteWyglad(Wyglad instance);
+  partial void InsertSport(Sport instance);
+  partial void UpdateSport(Sport instance);
+  partial void DeleteSport(Sport instance);
   #endregion
+	
+	public DataClassesDataContext() : 
+			base(global::System.Configuration.ConfigurationManager.ConnectionStrings["FriendsConnectionString"].ConnectionString, mappingSource)
+	{
+		OnCreated();
+	}
 	
 	public DataClassesDataContext(string connection) : 
 			base(connection, mappingSource)
@@ -94,6 +109,37 @@ public partial class DataClassesDataContext : System.Data.Linq.DataContext
 		{
 			return this.GetTable<message>();
 		}
+	}
+	
+	public System.Data.Linq.Table<Viewed> Vieweds
+	{
+		get
+		{
+			return this.GetTable<Viewed>();
+		}
+	}
+	
+	public System.Data.Linq.Table<Wyglad> Wyglads
+	{
+		get
+		{
+			return this.GetTable<Wyglad>();
+		}
+	}
+	
+	public System.Data.Linq.Table<Sport> Sports
+	{
+		get
+		{
+			return this.GetTable<Sport>();
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.PokazOdwiedzone")]
+	public ISingleResult<PokazOdwiedzoneResult> PokazOdwiedzone([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string userid)
+	{
+		IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), userid);
+		return ((ISingleResult<PokazOdwiedzoneResult>)(result.ReturnValue));
 	}
 }
 
@@ -367,6 +413,8 @@ public partial class aspnet_User : INotifyPropertyChanging, INotifyPropertyChang
 	
 	private EntitySet<message> _messages1;
 	
+	private EntityRef<Wyglad> _Wyglad;
+	
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -392,6 +440,7 @@ public partial class aspnet_User : INotifyPropertyChanging, INotifyPropertyChang
 		this._user_profile = default(EntityRef<user_profile>);
 		this._messages = new EntitySet<message>(new Action<message>(this.attach_messages), new Action<message>(this.detach_messages));
 		this._messages1 = new EntitySet<message>(new Action<message>(this.attach_messages1), new Action<message>(this.detach_messages1));
+		this._Wyglad = default(EntityRef<Wyglad>);
 		OnCreated();
 	}
 	
@@ -587,6 +636,35 @@ public partial class aspnet_User : INotifyPropertyChanging, INotifyPropertyChang
 		set
 		{
 			this._messages1.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_Wyglad", Storage="_Wyglad", ThisKey="UserId", OtherKey="userid", IsUnique=true, IsForeignKey=false)]
+	public Wyglad Wyglad
+	{
+		get
+		{
+			return this._Wyglad.Entity;
+		}
+		set
+		{
+			Wyglad previousValue = this._Wyglad.Entity;
+			if (((previousValue != value) 
+						|| (this._Wyglad.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Wyglad.Entity = null;
+					previousValue.aspnet_User = null;
+				}
+				this._Wyglad.Entity = value;
+				if ((value != null))
+				{
+					value.aspnet_User = this;
+				}
+				this.SendPropertyChanged("Wyglad");
+			}
 		}
 	}
 	
@@ -867,6 +945,517 @@ public partial class message : INotifyPropertyChanging, INotifyPropertyChanged
 		if ((this.PropertyChanged != null))
 		{
 			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Viewed")]
+public partial class Viewed : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private System.Guid _OdwiedzanyId;
+	
+	private System.Guid _OdwiedzilId;
+	
+	private System.DateTime _Data;
+	
+	private int _viewed1;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnOdwiedzanyIdChanging(System.Guid value);
+    partial void OnOdwiedzanyIdChanged();
+    partial void OnOdwiedzilIdChanging(System.Guid value);
+    partial void OnOdwiedzilIdChanged();
+    partial void OnDataChanging(System.DateTime value);
+    partial void OnDataChanged();
+    partial void Onviewed1Changing(int value);
+    partial void Onviewed1Changed();
+    #endregion
+	
+	public Viewed()
+	{
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OdwiedzanyId", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+	public System.Guid OdwiedzanyId
+	{
+		get
+		{
+			return this._OdwiedzanyId;
+		}
+		set
+		{
+			if ((this._OdwiedzanyId != value))
+			{
+				this.OnOdwiedzanyIdChanging(value);
+				this.SendPropertyChanging();
+				this._OdwiedzanyId = value;
+				this.SendPropertyChanged("OdwiedzanyId");
+				this.OnOdwiedzanyIdChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OdwiedzilId", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+	public System.Guid OdwiedzilId
+	{
+		get
+		{
+			return this._OdwiedzilId;
+		}
+		set
+		{
+			if ((this._OdwiedzilId != value))
+			{
+				this.OnOdwiedzilIdChanging(value);
+				this.SendPropertyChanging();
+				this._OdwiedzilId = value;
+				this.SendPropertyChanged("OdwiedzilId");
+				this.OnOdwiedzilIdChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Data", DbType="DateTime NOT NULL", IsPrimaryKey=true)]
+	public System.DateTime Data
+	{
+		get
+		{
+			return this._Data;
+		}
+		set
+		{
+			if ((this._Data != value))
+			{
+				this.OnDataChanging(value);
+				this.SendPropertyChanging();
+				this._Data = value;
+				this.SendPropertyChanged("Data");
+				this.OnDataChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Name="viewed", Storage="_viewed1", DbType="Int NOT NULL")]
+	public int viewed1
+	{
+		get
+		{
+			return this._viewed1;
+		}
+		set
+		{
+			if ((this._viewed1 != value))
+			{
+				this.Onviewed1Changing(value);
+				this.SendPropertyChanging();
+				this._viewed1 = value;
+				this.SendPropertyChanged("viewed1");
+				this.Onviewed1Changed();
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Wyglad")]
+public partial class Wyglad : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private System.Guid _userid;
+	
+	private System.Nullable<int> _wzrost;
+	
+	private System.Nullable<int> _waga;
+	
+	private System.Nullable<int> _budowa_ciala_id;
+	
+	private EntityRef<aspnet_User> _aspnet_User;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnuseridChanging(System.Guid value);
+    partial void OnuseridChanged();
+    partial void OnwzrostChanging(System.Nullable<int> value);
+    partial void OnwzrostChanged();
+    partial void OnwagaChanging(System.Nullable<int> value);
+    partial void OnwagaChanged();
+    partial void Onbudowa_ciala_idChanging(System.Nullable<int> value);
+    partial void Onbudowa_ciala_idChanged();
+    #endregion
+	
+	public Wyglad()
+	{
+		this._aspnet_User = default(EntityRef<aspnet_User>);
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_userid", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+	public System.Guid userid
+	{
+		get
+		{
+			return this._userid;
+		}
+		set
+		{
+			if ((this._userid != value))
+			{
+				if (this._aspnet_User.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnuseridChanging(value);
+				this.SendPropertyChanging();
+				this._userid = value;
+				this.SendPropertyChanged("userid");
+				this.OnuseridChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_wzrost", DbType="Int")]
+	public System.Nullable<int> wzrost
+	{
+		get
+		{
+			return this._wzrost;
+		}
+		set
+		{
+			if ((this._wzrost != value))
+			{
+				this.OnwzrostChanging(value);
+				this.SendPropertyChanging();
+				this._wzrost = value;
+				this.SendPropertyChanged("wzrost");
+				this.OnwzrostChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_waga", DbType="Int")]
+	public System.Nullable<int> waga
+	{
+		get
+		{
+			return this._waga;
+		}
+		set
+		{
+			if ((this._waga != value))
+			{
+				this.OnwagaChanging(value);
+				this.SendPropertyChanging();
+				this._waga = value;
+				this.SendPropertyChanged("waga");
+				this.OnwagaChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_budowa_ciala_id", DbType="Int")]
+	public System.Nullable<int> budowa_ciala_id
+	{
+		get
+		{
+			return this._budowa_ciala_id;
+		}
+		set
+		{
+			if ((this._budowa_ciala_id != value))
+			{
+				this.Onbudowa_ciala_idChanging(value);
+				this.SendPropertyChanging();
+				this._budowa_ciala_id = value;
+				this.SendPropertyChanged("budowa_ciala_id");
+				this.Onbudowa_ciala_idChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_Wyglad", Storage="_aspnet_User", ThisKey="userid", OtherKey="UserId", IsForeignKey=true)]
+	public aspnet_User aspnet_User
+	{
+		get
+		{
+			return this._aspnet_User.Entity;
+		}
+		set
+		{
+			aspnet_User previousValue = this._aspnet_User.Entity;
+			if (((previousValue != value) 
+						|| (this._aspnet_User.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._aspnet_User.Entity = null;
+					previousValue.Wyglad = null;
+				}
+				this._aspnet_User.Entity = value;
+				if ((value != null))
+				{
+					value.Wyglad = this;
+					this._userid = value.UserId;
+				}
+				else
+				{
+					this._userid = default(System.Guid);
+				}
+				this.SendPropertyChanged("aspnet_User");
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Sport")]
+public partial class Sport : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private int _sport_id;
+	
+	private string _sport_opis;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onsport_idChanging(int value);
+    partial void Onsport_idChanged();
+    partial void Onsport_opisChanging(string value);
+    partial void Onsport_opisChanged();
+    #endregion
+	
+	public Sport()
+	{
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_sport_id", DbType="Int NOT NULL", IsPrimaryKey=true)]
+	public int sport_id
+	{
+		get
+		{
+			return this._sport_id;
+		}
+		set
+		{
+			if ((this._sport_id != value))
+			{
+				this.Onsport_idChanging(value);
+				this.SendPropertyChanging();
+				this._sport_id = value;
+				this.SendPropertyChanged("sport_id");
+				this.Onsport_idChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_sport_opis", DbType="NVarChar(50)")]
+	public string sport_opis
+	{
+		get
+		{
+			return this._sport_opis;
+		}
+		set
+		{
+			if ((this._sport_opis != value))
+			{
+				this.Onsport_opisChanging(value);
+				this.SendPropertyChanging();
+				this._sport_opis = value;
+				this.SendPropertyChanged("sport_opis");
+				this.Onsport_opisChanged();
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+}
+
+public partial class PokazOdwiedzoneResult
+{
+	
+	private System.Guid _UserId;
+	
+	private string _username;
+	
+	private System.DateTime _Data;
+	
+	private string _Opis;
+	
+	private System.Nullable<int> _Wiek;
+	
+	private string _wojewodztwo;
+	
+	public PokazOdwiedzoneResult()
+	{
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="UniqueIdentifier NOT NULL")]
+	public System.Guid UserId
+	{
+		get
+		{
+			return this._UserId;
+		}
+		set
+		{
+			if ((this._UserId != value))
+			{
+				this._UserId = value;
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_username", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
+	public string username
+	{
+		get
+		{
+			return this._username;
+		}
+		set
+		{
+			if ((this._username != value))
+			{
+				this._username = value;
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Data", DbType="DateTime NOT NULL")]
+	public System.DateTime Data
+	{
+		get
+		{
+			return this._Data;
+		}
+		set
+		{
+			if ((this._Data != value))
+			{
+				this._Data = value;
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Opis", DbType="VarChar(500)")]
+	public string Opis
+	{
+		get
+		{
+			return this._Opis;
+		}
+		set
+		{
+			if ((this._Opis != value))
+			{
+				this._Opis = value;
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Wiek", DbType="Int")]
+	public System.Nullable<int> Wiek
+	{
+		get
+		{
+			return this._Wiek;
+		}
+		set
+		{
+			if ((this._Wiek != value))
+			{
+				this._Wiek = value;
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_wojewodztwo", DbType="NVarChar(50)")]
+	public string wojewodztwo
+	{
+		get
+		{
+			return this._wojewodztwo;
+		}
+		set
+		{
+			if ((this._wojewodztwo != value))
+			{
+				this._wojewodztwo = value;
+			}
 		}
 	}
 }

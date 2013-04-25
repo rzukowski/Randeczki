@@ -7,8 +7,8 @@ using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Data.SqlClient;
-
-public partial class szukajprzyjaciol : System.Web.UI.Page
+using Base;
+public partial class szukajprzyjaciol : BaseClass
 {
     public static string ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["FriendsConnectionString"].ConnectionString;
 

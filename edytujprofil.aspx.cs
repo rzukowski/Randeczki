@@ -7,25 +7,16 @@ using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Data.SqlClient;
-public partial class edytujprofil : System.Web.UI.Page
+using Base;
+
+
+public partial class edytujprofil : BaseClass
 {
     public static string ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["FriendsConnectionString"].ConnectionString;
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        try
-        {
-            if (Session["username"].ToString() == "" || Session["username"] == null)
-            {
-
-                Response.Redirect("~/Zaloguj.aspx");
-
-            }
-        }
-        catch
-        {
-            Response.Redirect("~/Zaloguj.aspx");
-        }
+        
 
         if (!IsPostBack)
         {
@@ -425,7 +416,7 @@ public partial class edytujprofil : System.Web.UI.Page
     protected void UpdateDane(object sender, EventArgs e)
     {
 
-        System.Threading.Thread.Sleep(2000);
+        System.Threading.Thread.Sleep(1000);
         string opis = Opis.Text;
         string userid = Session["userid"].ToString();
         string dataUrodzin = DataUrodzin.Text;

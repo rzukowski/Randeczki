@@ -8,8 +8,8 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
-
-public partial class profilephoto : System.Web.UI.Page
+using Base;
+public partial class profilephoto : BaseClass
 {
     protected void Page_Load(object sender, EventArgs e)
     {

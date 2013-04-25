@@ -7,27 +7,15 @@ using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Data.SqlClient;
-
-public partial class showprofile : System.Web.UI.Page
+using Base;
+public partial class showprofile : BaseClass
 {
 
     public static string ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["FriendsConnectionString"].ConnectionString;
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        try
-        {
-            if (Session["username"].ToString() == "" || Session["username"] == null)
-            {
-
-                Response.Redirect("~/Zaloguj.aspx");
-
-            }
-        }
-        catch
-        {
-            Response.Redirect("~/Zaloguj.aspx");
-        }
+        
 
        // String username = Request.QueryString["username"];
       //  String pth = Server.MapPath("./") + username + "image.jpg";
@@ -44,7 +32,7 @@ public partial class showprofile : System.Web.UI.Page
 
         string odwiedzanyid = Request.QueryString["userid"];
         string odwiedzilid = Session["userid"].ToString();
-        Usr.SaveVisited(odwiedzanyid,odwiedzanyid);
+        Usr.SaveVisited(odwiedzanyid, odwiedzilid);
 
     }
 
