@@ -33,22 +33,40 @@ img.UserPhoto {
     
 }
 
-#update {
-    opacity:0.9;
-    filter:alpha(opacity=90); /* For IE8 and earlier */
-    position:fixed;
-    padding:10px;
-    font-size:16px;
-    color:black;
-    line-height:140%;
-    padding-bottom:10px;
+#Center {
+    margin:auto 0;
     text-align:center;
-    margin-left:20%;
-    border:1px solid black;
-    z-index:9999;
-    background-color:white;
-    width:400px;
-    height:100px;
+}
+
+#update {
+   color:black;
+    width: 250px;
+        height: 150px;
+        background: #FFF;
+   
+        text-align: center;
+        position: fixed;
+        margin-left: -75px;
+        margin-top: -75px;
+        left: 50%;
+        top: 50%;
+        opacity:1.0;
+        z-index: 20;
+
+        display: block;
+
+}
+
+#greyout {
+    position: absolute;
+    background: #000;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.4;
+    filter: alpha(opacity=40); /* For IE8 and earlier */
+    
 }
     #update img {
         padding:30px;
@@ -88,6 +106,18 @@ ul.zakladki {
     text-align:center;
 
 }
+
+ul.links li{
+    
+   display:inline-block;
+   *display:inline; /*IE7*/
+   *zoom:1; /*IE7*/
+    list-style: none;
+    border-color:black;
+    border:1px solid white;
+}
+
+
 
 ul.zakladki li{
 

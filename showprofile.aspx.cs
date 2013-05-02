@@ -43,7 +43,8 @@ public partial class showprofile : BaseClass
     {
         SelectSporty();
         FillWzrost();
-
+        FillWaga();
+        FillWyglad();
 
     }
 
@@ -51,12 +52,16 @@ public partial class showprofile : BaseClass
     {
       string userid = Request.QueryString["userid"];
       List<string> sporty = Usr.GetSporty(userid);
-      
-
         Label sportyUsera = (Label)FormView1.FindControl("Sporty");
-        sportyUsera.Text = string.Join(",", sporty);
-
-
+      if (sporty != null)
+      {
+          
+          sportyUsera.Text = string.Join(", ", sporty);
+      }
+      else
+      {
+          sportyUsera.Visible = false;
+      }
 
     }
 
@@ -64,13 +69,16 @@ public partial class showprofile : BaseClass
     {
         string userid = Request.QueryString["userid"];
         int wzrost = Usr.GetWzrost(userid);
-        if (wzrost != null)
+        Label WzrostL = (Label)FormView1.FindControl("Wzrost");
+        if (wzrost != null && wzrost!=0)
         {
-            Label WzrostL = (Label)FormView1.FindControl("Wzrost");
-            WzrostL.Text = wzrost.ToString();
+
+            WzrostL.Text = "Wzrost: " + wzrost.ToString() + " cm" + "<br \\>";
         }
-
-
+        else
+        {
+            WzrostL.Visible = false;
+        }
 
 
     }
@@ -79,10 +87,16 @@ public partial class showprofile : BaseClass
     {
         string userid = Request.QueryString["userid"];
         int waga = Usr.GetWaga(userid);
-        if (waga != null)
+        Label Waga = (Label)FormView1.FindControl("Waga");
+        if (waga != null && waga!=0)
         {
-            Label Waga = (Label)FormView1.FindControl("Waga");
-            Waga.Text = waga.ToString();
+
+            Waga.Text = "Waga: " + waga.ToString() + " kg" + "<br \\>";
+
+        }
+        else
+        {
+            Waga.Visible = false;
 
         }
 
@@ -93,12 +107,17 @@ public partial class showprofile : BaseClass
     {
         string userid = Request.QueryString["userid"];
         string wyglad = Usr.SelectOpisCiala(userid);
-
+        Label Wyglad = (Label)FormView1.FindControl("Wyglad");
         if (wyglad != null)
         {
 
-            Label Wyglad = (Label)FormView1.FindControl("Wyglad");
-            Wyglad.Text = wyglad;
+
+            Wyglad.Text = "Budowa: " + wyglad + "<br \\>";
+
+        }
+        else
+        {
+            Wyglad.Visible = false;
 
         }
 

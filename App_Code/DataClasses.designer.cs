@@ -47,6 +47,12 @@ public partial class DataClassesDataContext : System.Data.Linq.DataContext
   partial void InsertSport(Sport instance);
   partial void UpdateSport(Sport instance);
   partial void DeleteSport(Sport instance);
+  partial void Insertmessage_sent(message_sent instance);
+  partial void Updatemessage_sent(message_sent instance);
+  partial void Deletemessage_sent(message_sent instance);
+  partial void Insertmessage1(message1 instance);
+  partial void Updatemessage1(message1 instance);
+  partial void Deletemessage1(message1 instance);
   #endregion
 	
 	public DataClassesDataContext() : 
@@ -132,6 +138,22 @@ public partial class DataClassesDataContext : System.Data.Linq.DataContext
 		get
 		{
 			return this.GetTable<Sport>();
+		}
+	}
+	
+	public System.Data.Linq.Table<message_sent> message_sents
+	{
+		get
+		{
+			return this.GetTable<message_sent>();
+		}
+	}
+	
+	public System.Data.Linq.Table<message1> message1s
+	{
+		get
+		{
+			return this.GetTable<message1>();
 		}
 	}
 	
@@ -415,6 +437,14 @@ public partial class aspnet_User : INotifyPropertyChanging, INotifyPropertyChang
 	
 	private EntityRef<Wyglad> _Wyglad;
 	
+	private EntitySet<message_sent> _message_sents;
+	
+	private EntitySet<message_sent> _message_sents1;
+	
+	private EntitySet<message1> _message1s;
+	
+	private EntitySet<message1> _message1s1;
+	
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -441,6 +471,10 @@ public partial class aspnet_User : INotifyPropertyChanging, INotifyPropertyChang
 		this._messages = new EntitySet<message>(new Action<message>(this.attach_messages), new Action<message>(this.detach_messages));
 		this._messages1 = new EntitySet<message>(new Action<message>(this.attach_messages1), new Action<message>(this.detach_messages1));
 		this._Wyglad = default(EntityRef<Wyglad>);
+		this._message_sents = new EntitySet<message_sent>(new Action<message_sent>(this.attach_message_sents), new Action<message_sent>(this.detach_message_sents));
+		this._message_sents1 = new EntitySet<message_sent>(new Action<message_sent>(this.attach_message_sents1), new Action<message_sent>(this.detach_message_sents1));
+		this._message1s = new EntitySet<message1>(new Action<message1>(this.attach_message1s), new Action<message1>(this.detach_message1s));
+		this._message1s1 = new EntitySet<message1>(new Action<message1>(this.attach_message1s1), new Action<message1>(this.detach_message1s1));
 		OnCreated();
 	}
 	
@@ -668,6 +702,58 @@ public partial class aspnet_User : INotifyPropertyChanging, INotifyPropertyChang
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_message_sent", Storage="_message_sents", ThisKey="UserId", OtherKey="receiver_id")]
+	public EntitySet<message_sent> message_sents
+	{
+		get
+		{
+			return this._message_sents;
+		}
+		set
+		{
+			this._message_sents.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_message_sent1", Storage="_message_sents1", ThisKey="UserId", OtherKey="receiver_id")]
+	public EntitySet<message_sent> message_sents1
+	{
+		get
+		{
+			return this._message_sents1;
+		}
+		set
+		{
+			this._message_sents1.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_message11", Storage="_message1s", ThisKey="UserId", OtherKey="receivid")]
+	public EntitySet<message1> message1s
+	{
+		get
+		{
+			return this._message1s;
+		}
+		set
+		{
+			this._message1s.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_message12", Storage="_message1s1", ThisKey="UserId", OtherKey="receivid")]
+	public EntitySet<message1> message1s1
+	{
+		get
+		{
+			return this._message1s1;
+		}
+		set
+		{
+			this._message1s1.Assign(value);
+		}
+	}
+	
 	public event PropertyChangingEventHandler PropertyChanging;
 	
 	public event PropertyChangedEventHandler PropertyChanged;
@@ -707,6 +793,54 @@ public partial class aspnet_User : INotifyPropertyChanging, INotifyPropertyChang
 	}
 	
 	private void detach_messages1(message entity)
+	{
+		this.SendPropertyChanging();
+		entity.aspnet_User1 = null;
+	}
+	
+	private void attach_message_sents(message_sent entity)
+	{
+		this.SendPropertyChanging();
+		entity.aspnet_User = this;
+	}
+	
+	private void detach_message_sents(message_sent entity)
+	{
+		this.SendPropertyChanging();
+		entity.aspnet_User = null;
+	}
+	
+	private void attach_message_sents1(message_sent entity)
+	{
+		this.SendPropertyChanging();
+		entity.aspnet_User1 = this;
+	}
+	
+	private void detach_message_sents1(message_sent entity)
+	{
+		this.SendPropertyChanging();
+		entity.aspnet_User1 = null;
+	}
+	
+	private void attach_message1s(message1 entity)
+	{
+		this.SendPropertyChanging();
+		entity.aspnet_User = this;
+	}
+	
+	private void detach_message1s(message1 entity)
+	{
+		this.SendPropertyChanging();
+		entity.aspnet_User = null;
+	}
+	
+	private void attach_message1s1(message1 entity)
+	{
+		this.SendPropertyChanging();
+		entity.aspnet_User1 = this;
+	}
+	
+	private void detach_message1s1(message1 entity)
 	{
 		this.SendPropertyChanging();
 		entity.aspnet_User1 = null;
@@ -1344,6 +1478,478 @@ public partial class Sport : INotifyPropertyChanging, INotifyPropertyChanged
 	}
 }
 
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.message_sent")]
+public partial class message_sent : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private int _msgid;
+	
+	private System.Nullable<System.Guid> _sender_id;
+	
+	private System.Nullable<System.Guid> _receiver_id;
+	
+	private string _mssg;
+	
+	private System.Nullable<System.DateTime> _sentdate;
+	
+	private EntityRef<aspnet_User> _aspnet_User;
+	
+	private EntityRef<aspnet_User> _aspnet_User1;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnmsgidChanging(int value);
+    partial void OnmsgidChanged();
+    partial void Onsender_idChanging(System.Nullable<System.Guid> value);
+    partial void Onsender_idChanged();
+    partial void Onreceiver_idChanging(System.Nullable<System.Guid> value);
+    partial void Onreceiver_idChanged();
+    partial void OnmssgChanging(string value);
+    partial void OnmssgChanged();
+    partial void OnsentdateChanging(System.Nullable<System.DateTime> value);
+    partial void OnsentdateChanged();
+    #endregion
+	
+	public message_sent()
+	{
+		this._aspnet_User = default(EntityRef<aspnet_User>);
+		this._aspnet_User1 = default(EntityRef<aspnet_User>);
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_msgid", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+	public int msgid
+	{
+		get
+		{
+			return this._msgid;
+		}
+		set
+		{
+			if ((this._msgid != value))
+			{
+				this.OnmsgidChanging(value);
+				this.SendPropertyChanging();
+				this._msgid = value;
+				this.SendPropertyChanged("msgid");
+				this.OnmsgidChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_sender_id", DbType="UniqueIdentifier")]
+	public System.Nullable<System.Guid> sender_id
+	{
+		get
+		{
+			return this._sender_id;
+		}
+		set
+		{
+			if ((this._sender_id != value))
+			{
+				this.Onsender_idChanging(value);
+				this.SendPropertyChanging();
+				this._sender_id = value;
+				this.SendPropertyChanged("sender_id");
+				this.Onsender_idChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_receiver_id", DbType="UniqueIdentifier")]
+	public System.Nullable<System.Guid> receiver_id
+	{
+		get
+		{
+			return this._receiver_id;
+		}
+		set
+		{
+			if ((this._receiver_id != value))
+			{
+				if ((this._aspnet_User.HasLoadedOrAssignedValue || this._aspnet_User1.HasLoadedOrAssignedValue))
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.Onreceiver_idChanging(value);
+				this.SendPropertyChanging();
+				this._receiver_id = value;
+				this.SendPropertyChanged("receiver_id");
+				this.Onreceiver_idChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_mssg", DbType="NVarChar(MAX)")]
+	public string mssg
+	{
+		get
+		{
+			return this._mssg;
+		}
+		set
+		{
+			if ((this._mssg != value))
+			{
+				this.OnmssgChanging(value);
+				this.SendPropertyChanging();
+				this._mssg = value;
+				this.SendPropertyChanged("mssg");
+				this.OnmssgChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_sentdate", DbType="DateTime")]
+	public System.Nullable<System.DateTime> sentdate
+	{
+		get
+		{
+			return this._sentdate;
+		}
+		set
+		{
+			if ((this._sentdate != value))
+			{
+				this.OnsentdateChanging(value);
+				this.SendPropertyChanging();
+				this._sentdate = value;
+				this.SendPropertyChanged("sentdate");
+				this.OnsentdateChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_message_sent", Storage="_aspnet_User", ThisKey="receiver_id", OtherKey="UserId", IsForeignKey=true)]
+	public aspnet_User aspnet_User
+	{
+		get
+		{
+			return this._aspnet_User.Entity;
+		}
+		set
+		{
+			aspnet_User previousValue = this._aspnet_User.Entity;
+			if (((previousValue != value) 
+						|| (this._aspnet_User.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._aspnet_User.Entity = null;
+					previousValue.message_sents.Remove(this);
+				}
+				this._aspnet_User.Entity = value;
+				if ((value != null))
+				{
+					value.message_sents.Add(this);
+					this._receiver_id = value.UserId;
+				}
+				else
+				{
+					this._receiver_id = default(Nullable<System.Guid>);
+				}
+				this.SendPropertyChanged("aspnet_User");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_message_sent1", Storage="_aspnet_User1", ThisKey="receiver_id", OtherKey="UserId", IsForeignKey=true)]
+	public aspnet_User aspnet_User1
+	{
+		get
+		{
+			return this._aspnet_User1.Entity;
+		}
+		set
+		{
+			aspnet_User previousValue = this._aspnet_User1.Entity;
+			if (((previousValue != value) 
+						|| (this._aspnet_User1.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._aspnet_User1.Entity = null;
+					previousValue.message_sents1.Remove(this);
+				}
+				this._aspnet_User1.Entity = value;
+				if ((value != null))
+				{
+					value.message_sents1.Add(this);
+					this._receiver_id = value.UserId;
+				}
+				else
+				{
+					this._receiver_id = default(Nullable<System.Guid>);
+				}
+				this.SendPropertyChanged("aspnet_User1");
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.message")]
+public partial class message1 : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private int _msgid;
+	
+	private System.Nullable<System.Guid> _sendid;
+	
+	private System.Nullable<System.Guid> _receivid;
+	
+	private string _mssg;
+	
+	private System.Nullable<System.DateTime> _sentdate;
+	
+	private EntityRef<aspnet_User> _aspnet_User;
+	
+	private EntityRef<aspnet_User> _aspnet_User1;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnmsgidChanging(int value);
+    partial void OnmsgidChanged();
+    partial void OnsendidChanging(System.Nullable<System.Guid> value);
+    partial void OnsendidChanged();
+    partial void OnreceividChanging(System.Nullable<System.Guid> value);
+    partial void OnreceividChanged();
+    partial void OnmssgChanging(string value);
+    partial void OnmssgChanged();
+    partial void OnsentdateChanging(System.Nullable<System.DateTime> value);
+    partial void OnsentdateChanged();
+    #endregion
+	
+	public message1()
+	{
+		this._aspnet_User = default(EntityRef<aspnet_User>);
+		this._aspnet_User1 = default(EntityRef<aspnet_User>);
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_msgid", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+	public int msgid
+	{
+		get
+		{
+			return this._msgid;
+		}
+		set
+		{
+			if ((this._msgid != value))
+			{
+				this.OnmsgidChanging(value);
+				this.SendPropertyChanging();
+				this._msgid = value;
+				this.SendPropertyChanged("msgid");
+				this.OnmsgidChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_sendid", DbType="UniqueIdentifier")]
+	public System.Nullable<System.Guid> sendid
+	{
+		get
+		{
+			return this._sendid;
+		}
+		set
+		{
+			if ((this._sendid != value))
+			{
+				this.OnsendidChanging(value);
+				this.SendPropertyChanging();
+				this._sendid = value;
+				this.SendPropertyChanged("sendid");
+				this.OnsendidChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_receivid", DbType="UniqueIdentifier")]
+	public System.Nullable<System.Guid> receivid
+	{
+		get
+		{
+			return this._receivid;
+		}
+		set
+		{
+			if ((this._receivid != value))
+			{
+				if ((this._aspnet_User.HasLoadedOrAssignedValue || this._aspnet_User1.HasLoadedOrAssignedValue))
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnreceividChanging(value);
+				this.SendPropertyChanging();
+				this._receivid = value;
+				this.SendPropertyChanged("receivid");
+				this.OnreceividChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_mssg", DbType="NVarChar(MAX)")]
+	public string mssg
+	{
+		get
+		{
+			return this._mssg;
+		}
+		set
+		{
+			if ((this._mssg != value))
+			{
+				this.OnmssgChanging(value);
+				this.SendPropertyChanging();
+				this._mssg = value;
+				this.SendPropertyChanged("mssg");
+				this.OnmssgChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_sentdate", DbType="DateTime")]
+	public System.Nullable<System.DateTime> sentdate
+	{
+		get
+		{
+			return this._sentdate;
+		}
+		set
+		{
+			if ((this._sentdate != value))
+			{
+				this.OnsentdateChanging(value);
+				this.SendPropertyChanging();
+				this._sentdate = value;
+				this.SendPropertyChanged("sentdate");
+				this.OnsentdateChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_message11", Storage="_aspnet_User", ThisKey="receivid", OtherKey="UserId", IsForeignKey=true)]
+	public aspnet_User aspnet_User
+	{
+		get
+		{
+			return this._aspnet_User.Entity;
+		}
+		set
+		{
+			aspnet_User previousValue = this._aspnet_User.Entity;
+			if (((previousValue != value) 
+						|| (this._aspnet_User.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._aspnet_User.Entity = null;
+					previousValue.message1s.Remove(this);
+				}
+				this._aspnet_User.Entity = value;
+				if ((value != null))
+				{
+					value.message1s.Add(this);
+					this._receivid = value.UserId;
+				}
+				else
+				{
+					this._receivid = default(Nullable<System.Guid>);
+				}
+				this.SendPropertyChanged("aspnet_User");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_message12", Storage="_aspnet_User1", ThisKey="receivid", OtherKey="UserId", IsForeignKey=true)]
+	public aspnet_User aspnet_User1
+	{
+		get
+		{
+			return this._aspnet_User1.Entity;
+		}
+		set
+		{
+			aspnet_User previousValue = this._aspnet_User1.Entity;
+			if (((previousValue != value) 
+						|| (this._aspnet_User1.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._aspnet_User1.Entity = null;
+					previousValue.message1s1.Remove(this);
+				}
+				this._aspnet_User1.Entity = value;
+				if ((value != null))
+				{
+					value.message1s1.Add(this);
+					this._receivid = value.UserId;
+				}
+				else
+				{
+					this._receivid = default(Nullable<System.Guid>);
+				}
+				this.SendPropertyChanged("aspnet_User1");
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+}
+
 public partial class PokazOdwiedzoneResult
 {
 	
@@ -1354,6 +1960,8 @@ public partial class PokazOdwiedzoneResult
 	private System.DateTime _Data;
 	
 	private string _Opis;
+	
+	private string _plec;
 	
 	private System.Nullable<int> _Wiek;
 	
@@ -1423,6 +2031,22 @@ public partial class PokazOdwiedzoneResult
 			if ((this._Opis != value))
 			{
 				this._Opis = value;
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_plec", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+	public string plec
+	{
+		get
+		{
+			return this._plec;
+		}
+		set
+		{
+			if ((this._plec != value))
+			{
+				this._plec = value;
 			}
 		}
 	}

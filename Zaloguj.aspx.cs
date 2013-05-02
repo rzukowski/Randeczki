@@ -26,42 +26,47 @@ public partial class Zaloguj : System.Web.UI.Page
     }
     protected void TryToLog(object sender, EventArgs e)
     {
-       
 
 
-        if(Membership.ValidateUser(UserName.Text, UserPass.Text))
-         {
-             Session.Add("username", UserName.Text);
-             Session.Add("userid",
-            Membership.GetUser(UserName.Text).ProviderUserKey.ToString());
+
+        if (Membership.ValidateUser(UserName.Text, UserPass.Text))
+        {
+            Session.Add("username", UserName.Text);
+            Session.Add("userid",
+           Membership.GetUser(UserName.Text).ProviderUserKey.ToString());
 
             //jesli zaznaczona opcja 'Pamiętaj login'
-             if (RememberMe.Checked)
-             {
-                 string username = UserName.Text;
-                 //stworzymy token ktory zapiszemy tez do bazy
+            if (RememberMe.Checked)
+            {
+                string username = UserName.Text;
+                //stworzymy token ktory zapiszemy tez do bazy
 
-                 //jesli user ma ciacho z tokenem, to przekierowujemy go na stronę testową,jednoczesnie kasując 
-                 //stary token i generujemy nowy
-
-
-                 //tworzymy ciacho
-
-                 //pobieramy salt z bazy
-                 string salt = Usr.GetSaltFromUser(username);
-                 if (salt != null)
-                 {
-                     HttpCookie cookie = CreateAuthCookie(username, salt);
-                     Response.Cookies.Add(cookie);
-                 }
+                //jesli user ma ciacho z tokenem, to przekierowujemy go na stronę testową,jednoczesnie kasując 
+                //stary token i generujemy nowy
 
 
-             }
-   
-            
+                //tworzymy ciacho
+
+                //pobieramy salt z bazy
+                string salt = Usr.GetSaltFromUser(username);
+                if (salt != null)
+                {
+                    HttpCookie cookie = CreateAuthCookie(username, salt);
+                    Response.Cookies.Add(cookie);
+                }
+
+
+            }
+
+
             Response.Redirect("~/Default.aspx");
 
-         }
+        }
+        else
+        {
+            Wrong.Visible = true;
+
+        }
 
 
     }

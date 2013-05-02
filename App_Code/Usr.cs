@@ -747,5 +747,113 @@ public class Usr
 
     }
 
+    //pobiera całkowitą liczbę wizyt
+    public static int GetNumberOfAllVisits(string userid)
+    {
+        int numberOfVisits = 0;
+        SqlConnection con = new SqlConnection(ConnectionString);
+        SqlCommand cmd = new SqlCommand("SELECT Count(*) FROM Viewed where OdwiedzanyId = @userid", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+        con.Open();
+        try
+        {
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                    numberOfVisits = reader.GetInt32(0);
+                reader.Close();
+            }
+        }
+        catch (Exception ex)
+        {
+
+            HttpContext.Current.Trace.Write(ex.Message);
+            numberOfVisits = 0;
+        }
+        finally
+        {
+            con.Close();
+        }
+        if (numberOfVisits > 0)
+        {
+            return numberOfVisits;
+        }
+        else
+            return 0;
+
+    }
+
+    public static int GetNumberOfSentMessages(string userid)
+    {
+        int sentMssg = 0;
+        SqlConnection con = new SqlConnection(ConnectionString);
+        SqlCommand cmd = new SqlCommand("SELECT Count(*) FROM message_sent where sender_id = @userid", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+        con.Open();
+        try
+        {
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                    sentMssg = reader.GetInt32(0);
+                reader.Close();
+            }
+        }
+        catch (Exception ex)
+        {
+
+            HttpContext.Current.Trace.Write(ex.Message);
+            sentMssg = 0;
+        }
+        finally
+        {
+            con.Close();
+        }
+        if (sentMssg > 0)
+        {
+            return sentMssg;
+        }
+        else
+            return 0;
+
+
+
+    }
+
+    public static int GetNumberOfReceivedMssg(string userid)
+    {
+        int receivedMssg = 0;
+        SqlConnection con = new SqlConnection(ConnectionString);
+        SqlCommand cmd = new SqlCommand("SELECT Count(*) FROM message where receivid = @userid", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+        con.Open();
+        try
+        {
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                    receivedMssg = reader.GetInt32(0);
+                reader.Close();
+            }
+        }
+        catch (Exception ex)
+        {
+
+            HttpContext.Current.Trace.Write(ex.Message);
+            receivedMssg = 0;
+        }
+        finally
+        {
+            con.Close();
+        }
+        if (receivedMssg > 0)
+        {
+            return receivedMssg;
+        }
+        else
+            return 0;
+
+
+    }
 
 	}

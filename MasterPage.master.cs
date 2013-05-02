@@ -44,7 +44,7 @@ public partial class MasterPage : System.Web.UI.MasterPage
         if (numberOfMssg > 0)
         {
             Label myLabel = this.FindControl("NowaWiadomosc") as Label;
-            myLabel.Text = numberOfMssg.ToString(); ;
+            myLabel.Text = numberOfMssg.ToString(); 
 
 
         }
@@ -59,7 +59,7 @@ public partial class MasterPage : System.Web.UI.MasterPage
         {
             OdwiedziliNew.Text = GetNumberOfNewVisits().ToString()+"/";
         }
-        OdwiedziliTotal.Text = GetNumberOfAllVisits().ToString();
+        OdwiedziliTotal.Text = Usr.GetNumberOfAllVisits(userid).ToString();
 
 
     }
@@ -104,43 +104,7 @@ public partial class MasterPage : System.Web.UI.MasterPage
 
     }
 
-    //pobiera całkowitą liczbę wizyt
-    protected int GetNumberOfAllVisits()
-    {
-        string userid = Session["userid"].ToString();
-        int numberOfVisits = 0;
-        SqlConnection con = new SqlConnection(ConnectionString);
-        SqlCommand cmd = new SqlCommand("SELECT Count(*) FROM Viewed where OdwiedzanyId = @userid", con);
-        cmd.Parameters.AddWithValue("@userid", userid);
-        con.Open();
-        try
-        {
-            using (SqlDataReader reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                    numberOfVisits = reader.GetInt32(0);
-                reader.Close();
-            }
-        }
-        catch (Exception ex)
-        {
-
-            HttpContext.Current.Trace.Write(ex.Message);
-            numberOfVisits = 0;
-        }
-        finally
-        {
-            con.Close();
-        }
-        if (numberOfVisits > 0)
-        {
-            return numberOfVisits;
-        }
-        else
-            return 0;
-
-
-    }
+    
     protected void LogOut(object sender, EventArgs e)
     {
         if (HttpContext.Current.Request.Cookies["UserSzukaj"] != null)

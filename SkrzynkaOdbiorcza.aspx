@@ -7,7 +7,18 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <h2>Wiadomości wysłane</h2>
-    <asp:DataList ID="DataList1" runat="server" DataSourceID="SqlDataSource1" Width="100%">
+    <asp:ScriptManager   
+            ID="ScriptManager1"  
+            runat="server"  
+            >  
+        </asp:ScriptManager>  
+    <asp:UpdatePanel runat="server" id="UpdatePanel1" updatemode="Conditional">
+        <ContentTemplate>
+            <script type="text/javascript">
+                Sys.Application.add_load(BindEvents);
+     </script>
+
+    <asp:DataList ID="DataList1" runat="server" Width="100%">
         <ItemTemplate>
           <table width="100%" border="1">
           <tr>
@@ -25,6 +36,13 @@
           </table>
         </ItemTemplate>
     </asp:DataList>
+            <asp:HiddenField ID="CurrPage" runat="server" />
+             <div id="links" runat="server"></div>
+        </ContentTemplate>
+  
+
+        </asp:UpdatePanel>
+    
     <p align="center"> <a href="javascript: history.go(-1)">Powrót</a></p>
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
         ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" 

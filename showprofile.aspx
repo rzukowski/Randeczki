@@ -24,12 +24,12 @@
 
           <span class="black">Wiek:</span> <%# Eval("Wiek") %>
             <br />
-                <span class="black">Wygląd:</span><asp:Label ID="Wygląd" runat="server"></asp:Label>
-                <br />
-                <span class="black">Wzrost:</span><asp:Label ID="Wzrost" runat="server"> cm</asp:Label>
-                <br />
-                <span class="black">Waga:</span><asp:Label ID="Waga" runat="server"> kg</asp:Label>
-                <br />
+                <asp:Label ID="Wyglad" runat="server"><br /></asp:Label>
+                
+                <asp:Label ID="Wzrost" runat="server"><br /></asp:Label>
+                
+                <asp:Label ID="Waga" runat="server"> <br /></asp:Label>
+                
            <span class="black">O mnie:</span> <%# Eval("opis") %><br />
             <span class="black">Uprawiany sport:</span> <asp:Label ID="Sporty" runat="server"></asp:Label><br />
             <a href='wyslijwiadomosc.aspx?userid=<%# Eval("userid") %>'> Wyslij wiadomość</a>

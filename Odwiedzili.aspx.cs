@@ -14,10 +14,22 @@ public partial class Odwiedzili : BaseClass
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        FillOdwiedzili();
 
-        if(!IsPostBack)
-        ResetViewed();
+        //if (ScriptManager.GetCurrent(Page).IsInAsyncPostBack)
+        //{
+        //    if (UpdatePanel1.IsInPartialRendering)
+        //    {
+        //        bool yes = true;
+        //    }
+        //}
+
+        if (!IsPostBack)
+        {
+
+            ResetViewed();
+            FillOdwiedziliFirst(1);
+        }
+        GetNumberOfViewed();
     }
 
     protected void ResetViewed()
@@ -44,14 +56,14 @@ public partial class Odwiedzili : BaseClass
 
 
     }
-
-
-    protected void FillOdwiedzili()
+    protected void FillOdwiedziliFirst(int pageNumber)
     {
-        string userid=Session["userid"].ToString();
-        DataClassesDataContext db = new DataClassesDataContext(ConnectionString);
 
-        var cos = from c in db.PokazOdwiedzone(userid).Skip(0).Take(2) select c;
+        string userid = Session["userid"].ToString();
+
+        DataClassesDataContext db = new DataClassesDataContext(ConnectionString);
+        int numberOfRows = (pageNumber-1) * 2;
+        var cos = from c in db.PokazOdwiedzone(userid).Skip(numberOfRows).Take(2) select c;
 
         ListView1.DataSource = cos.ToList();
         ListView1.DataBind();
@@ -60,5 +72,50 @@ public partial class Odwiedzili : BaseClass
 
 
     }
+
+    protected void FillOdwiedzili(object sender, CommandEventArgs e)
+    {
+
+        string userid=Session["userid"].ToString();
+        
+        DataClassesDataContext db = new DataClassesDataContext(ConnectionString);
+        int numberOfRows = (int.Parse(e.CommandArgument.ToString()) -1) * 2;
+        var cos = from c in db.PokazOdwiedzone(userid).Skip(numberOfRows).Take(2) select c;
+
+        ListView1.DataSource = cos.ToList();
+        ListView1.DataBind();
+
+
+
+
+    }
+
+
+    protected void GetNumberOfViewed()
+    {
+        string userid= Session["userid"].ToString();
+        int numberOfVisits = Usr.GetNumberOfAllVisits(userid);
+        int ii=0;
+        int perPage = 2;
+        
+        for (ii = 0; ii < (numberOfVisits/perPage); ii++)
+        {
+            
+            
+            LinkButton anchor = new LinkButton();
+           // anchor.PostBackUrl = "Odwiedzili.aspx?odwiedzili="+(ii+1);
+            anchor.Text = (ii+1).ToString();
+            anchor.ID = "link" + (ii + 1);
+
+            anchor.Command += new CommandEventHandler(FillOdwiedzili);
+            anchor.CommandArgument = (ii + 1).ToString();
+            links.Controls.Add(anchor);
+            
+        }
+
+    }
+
+
+
 
 }

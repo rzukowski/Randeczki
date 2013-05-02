@@ -3,6 +3,12 @@
 <%@ Register assembly="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" namespace="System.Web.UI.WebControls" tagprefix="asp" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+    <script type="text/javascript">
+    $(document).ready(function () {
+            BindEvents();
+    });
+        </script>
+    <script type="text/jscript" src="Scripts/OnHoverShowOpis.js"></script>
     <asp:Panel ID="Panel1" BorderStyle="None" runat="server">
         <p class="ulubieni">Ulubieni</p>
         <hr width="50%" />
@@ -24,10 +30,10 @@
             <td id="prof">
                 <h4>
                   <%# Eval("username") %></h4>
-                 <img src='photos/<%# Eval("username") %>image.jpg' alt="" width="100px" height="100px" />  <br />
+                 <img src='photos/<%# Eval("username") %>image.jpg' alt="" id='<%# Eval("username") %>p' width="100px" height="100px" />  <br />
               <a href='showprofile.aspx?userid=<%# Eval("userid") %>&<%# Eval("username") %>'>Pokaż profil</a>
                 <br />
-              
+              <p class="opis" id='<%# Eval("username") %>'><%# Eval("opis") %></p>
               
               <a href='wyslijwiadomosc.aspx?userid=<%# Eval("userid") %>'>Wyślij wiadomość</a>
               </td>

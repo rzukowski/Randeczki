@@ -21,11 +21,12 @@
     Zapamiętaj <asp:CheckBox ID="RememberMe" runat="server" /><br />
           <asp:Button ID="Loguj" runat="server" OnClick="TryToLog" Text="Zaloguj" />
           </div>
-   <p align="center"><a href="odzyskajhaslo.aspx">Zapomniałem hasła</a></p>
-    <p align="center" dir="rtl"> Nie masz konta? <a href="Zarejestruj.aspx">Zarejestruj się</a></p>
+          <div id="Center">
+   <p><a href="odzyskajhaslo.aspx">Zapomniałem hasła</a></p>
+     <p>Nie masz konta? <a href="Zarejestruj.aspx">Zarejestruj się</a></p>
 
-      
-      
+      <p><asp:Label runat="server" ID="Wrong" Visible="false" Text="Złe hasło lub login"></asp:Label>      </p>
+              </div>
         </form>
 
     

@@ -135,7 +135,9 @@
                <asp:UpdateProgress ID="updProgress"
         runat="server" AssociatedUpdatePanelID="UpdatePanel2">
             <ProgressTemplate>           
-               <div id="update">Zapisywanie<br /><img alt="" src="images/ajax-loader.gif" /></div>           
+                 <div id="update">Zapisywanie<br /><img alt="" src="images/ajax-loader.gif" /></div> 
+              <div id="greyout">    </div>   
+                 
             </ProgressTemplate>
         </asp:UpdateProgress>
             <asp:UpdatePanel runat="server" id="UpdatePanel2" updatemode="Conditional">
@@ -165,8 +167,9 @@
    <h4 class="center"> Sport</h4>
     <asp:UpdateProgress ID="UpdateProgress2"
         runat="server" AssociatedUpdatePanelID="UpdatePanel">
-            <ProgressTemplate>           
-               <div id="update">Zapisywanie<br /><img alt="" src="images/ajax-loader.gif" /></div>           
+            <ProgressTemplate>   
+                <div id="update">Zapisywanie<br /><img alt="" src="images/ajax-loader.gif" /></div> 
+              <div id="greyout">    </div>  
             </ProgressTemplate>
         </asp:UpdateProgress>
     <asp:UpdatePanel runat="server" id="UpdatePanel" updatemode="Conditional">
@@ -197,7 +200,8 @@
         <asp:UpdateProgress ID="UpdateProgress3"
         runat="server" AssociatedUpdatePanelID="UpdatePanel1">
             <ProgressTemplate>           
-               <div id="update">Zapisywanie<br /><img alt="" src="images/ajax-loader.gif" /></div>           
+               <div id="update">Zapisywanie<br /><img alt="" src="images/ajax-loader.gif" /></div> 
+              <div id="greyout">    </div>           
             </ProgressTemplate>
         </asp:UpdateProgress>
      

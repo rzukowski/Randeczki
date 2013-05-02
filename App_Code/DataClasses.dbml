@@ -31,6 +31,10 @@
       <Association Name="aspnet_User_message" Member="messages" ThisKey="UserId" OtherKey="receivid" Type="message" />
       <Association Name="aspnet_User_message1" Member="messages1" ThisKey="UserId" OtherKey="receivid" Type="message" />
       <Association Name="aspnet_User_Wyglad" Member="Wyglad" ThisKey="UserId" OtherKey="userid" Type="Wyglad" Cardinality="One" />
+      <Association Name="aspnet_User_message_sent" Member="message_sents" ThisKey="UserId" OtherKey="receiver_id" Type="message_sent" />
+      <Association Name="aspnet_User_message_sent1" Member="message_sents1" ThisKey="UserId" OtherKey="receiver_id" Type="message_sent" />
+      <Association Name="aspnet_User_message11" Member="message1s" ThisKey="UserId" OtherKey="receivid" Type="message1" />
+      <Association Name="aspnet_User_message12" Member="message1s1" ThisKey="UserId" OtherKey="receivid" Type="message1" />
     </Type>
   </Table>
   <Table Name="dbo.message" Member="messages">
@@ -67,6 +71,28 @@
       <Column Name="sport_opis" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
     </Type>
   </Table>
+  <Table Name="dbo.message_sent" Member="message_sents">
+    <Type Name="message_sent">
+      <Column Name="msgid" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="sender_id" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="receiver_id" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="mssg" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="sentdate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="aspnet_User_message_sent" Member="aspnet_User" ThisKey="receiver_id" OtherKey="UserId" Type="aspnet_User" IsForeignKey="true" />
+      <Association Name="aspnet_User_message_sent1" Member="aspnet_User1" ThisKey="receiver_id" OtherKey="UserId" Type="aspnet_User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.message" Member="message1s">
+    <Type Name="message1">
+      <Column Name="msgid" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="sendid" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="receivid" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="mssg" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="sentdate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="aspnet_User_message11" Member="aspnet_User" ThisKey="receivid" OtherKey="UserId" Type="aspnet_User" IsForeignKey="true" />
+      <Association Name="aspnet_User_message12" Member="aspnet_User1" ThisKey="receivid" OtherKey="UserId" Type="aspnet_User" IsForeignKey="true" />
+    </Type>
+  </Table>
   <Function Name="dbo.PokazOdwiedzone" Method="PokazOdwiedzone">
     <Parameter Name="userid" Type="System.String" DbType="VarChar(50)" />
     <ElementType Name="PokazOdwiedzoneResult">
@@ -74,6 +100,7 @@
       <Column Name="username" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
       <Column Name="Data" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="Opis" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="plec" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="Wiek" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="wojewodztwo" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
     </ElementType>
