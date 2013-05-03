@@ -7,6 +7,9 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Data.SqlClient;
+using System.Web.Security;
+using System.Security.Cryptography;
+using System.Text;
 /// <summary>
 /// Summary description for Usr
 /// </summary>
@@ -14,7 +17,8 @@ public class Usr
 {
  //connection string pobrany z web.config
     public static string ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["FriendsConnectionString"].ConnectionString;// @"Data Source=.\SQLEXPRESS;AttachDbFilename=C:\Users\Raf\Documents\Visual Studio 2012\WebSites\WebSite5\App_Data\ASPNETDB.MDF;Integrated Security=True;User Instance=True";
-		 
+    public static string websiteMail = "mrzuk@op.pl";
+    public static string websiteMailPassword = "metallica1";
     //dodanie do ulubionych - dodanie do tabeli friends
     public static bool AddFriend(String userid, String friendid)
     {
@@ -853,6 +857,92 @@ public class Usr
         else
             return 0;
 
+
+    }
+
+
+    public static bool CheckUserByEmailAndName(string username, string email)
+    {
+        bool valid = false;
+        SqlConnection con = new SqlConnection(ConnectionString);
+        SqlCommand cmd = new SqlCommand("SELECT Count(*) FROM aspnet_Membership am JOIN aspnet_Users au ON au.UserId=am.UserId where am.email = @email AND au.UserName = @username", con);
+        cmd.Parameters.AddWithValue("@username", username);
+        cmd.Parameters.AddWithValue("@email", email);
+        con.Open();
+
+        try
+        {
+        
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+               if(reader.GetInt32(0)==1)
+                   valid = true;
+        }
+        catch (Exception ex)
+        {
+
+            HttpContext.Current.Trace.Write(ex.Message);
+
+        }
+
+        finally
+        {
+            con.Close();
+        }
+        return valid;
+
+
+
+
+
+    }
+
+    public static bool SaveNewPassToDb(string pass,string username)
+    {
+
+        string salt = GetSaltFromUser(username);
+        string hash = CreateHash(pass, salt);
+        bool updated = false;
+        SqlConnection con = new SqlConnection(ConnectionString);
+        SqlCommand cmd = new SqlCommand("UPDATE aspnet_Membership SET Password = @password where userid = (Select userid from aspnet_Users WHERE username = @username)", con);
+        cmd.Parameters.AddWithValue("@username", username);
+        cmd.Parameters.AddWithValue("@password", hash);
+        con.Open();
+        try
+        {
+            cmd.ExecuteNonQuery();
+            updated = true;
+        }
+        catch (Exception ex)
+        {
+
+            HttpContext.Current.Trace.Write(ex.Message);
+
+        }
+        finally
+        {
+            con.Close();
+
+        }
+        return updated;
+    }
+
+    public static string CreateHash(string password, string salt)
+    {
+
+        byte[] bytes = Encoding.Unicode.GetBytes(password);
+        byte[] src = Convert.FromBase64String(salt);
+        byte[] dst = new byte[src.Length + bytes.Length];
+        System.Buffer.BlockCopy(src, 0, dst, 0, src.Length);
+        System.Buffer.BlockCopy(bytes, 0, dst, src.Length, bytes.Length);
+
+        HashAlgorithm hash = HashAlgorithm.Create("SHA1");
+
+        byte[] hashed = hash.ComputeHash(dst);
+
+        string hashedPass = Convert.ToBase64String(hashed);
+
+        return hashedPass;
 
     }
 
