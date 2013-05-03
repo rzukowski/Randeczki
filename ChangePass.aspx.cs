@@ -51,7 +51,7 @@ public partial class Default2 : System.Web.UI.Page
         string text = "Nowe hasło to: " + newpass + " Aby się zalogować, zapraszamy na stronę główną SzukajToZnajdziej.pl";
         MailMessage objMail = new MailMessage(Usr.websiteMail, email, "Nowe hasło", text);
         NetworkCredential objNC = new NetworkCredential(Usr.websiteMail, Usr.websiteMailPassword);
-        SmtpClient objsmtp = new SmtpClient("smtp.poczta.onet.pl", 587); // for hotmail
+        SmtpClient objsmtp = new SmtpClient(Usr.smtpAddress,Usr.emailPort); // for hotmail
         objsmtp.EnableSsl = true;
         objsmtp.Credentials = objNC;
         objsmtp.Send(objMail);

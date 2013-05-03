@@ -17,8 +17,11 @@ public class Usr
 {
  //connection string pobrany z web.config
     public static string ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["FriendsConnectionString"].ConnectionString;// @"Data Source=.\SQLEXPRESS;AttachDbFilename=C:\Users\Raf\Documents\Visual Studio 2012\WebSites\WebSite5\App_Data\ASPNETDB.MDF;Integrated Security=True;User Instance=True";
-    public static string websiteMail = "mrzuk@op.pl";
-    public static string websiteMailPassword = "metallica1";
+    public static string websiteMail = "ktoszukatenznajdzie@gmail.com";
+    public static string websiteMailPassword = "kozajemarchew234";
+    public static string smtpAddress = "smtp.gmail.com";
+    public static int emailPort = 587;
+
     //dodanie do ulubionych - dodanie do tabeli friends
     public static bool AddFriend(String userid, String friendid)
     {
