@@ -189,7 +189,7 @@ public partial class edytujprofil : BaseClass
         string userid = Session["userid"].ToString();
         try
         {
-            DDLWyglad = FillWygladDropDownList();
+            DDLWyglad = Usr.FillWygladDropDownList(DDLWyglad);
 
 
             int budowa = Usr.SelectBudowaCiala(userid);
@@ -212,32 +212,7 @@ public partial class edytujprofil : BaseClass
 
     }
 
-    protected RadioButtonList FillWygladDropDownList()
-    {
-
-        SqlConnection con = new SqlConnection(ConnectionString);
-        con.Open();
-        SqlCommand cmd = new SqlCommand("SELECT budowa_ciala_id, budowa_ciala_opis FROM Budowa", con);
-        try
-        {
-            SqlDataReader reader = cmd.ExecuteReader();
-            DDLWyglad.DataSource = reader;
-            DDLWyglad.DataTextField = "budowa_ciala_opis";
-            DDLWyglad.DataValueField = "budowa_ciala_id";
-            DDLWyglad.DataBind();
-        }
-        catch (Exception ex)
-        {
-            HttpContext.Current.Trace.Write(ex.Message);
-
-        }
-        finally
-        {
-            con.Close();
-
-        }
-        return DDLWyglad;
-    }
+   
 
     protected void FillWzrost()
     {   

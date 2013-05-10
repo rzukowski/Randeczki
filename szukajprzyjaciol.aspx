@@ -7,52 +7,84 @@
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-    <script>
-        //function BindEvents() {
-        //   $(document).ready(function () {
-        //        $(".opis").each(function () {
-        //            $(this).hide();
-        //        });
-        //   });
-        //    //tutaj skrypt do nadawania obiektom z klasa 'opis' i 'id' status visible (lub tez dopisywanie nowej klasy
-        //    //powodującej ze 'opis' bedzie jako chmurka
-        //   $("img").mouseover(function(e){
-        //       var href = $(this).attr('id');
-        //       var id = href.substring(0, href.length - 1);
-        //       var text = $("#" + id).text();
-        //       if (text == "") {
-        //           text = "Brak opisu...";
-        //       }
-        //       else {
-        //           if (text.length > 10) {
-        //               var ii = 10;
-        //               while (text.charAt(ii) != " " && ii!=text.length)
-        //                   ii++;
-        //               if(ii!=text.length)
-        //                text = text.substring(0, ii) + "...";
-        //           }
+    <script type="text/jscript" src="Scripts/CountSelected.js"></script>
+    <script type="text/javascript">
 
+        $(document).ready(function () {
+            $('#' + '<%= divDDL2.ClientID %>').click(function () { 
+                return hideUnhide($(this), 'popup');
 
-        //       }
-        //       $(this).after('<div id="tooltip"><div class="tipBody">' + text + '</div></div>');
-        //       $('#tooltip').css('top', e.pageY + 10);
-        //       $('#tooltip').css('left', e.pageX + 20);
+            });
 
-        //       $('#tooltip').fadeIn('500');
-        //       $('#tooltip').fadeTo('10', 0.8);
+            $('#' + '<%= divDDL.ClientID %>').click(function () {
+                return hideUnhide($(this), 'popSport');
 
-        //   }).mousemove(function(e) { 
+            });
+
+            $('body').click(function () {
                
-        //       $('#tooltip').css('top', e.pageY + 10 );
-        //       $('#tooltip').css('left', e.pageX + 20 );
+                hideUnhideBodyClick('#' + '<%= divDDL2.ClientID %>', 'popup');
+
+                hideUnhideBodyClick('#' + '<%= divDDL.ClientID %>', 'popSport');
+            });
+           
+            
+
+        });
+
+
+
+        function hideUnhideBodyClick(objectId, popupId) {
+            
+            if($(objectId).parent().hasClass('nowe')){
+                $find(popupId).hidePopup();
+
+                $(objectId).parent().animate({
+                    height: "17px",
+                }, 150);
+
+                $(objectId).parent().removeClass('nowe').addClass('rozsun');
+              
+
+            }
+
+            return false;
+        }
+
+        function hideUnhide(object, popupId) {
+
+            if (object.parent().hasClass('rozsun')) {
+                object.parent().animate({
+                    height: "200px",
+                }, 150);
+                object.parent().removeClass('rozsun').addClass('nowe');
+
+                $find(popupId).showPopup();
+
+                return false;
+            }
+            else {
+                object.parent().animate({
+                    height: "17px",
+                }, 150);
+                object.parent().removeClass('nowe');
+                object.parent().addClass('rozsun');
+                $find(popupId).hidePopup();
+                return false;
+
+
+            }
+
+
+
+        }
+            
         
-        //   }).mouseout(function() {
 
-        //       $('div#tooltip').remove();
+      
 
-        //   });
-
-        //}
+       
+        
         </script>
         <script type="text/jscript" src="Scripts/OnHoverShowOpis.js"></script>
 
@@ -230,23 +262,43 @@
 </asp:DropDownList>
     </p>
         </p>
+    
     <%-- Check box rozwijany z wojewodztwami --%>
+   
+    <div class="rozsun">
         <div id="divDDL2" class="divDDL2" runat="server">
-        Województwo
-       </div>
-    <asp:Panel ID="pnlWojewodztwa" runat="server" CssClass="MultipleSelectionDDL">
+        Województwo<div id="divDDL3" runat="server" height="1px"></div>
+       </div></div> 
+    <asp:Panel ID="pnlWojewodztwa" runat="server" CssClass="MultipleSelectionDDL" >
             <asp:CheckBoxList ID="cblWojewodztwa" runat="server" >
             </asp:CheckBoxList>
         </asp:Panel>
         <br />
-        <cc1:PopupControlExtender ID="pceSelections" runat="server" TargetControlID="divDDL2"
-               PopupControlID="pnlWojewodztwa" Position="Bottom" OffsetY="-1" >
+        <cc1:PopupControlExtender ID="pceSelections" runat="server"  TargetControlID="divDDL3"
+               PopupControlID="pnlWojewodztwa" Position="Bottom" OffsetY="3" BehaviorID="popup" >
         </cc1:PopupControlExtender>
-       
+      
+    <br />
+    <div class="rozsun">
+    <div id="divDDL" class="divDDL2" runat="server">
+        Proszę wybrać…<div id="divDDLinner" runat="server"></div>
+       </div></div>
+    <asp:Panel ID="pnlCustomers" runat="server" CssClass="MultipleSelectionDDL">
+            <asp:CheckBoxList ID="cblCustomerList" runat="server" onclick="CountSelected(this)">
+            </asp:CheckBoxList>
+        </asp:Panel>
+        <br />
+        <cc1:PopupControlExtender ID="PopupControlExtender1" runat="server" TargetControlID="divDDLinner"
+               PopupControlID="pnlCustomers" Position="Bottom" OffsetY="3" BehaviorID="popSport" >
+        </cc1:PopupControlExtender>
+    <p>
+        Budowa ciała: <asp:RadioButtonList ID="DDLWyglad" runat="server" DataTextField="budowa_opis" DataValueField="budowa_id" Width="200px" AppendDataBoundItems="True"></asp:RadioButtonList>
+
+    </p>
     <p class="center" >
 
 
-        <asp:Button ID="btnSearch" runat="server" Text="Szukaj" OnClick="AddWojewodztwoParameter"/>
+        <asp:Button ID="btnSearch" runat="server" Text="Szukaj" OnCommand="FillSzukane" CommandArgument="1" />
     &nbsp;</p>
     <p>
         <asp:UpdatePanel runat="server" id="UpdatePanel1" updatemode="Conditional">
@@ -255,7 +307,7 @@
                <script type="text/javascript">
                    Sys.Application.add_load(BindEvents);
      </script>
-        <asp:ListView ID="ListView1" runat="server" DataSourceID="SqlDataSource1" GroupItemCount ="2">
+        <asp:ListView ID="ListView1" runat="server" GroupItemCount ="1">
         <GroupTemplate>
          <tr>
             <td id="itemPlaceHolder" runat="server"></td>
@@ -284,17 +336,9 @@
              </td>
           </ItemTemplate>
        </asp:ListView>
-        <asp:DataPager ID="lvDataPager1" runat="server" PagedControlID="ListView1" PageSize="1">
-            <Fields>
-                <asp:NumericPagerField ButtonType="Link" />
-            </Fields>
-        </asp:DataPager>
 
+             <div id="links" runat="server"></div>
         </ContentTemplate>
-            <Triggers>
-<asp:AsyncPostBackTrigger ControlID="btnSearch"
-     EventName="Click" />
-</Triggers>
         </asp:UpdatePanel>
 
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 

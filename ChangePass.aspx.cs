@@ -17,7 +17,8 @@ public partial class Default2 : System.Web.UI.Page
 
     }
 
-
+    //sprawdzenie czy użytkownik o danej nazwie i mailu istnieje
+    //jeśli tak - resetowanie hasła i wysłanie maila z nowym hasłem (automatycznie wygenerowany guid)
     protected void Sent_Click(object sender, EventArgs e)
     {
 
@@ -46,12 +47,15 @@ public partial class Default2 : System.Web.UI.Page
 
     }
 
+    //metoda wysyłająca email
+
+    //hasło, nazwa konta - w pliku Usr.cs
     protected void SendEmail(string email,string newpass)
     {
         string text = "Nowe hasło to: " + newpass + " Aby się zalogować, zapraszamy na stronę główną SzukajToZnajdziej.pl";
         MailMessage objMail = new MailMessage(Usr.websiteMail, email, "Nowe hasło", text);
         NetworkCredential objNC = new NetworkCredential(Usr.websiteMail, Usr.websiteMailPassword);
-        SmtpClient objsmtp = new SmtpClient(Usr.smtpAddress,Usr.emailPort); // for hotmail
+        SmtpClient objsmtp = new SmtpClient(Usr.smtpAddress,Usr.emailPort); // for gmail
         objsmtp.EnableSsl = true;
         objsmtp.Credentials = objNC;
         objsmtp.Send(objMail);

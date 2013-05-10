@@ -29,9 +29,6 @@ public partial class DataClassesDataContext : System.Data.Linq.DataContext
 	
   #region Extensibility Method Definitions
   partial void OnCreated();
-  partial void Insertuser_profile(user_profile instance);
-  partial void Updateuser_profile(user_profile instance);
-  partial void Deleteuser_profile(user_profile instance);
   partial void Insertaspnet_User(aspnet_User instance);
   partial void Updateaspnet_User(aspnet_User instance);
   partial void Deleteaspnet_User(aspnet_User instance);
@@ -53,6 +50,15 @@ public partial class DataClassesDataContext : System.Data.Linq.DataContext
   partial void Insertmessage1(message1 instance);
   partial void Updatemessage1(message1 instance);
   partial void Deletemessage1(message1 instance);
+  partial void Insertplec(plec instance);
+  partial void Updateplec(plec instance);
+  partial void Deleteplec(plec instance);
+  partial void Insertuser_profile(user_profile instance);
+  partial void Updateuser_profile(user_profile instance);
+  partial void Deleteuser_profile(user_profile instance);
+  partial void Insertuser_sport(user_sport instance);
+  partial void Updateuser_sport(user_sport instance);
+  partial void Deleteuser_sport(user_sport instance);
   #endregion
 	
 	public DataClassesDataContext() : 
@@ -83,14 +89,6 @@ public partial class DataClassesDataContext : System.Data.Linq.DataContext
 			base(connection, mappingSource)
 	{
 		OnCreated();
-	}
-	
-	public System.Data.Linq.Table<user_profile> user_profiles
-	{
-		get
-		{
-			return this.GetTable<user_profile>();
-		}
 	}
 	
 	public System.Data.Linq.Table<friend> friends
@@ -157,210 +155,48 @@ public partial class DataClassesDataContext : System.Data.Linq.DataContext
 		}
 	}
 	
+	public System.Data.Linq.Table<plec> plecs
+	{
+		get
+		{
+			return this.GetTable<plec>();
+		}
+	}
+	
+	public System.Data.Linq.Table<user_profile> user_profiles
+	{
+		get
+		{
+			return this.GetTable<user_profile>();
+		}
+	}
+	
+	public System.Data.Linq.Table<user_sport> user_sports
+	{
+		get
+		{
+			return this.GetTable<user_sport>();
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.PokazOdwiedzone")]
 	public ISingleResult<PokazOdwiedzoneResult> PokazOdwiedzone([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string userid)
 	{
 		IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), userid);
 		return ((ISingleResult<PokazOdwiedzoneResult>)(result.ReturnValue));
 	}
-}
-
-[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.user_profile")]
-public partial class user_profile : INotifyPropertyChanging, INotifyPropertyChanged
-{
 	
-	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-	
-	private System.Guid _userid;
-	
-	private string _fullname;
-	
-	private string _plec;
-	
-	private System.Nullable<System.DateTime> _birthdate;
-	
-	private string _opis;
-	
-	private EntityRef<aspnet_User> _aspnet_User;
-	
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnuseridChanging(System.Guid value);
-    partial void OnuseridChanged();
-    partial void OnfullnameChanging(string value);
-    partial void OnfullnameChanged();
-    partial void OnplecChanging(string value);
-    partial void OnplecChanged();
-    partial void OnbirthdateChanging(System.Nullable<System.DateTime> value);
-    partial void OnbirthdateChanged();
-    partial void OnopisChanging(string value);
-    partial void OnopisChanged();
-    #endregion
-	
-	public user_profile()
+	[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.Szukaj")]
+	public ISingleResult<SzukajResult> Szukaj([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> gender, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> dateUp, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> dateDown, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string userid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string wojewodztwo_id)
 	{
-		this._aspnet_User = default(EntityRef<aspnet_User>);
-		OnCreated();
+		IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), gender, dateUp, dateDown, userid, wojewodztwo_id);
+		return ((ISingleResult<SzukajResult>)(result.ReturnValue));
 	}
 	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_userid", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-	public System.Guid userid
+	[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.CountWiek", IsComposable=true)]
+	public IQueryable<CountWiekResult> CountWiek([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Char(11)")] string dataurodzin)
 	{
-		get
-		{
-			return this._userid;
-		}
-		set
-		{
-			if ((this._userid != value))
-			{
-				if (this._aspnet_User.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.OnuseridChanging(value);
-				this.SendPropertyChanging();
-				this._userid = value;
-				this.SendPropertyChanged("userid");
-				this.OnuseridChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_fullname", DbType="NVarChar(50)")]
-	public string fullname
-	{
-		get
-		{
-			return this._fullname;
-		}
-		set
-		{
-			if ((this._fullname != value))
-			{
-				this.OnfullnameChanging(value);
-				this.SendPropertyChanging();
-				this._fullname = value;
-				this.SendPropertyChanged("fullname");
-				this.OnfullnameChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_plec", DbType="NVarChar(50)")]
-	public string plec
-	{
-		get
-		{
-			return this._plec;
-		}
-		set
-		{
-			if ((this._plec != value))
-			{
-				this.OnplecChanging(value);
-				this.SendPropertyChanging();
-				this._plec = value;
-				this.SendPropertyChanged("plec");
-				this.OnplecChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_birthdate", DbType="Date")]
-	public System.Nullable<System.DateTime> birthdate
-	{
-		get
-		{
-			return this._birthdate;
-		}
-		set
-		{
-			if ((this._birthdate != value))
-			{
-				this.OnbirthdateChanging(value);
-				this.SendPropertyChanging();
-				this._birthdate = value;
-				this.SendPropertyChanged("birthdate");
-				this.OnbirthdateChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_opis", DbType="VarChar(500)")]
-	public string opis
-	{
-		get
-		{
-			return this._opis;
-		}
-		set
-		{
-			if ((this._opis != value))
-			{
-				this.OnopisChanging(value);
-				this.SendPropertyChanging();
-				this._opis = value;
-				this.SendPropertyChanged("opis");
-				this.OnopisChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_user_profile", Storage="_aspnet_User", ThisKey="userid", OtherKey="UserId", IsForeignKey=true)]
-	public aspnet_User aspnet_User
-	{
-		get
-		{
-			return this._aspnet_User.Entity;
-		}
-		set
-		{
-			aspnet_User previousValue = this._aspnet_User.Entity;
-			if (((previousValue != value) 
-						|| (this._aspnet_User.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._aspnet_User.Entity = null;
-					previousValue.user_profile = null;
-				}
-				this._aspnet_User.Entity = value;
-				if ((value != null))
-				{
-					value.user_profile = this;
-					this._userid = value.UserId;
-				}
-				else
-				{
-					this._userid = default(System.Guid);
-				}
-				this.SendPropertyChanged("aspnet_User");
-			}
-		}
-	}
-	
-	public event PropertyChangingEventHandler PropertyChanging;
-	
-	public event PropertyChangedEventHandler PropertyChanged;
-	
-	protected virtual void SendPropertyChanging()
-	{
-		if ((this.PropertyChanging != null))
-		{
-			this.PropertyChanging(this, emptyChangingEventArgs);
-		}
-	}
-	
-	protected virtual void SendPropertyChanged(String propertyName)
-	{
-		if ((this.PropertyChanged != null))
-		{
-			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-		}
+		return this.CreateMethodCallQuery<CountWiekResult>(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), dataurodzin);
 	}
 }
 
@@ -429,8 +265,6 @@ public partial class aspnet_User : INotifyPropertyChanging, INotifyPropertyChang
 	
 	private System.DateTime _LastActivityDate;
 	
-	private EntityRef<user_profile> _user_profile;
-	
 	private EntitySet<message> _messages;
 	
 	private EntitySet<message> _messages1;
@@ -444,6 +278,8 @@ public partial class aspnet_User : INotifyPropertyChanging, INotifyPropertyChang
 	private EntitySet<message1> _message1s;
 	
 	private EntitySet<message1> _message1s1;
+	
+	private EntityRef<user_profile> _user_profile;
 	
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -467,7 +303,6 @@ public partial class aspnet_User : INotifyPropertyChanging, INotifyPropertyChang
 	
 	public aspnet_User()
 	{
-		this._user_profile = default(EntityRef<user_profile>);
 		this._messages = new EntitySet<message>(new Action<message>(this.attach_messages), new Action<message>(this.detach_messages));
 		this._messages1 = new EntitySet<message>(new Action<message>(this.attach_messages1), new Action<message>(this.detach_messages1));
 		this._Wyglad = default(EntityRef<Wyglad>);
@@ -475,6 +310,7 @@ public partial class aspnet_User : INotifyPropertyChanging, INotifyPropertyChang
 		this._message_sents1 = new EntitySet<message_sent>(new Action<message_sent>(this.attach_message_sents1), new Action<message_sent>(this.detach_message_sents1));
 		this._message1s = new EntitySet<message1>(new Action<message1>(this.attach_message1s), new Action<message1>(this.detach_message1s));
 		this._message1s1 = new EntitySet<message1>(new Action<message1>(this.attach_message1s1), new Action<message1>(this.detach_message1s1));
+		this._user_profile = default(EntityRef<user_profile>);
 		OnCreated();
 	}
 	
@@ -618,35 +454,6 @@ public partial class aspnet_User : INotifyPropertyChanging, INotifyPropertyChang
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_user_profile", Storage="_user_profile", ThisKey="UserId", OtherKey="userid", IsUnique=true, IsForeignKey=false)]
-	public user_profile user_profile
-	{
-		get
-		{
-			return this._user_profile.Entity;
-		}
-		set
-		{
-			user_profile previousValue = this._user_profile.Entity;
-			if (((previousValue != value) 
-						|| (this._user_profile.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._user_profile.Entity = null;
-					previousValue.aspnet_User = null;
-				}
-				this._user_profile.Entity = value;
-				if ((value != null))
-				{
-					value.aspnet_User = this;
-				}
-				this.SendPropertyChanged("user_profile");
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_message", Storage="_messages", ThisKey="UserId", OtherKey="receivid")]
 	public EntitySet<message> messages
 	{
@@ -751,6 +558,35 @@ public partial class aspnet_User : INotifyPropertyChanging, INotifyPropertyChang
 		set
 		{
 			this._message1s1.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_user_profile", Storage="_user_profile", ThisKey="UserId", OtherKey="userid", IsUnique=true, IsForeignKey=false)]
+	public user_profile user_profile
+	{
+		get
+		{
+			return this._user_profile.Entity;
+		}
+		set
+		{
+			user_profile previousValue = this._user_profile.Entity;
+			if (((previousValue != value) 
+						|| (this._user_profile.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._user_profile.Entity = null;
+					previousValue.aspnet_User = null;
+				}
+				this._user_profile.Entity = value;
+				if ((value != null))
+				{
+					value.aspnet_User = this;
+				}
+				this.SendPropertyChanged("user_profile");
+			}
 		}
 	}
 	
@@ -1950,6 +1786,401 @@ public partial class message1 : INotifyPropertyChanging, INotifyPropertyChanged
 	}
 }
 
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.plec")]
+public partial class plec : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private int _plec_Id;
+	
+	private string _plec1;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onplec_IdChanging(int value);
+    partial void Onplec_IdChanged();
+    partial void Onplec1Changing(string value);
+    partial void Onplec1Changed();
+    #endregion
+	
+	public plec()
+	{
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_plec_Id", DbType="Int NOT NULL", IsPrimaryKey=true)]
+	public int plec_Id
+	{
+		get
+		{
+			return this._plec_Id;
+		}
+		set
+		{
+			if ((this._plec_Id != value))
+			{
+				this.Onplec_IdChanging(value);
+				this.SendPropertyChanging();
+				this._plec_Id = value;
+				this.SendPropertyChanged("plec_Id");
+				this.Onplec_IdChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Name="plec", Storage="_plec1", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+	public string plec1
+	{
+		get
+		{
+			return this._plec1;
+		}
+		set
+		{
+			if ((this._plec1 != value))
+			{
+				this.Onplec1Changing(value);
+				this.SendPropertyChanging();
+				this._plec1 = value;
+				this.SendPropertyChanged("plec1");
+				this.Onplec1Changed();
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.user_profile")]
+public partial class user_profile : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private System.Guid _userid;
+	
+	private string _fullname;
+	
+	private System.Nullable<int> _plec_id;
+	
+	private System.Nullable<System.DateTime> _birthdate;
+	
+	private string _opis;
+	
+	private System.Nullable<int> _wojewodztwo_id;
+	
+	private EntityRef<aspnet_User> _aspnet_User;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnuseridChanging(System.Guid value);
+    partial void OnuseridChanged();
+    partial void OnfullnameChanging(string value);
+    partial void OnfullnameChanged();
+    partial void Onplec_idChanging(System.Nullable<int> value);
+    partial void Onplec_idChanged();
+    partial void OnbirthdateChanging(System.Nullable<System.DateTime> value);
+    partial void OnbirthdateChanged();
+    partial void OnopisChanging(string value);
+    partial void OnopisChanged();
+    partial void Onwojewodztwo_idChanging(System.Nullable<int> value);
+    partial void Onwojewodztwo_idChanged();
+    #endregion
+	
+	public user_profile()
+	{
+		this._aspnet_User = default(EntityRef<aspnet_User>);
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_userid", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+	public System.Guid userid
+	{
+		get
+		{
+			return this._userid;
+		}
+		set
+		{
+			if ((this._userid != value))
+			{
+				if (this._aspnet_User.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnuseridChanging(value);
+				this.SendPropertyChanging();
+				this._userid = value;
+				this.SendPropertyChanged("userid");
+				this.OnuseridChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_fullname", DbType="NVarChar(50)")]
+	public string fullname
+	{
+		get
+		{
+			return this._fullname;
+		}
+		set
+		{
+			if ((this._fullname != value))
+			{
+				this.OnfullnameChanging(value);
+				this.SendPropertyChanging();
+				this._fullname = value;
+				this.SendPropertyChanged("fullname");
+				this.OnfullnameChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_plec_id", DbType="Int")]
+	public System.Nullable<int> plec_id
+	{
+		get
+		{
+			return this._plec_id;
+		}
+		set
+		{
+			if ((this._plec_id != value))
+			{
+				this.Onplec_idChanging(value);
+				this.SendPropertyChanging();
+				this._plec_id = value;
+				this.SendPropertyChanged("plec_id");
+				this.Onplec_idChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_birthdate", DbType="Date")]
+	public System.Nullable<System.DateTime> birthdate
+	{
+		get
+		{
+			return this._birthdate;
+		}
+		set
+		{
+			if ((this._birthdate != value))
+			{
+				this.OnbirthdateChanging(value);
+				this.SendPropertyChanging();
+				this._birthdate = value;
+				this.SendPropertyChanged("birthdate");
+				this.OnbirthdateChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_opis", DbType="VarChar(500)")]
+	public string opis
+	{
+		get
+		{
+			return this._opis;
+		}
+		set
+		{
+			if ((this._opis != value))
+			{
+				this.OnopisChanging(value);
+				this.SendPropertyChanging();
+				this._opis = value;
+				this.SendPropertyChanged("opis");
+				this.OnopisChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_wojewodztwo_id", DbType="Int")]
+	public System.Nullable<int> wojewodztwo_id
+	{
+		get
+		{
+			return this._wojewodztwo_id;
+		}
+		set
+		{
+			if ((this._wojewodztwo_id != value))
+			{
+				this.Onwojewodztwo_idChanging(value);
+				this.SendPropertyChanging();
+				this._wojewodztwo_id = value;
+				this.SendPropertyChanged("wojewodztwo_id");
+				this.Onwojewodztwo_idChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_user_profile", Storage="_aspnet_User", ThisKey="userid", OtherKey="UserId", IsForeignKey=true)]
+	public aspnet_User aspnet_User
+	{
+		get
+		{
+			return this._aspnet_User.Entity;
+		}
+		set
+		{
+			aspnet_User previousValue = this._aspnet_User.Entity;
+			if (((previousValue != value) 
+						|| (this._aspnet_User.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._aspnet_User.Entity = null;
+					previousValue.user_profile = null;
+				}
+				this._aspnet_User.Entity = value;
+				if ((value != null))
+				{
+					value.user_profile = this;
+					this._userid = value.UserId;
+				}
+				else
+				{
+					this._userid = default(System.Guid);
+				}
+				this.SendPropertyChanged("aspnet_User");
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.user_sport")]
+public partial class user_sport : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private System.Guid _userid;
+	
+	private int _sport_id;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnuseridChanging(System.Guid value);
+    partial void OnuseridChanged();
+    partial void Onsport_idChanging(int value);
+    partial void Onsport_idChanged();
+    #endregion
+	
+	public user_sport()
+	{
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_userid", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+	public System.Guid userid
+	{
+		get
+		{
+			return this._userid;
+		}
+		set
+		{
+			if ((this._userid != value))
+			{
+				this.OnuseridChanging(value);
+				this.SendPropertyChanging();
+				this._userid = value;
+				this.SendPropertyChanged("userid");
+				this.OnuseridChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_sport_id", DbType="Int NOT NULL", IsPrimaryKey=true)]
+	public int sport_id
+	{
+		get
+		{
+			return this._sport_id;
+		}
+		set
+		{
+			if ((this._sport_id != value))
+			{
+				this.Onsport_idChanging(value);
+				this.SendPropertyChanging();
+				this._sport_id = value;
+				this.SendPropertyChanged("sport_id");
+				this.Onsport_idChanged();
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+}
+
 public partial class PokazOdwiedzoneResult
 {
 	
@@ -2079,6 +2310,166 @@ public partial class PokazOdwiedzoneResult
 			if ((this._wojewodztwo != value))
 			{
 				this._wojewodztwo = value;
+			}
+		}
+	}
+}
+
+public partial class SzukajResult
+{
+	
+	private System.Guid _userid;
+	
+	private string _username;
+	
+	private string _fullname;
+	
+	private string _opis;
+	
+	private string _plec;
+	
+	private System.Nullable<System.DateTime> _birthdate;
+	
+	private System.Nullable<int> _wojewodztwo_id;
+	
+	public SzukajResult()
+	{
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_userid", DbType="UniqueIdentifier NOT NULL")]
+	public System.Guid userid
+	{
+		get
+		{
+			return this._userid;
+		}
+		set
+		{
+			if ((this._userid != value))
+			{
+				this._userid = value;
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_username", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
+	public string username
+	{
+		get
+		{
+			return this._username;
+		}
+		set
+		{
+			if ((this._username != value))
+			{
+				this._username = value;
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_fullname", DbType="NVarChar(50)")]
+	public string fullname
+	{
+		get
+		{
+			return this._fullname;
+		}
+		set
+		{
+			if ((this._fullname != value))
+			{
+				this._fullname = value;
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_opis", DbType="VarChar(500)")]
+	public string opis
+	{
+		get
+		{
+			return this._opis;
+		}
+		set
+		{
+			if ((this._opis != value))
+			{
+				this._opis = value;
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_plec", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+	public string plec
+	{
+		get
+		{
+			return this._plec;
+		}
+		set
+		{
+			if ((this._plec != value))
+			{
+				this._plec = value;
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_birthdate", DbType="Date")]
+	public System.Nullable<System.DateTime> birthdate
+	{
+		get
+		{
+			return this._birthdate;
+		}
+		set
+		{
+			if ((this._birthdate != value))
+			{
+				this._birthdate = value;
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_wojewodztwo_id", DbType="Int")]
+	public System.Nullable<int> wojewodztwo_id
+	{
+		get
+		{
+			return this._wojewodztwo_id;
+		}
+		set
+		{
+			if ((this._wojewodztwo_id != value))
+			{
+				this._wojewodztwo_id = value;
+			}
+		}
+	}
+}
+
+public partial class CountWiekResult
+{
+	
+	private System.Nullable<int> _c1;
+	
+	public CountWiekResult()
+	{
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_c1", DbType="Int")]
+	public System.Nullable<int> c1
+	{
+		get
+		{
+			return this._c1;
+		}
+		set
+		{
+			if ((this._c1 != value))
+			{
+				this._c1 = value;
 			}
 		}
 	}

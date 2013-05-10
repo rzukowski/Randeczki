@@ -21,6 +21,7 @@ public class Usr
     public static string websiteMailPassword = "kozajemarchew234";
     public static string smtpAddress = "smtp.gmail.com";
     public static int emailPort = 587;
+    public static DataClassesDataContext db = new DataClassesDataContext(Usr.ConnectionString);
 
     //dodanie do ulubionych - dodanie do tabeli friends
     public static bool AddFriend(String userid, String friendid)
@@ -948,5 +949,194 @@ public class Usr
         return hashedPass;
 
     }
+
+    public static int GetNumberOfSzukane(string userid, int dateDown, int dateUp, int gender, List<int> wojewodztwa_id, List<int> sporty_id, int budowaId)
+    {
+
+
+
+        var szukajResults = (from x in db.user_profiles
+                             join p in db.plecs on x.plec_id equals p.plec_Id
+                             join u in db.aspnet_Users on x.userid equals u.UserId
+                             let years = DateTime.Now.Year - x.birthdate.Value.Year
+                             //get the date of the birthday this year
+                             let sportyUsera = (from s in db.user_sports where s.userid == x.userid select s.sport_id)
+                             let inter = (from zz in sportyUsera where sporty_id.Contains(zz) select zz)
+                             let budowaUsera = (from z in db.Wyglads where z.userid == x.userid select z.budowa_ciala_id.Value).First()
+                             let birthdayThisYear = x.birthdate.Value.AddYears(years)
+                             let age = birthdayThisYear > DateTime.Now ? years - 1 : years
+                             where
+                                 p.plec_Id == gender
+                                 && age < dateUp && age > dateDown &&
+                                 wojewodztwa_id.Contains(x.wojewodztwo_id.Value) &&
+                                 x.userid.ToString() != userid &&
+                                 (sporty_id.Count() == 0 || inter.ToList().Count() != 0)
+                                 && (budowaId==0 || budowaUsera == budowaId)
+                            select new { username = u.UserName}).Count();
+
+        return szukajResults;
+
+
+    }
+
+    public static IQueryable<System.Object> FillSzukane(string userid, int dateDown, int dateUp, int gender, List<int> wojewodztwa_id,int toSkip,int toTake, List<int> sporty_id, int budowaId)
+    {
+
+        var results = (from x in db.user_profiles
+                       join p in db.plecs on x.plec_id equals p.plec_Id
+                       join u in db.aspnet_Users on x.userid equals u.UserId
+                       let years = DateTime.Now.Year - x.birthdate.Value.Year
+                       //get the date of the birthday this year
+                       let sportyUsera = (from s in db.user_sports where s.userid == x.userid select s.sport_id)
+                       let inter = (from zz in sportyUsera where sporty_id.Contains(zz) select zz)
+                       let budowaUsera = (from z in db.Wyglads where z.userid == x.userid select z.budowa_ciala_id.Value).First()
+                       let birthdayThisYear = x.birthdate.Value.AddYears(years)
+                       let age = birthdayThisYear > DateTime.Now ? years - 1 : years
+                       where
+                           p.plec_Id == gender
+                           && age < dateUp && age > dateDown &&
+                           wojewodztwa_id.Contains(x.wojewodztwo_id.Value) &&
+                           x.userid.ToString() != userid &&
+                           (sporty_id.Count() == 0 || inter.ToList().Count() != 0)
+                           && (budowaId == 0 || budowaUsera == budowaId)
+                       select new { username = u.UserName, opis = x.opis, userid = x.userid }).Skip(toSkip).Take(toTake);
+
+    return results;
+
+
+
+
+    }
+
+
+
+
+     public static void BuildPagination(Control linksContainer, int pagesNumberMax,int page,CommandEventHandler nameOfHandler){
+         linksContainer.Controls.Clear();
+
+        if (pagesNumberMax > 4)
+        {
+
+            LinkButton anchor = new LinkButton();
+            LinkButton anchor2 = new LinkButton();
+            LinkButton anchor3 = new LinkButton();
+            LinkButton anchor4 = new LinkButton();
+            
+
+            if (page == 1)
+            {
+                //pokaz 1 i 2, postaw '...' jako link do ostatniej strony
+                anchor.CssClass = "aktywnyPag";
+                page += 1;
+
+                anchor.Text = 1.ToString();
+                anchor2.Text = (page).ToString();
+                anchor3.Text = (page + 1).ToString();
+                anchor4.Text = "...";
+
+            }
+            else if (page > 1 && page < pagesNumberMax-1)
+            {
+                //'...' jako pierwsza strona '...' jako ostatnia strona, pokaz obecny page oraz page+1
+                anchor2.CssClass = "aktywnyPag";
+                anchor.Text = "...";
+                anchor2.Text = (page).ToString();
+                anchor3.Text = (page + 1).ToString();
+                anchor4.Text = "...";
+            }
+
+            else if (page == pagesNumberMax || page == (pagesNumberMax -1) )
+            {
+                //'...' jako pierwszy, (pagesNumberMax-1) oraz pagesNumberMax jako numery
+
+
+                if (page == pagesNumberMax) { anchor4.CssClass = "aktywnyPag"; page -= 2; } else { anchor3.CssClass = "aktywnyPag"; page -= 1; }
+
+
+                anchor.Text = "...";
+                anchor2.Text = (page).ToString();
+                anchor3.Text = (page+1).ToString();
+                anchor4.Text = pagesNumberMax.ToString();
+
+            }
+
+            anchor.ID = "link" + (1);
+            anchor2.ID = "link" + (page);
+            anchor3.ID = "link" + (page + 1);
+            anchor4.ID = "link" + (pagesNumberMax);
+
+            anchor.Command += new CommandEventHandler(nameOfHandler);
+            anchor.CommandArgument = 1.ToString();
+            anchor2.Command += new CommandEventHandler(nameOfHandler);
+            anchor2.CommandArgument = (page).ToString();
+
+            anchor3.Command += new CommandEventHandler(nameOfHandler);
+            anchor3.CommandArgument = (page + 1).ToString();
+
+            anchor4.Command += new CommandEventHandler(nameOfHandler);
+            anchor4.CommandArgument = (pagesNumberMax).ToString();
+
+            linksContainer.Controls.Add(anchor);
+            linksContainer.Controls.Add(anchor2);
+            linksContainer.Controls.Add(anchor3);
+            linksContainer.Controls.Add(anchor4);
+
+
+            
+        }
+        else
+        {
+            for (int ii = 0; ii < pagesNumberMax; ii++)
+            {
+                LinkButton anchor = new LinkButton();
+                // anchor.PostBackUrl = "Odwiedzili.aspx?odwiedzili="+(ii+1);
+                anchor.Text = (ii+1).ToString();
+                anchor.ID = "link" + (ii + 1);
+                
+                anchor.Command += new CommandEventHandler(nameOfHandler);
+                anchor.CommandArgument = (ii + 1).ToString();
+                if ((ii+1) == page)
+                    anchor.CssClass = "aktywnyPag";
+                linksContainer.Controls.Add(anchor);
+
+
+            }
+
+
+        }
+}
+
+     public static RadioButtonList FillWygladDropDownList(RadioButtonList DDLWyglad)
+     {
+
+         SqlConnection con = new SqlConnection(Usr.ConnectionString);
+         con.Open();
+         SqlCommand cmd = new SqlCommand("SELECT budowa_ciala_id, budowa_ciala_opis FROM Budowa", con);
+         try
+         {
+             SqlDataReader reader = cmd.ExecuteReader();
+             DDLWyglad.DataSource = reader;
+             DDLWyglad.DataTextField = "budowa_ciala_opis";
+             DDLWyglad.DataValueField = "budowa_ciala_id";
+             DDLWyglad.DataBind();
+         }
+         catch (Exception ex)
+         {
+             HttpContext.Current.Trace.Write(ex.Message);
+
+         }
+         finally
+         {
+             con.Close();
+
+         }
+
+         return DDLWyglad;
+
+     }
+
+
+
+
 
 	}

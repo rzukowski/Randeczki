@@ -14,7 +14,7 @@
     </siteMapNode>
     <siteMapNode title="| Skrzynka pocztowa" description="Przeczytaj wiadomości od użytkowników" >
       <siteMapNode title="Wiadomości odebrane" url="wiadomosci.aspx" description="Wiadomości odebrane" />
-      <siteMapNode title="Wiadomości wysłane" url="SkrzynkaOdbiorcza.aspx" description="Wiadomości wysłane" />
+      <siteMapNode title="Wiadomości wysłane" url="wiadomosciWyslane.aspx" description="Wiadomości wysłane" />
   </siteMapNode>
     </siteMapNode>
 </siteMap>

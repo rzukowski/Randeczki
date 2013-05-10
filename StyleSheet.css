@@ -9,6 +9,10 @@ img.UserPhoto {
 .OdwiedziliList p {
     margin-top:0px;
 }
+
+.aktywnyPag {
+    color:red;
+}
 .OdwiedziliList {
     clear:both;
     margin-bottom:10px;
