@@ -9,7 +9,10 @@ img.UserPhoto {
 .OdwiedziliList p {
     margin-top:0px;
 }
-
+img.Galeria:nth-child(2n+1):after {
+     content: '\a';
+     white-space: pre;
+}
 .aktywnyPag {
     color:red;
 }
@@ -67,7 +70,7 @@ img.UserPhoto {
     top:0;
     left:0;
     width: 100%;
-    height: 100%;
+    height: 1024px;
     opacity: 0.4;
     filter: alpha(opacity=40); /* For IE8 and earlier */
     
@@ -363,4 +366,62 @@ a {
     font-size:16px;
     font-family:Calibri, Arial, Helvetica;
     
+}
+
+
+/* CSS DO GALERII*/
+
+.galery img {
+    width:20%;
+    height:20%;
+
+}
+
+
+
+
+#imgbox 
+{
+    vertical-align : middle;
+    position : absolute;
+    border: 1px solid #999;
+    background : #FFFFFF; 
+    filter: Alpha(Opacity=100);
+    visibility : hidden;
+    height : 200px;
+    width : 200px;
+    z-index : 50;
+    overflow : hidden;
+    text-align : center;
+}
+
+.thumb {
+    width: 10%;
+    height: 10%;
+}
+.galeria li {
+    display: inline;
+    list-style: none;
+    margin:5px;
+}
+
+.galeria li:nth-child(5n+0):after{
+       content: '\a';
+    white-space: pre;
+
+
+}
+
+.AFU
+{
+ position: relative;
+ float: left;
+ clear: both;
+ top: 0px;
+ padding-left: 0px;
+ padding-right: 0px;
+ width: 200px;
+ border:thick;
+ margin:0px;
+ background: url("images/ajax-loader.gif") no-repeat 100% 1px;
 }

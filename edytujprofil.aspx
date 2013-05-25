@@ -3,14 +3,18 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="AjaxControlToolkit" %>
 <%@ Register assembly="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" namespace="System.Web.UI.WebControls" tagprefix="asp" %>
 
-<script runat="server">
 
-</script>
+
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+    <script type="text/javascript" src="Scripts/gallery.js"></script>    <script type="text/javascript" src="Scripts/validation_dane.js"></script>
+    <script type="text/javascript" src="Scripts/ValidateUpload.js"></script>
     <script type="text/javascript">
+
+
         //funkcja do zakładek
         $(document).ready(function () {
+
             //dla każdego miejsca z tabami
             $('.zakladki').each(function () {
                 var $li = $(this).children('li');
@@ -43,80 +47,7 @@
                 });
             });
         });
-       //validacja danych
-        function Validate() {
-           return ValidateAll();
-           function ValidateAll() {
-               var plec = ValidatePlec();
-               var opis = ValidateOpis();
-               var birthDate = ValidateBirthDate();
-               // if (plec && opis && urodziny) {
-               if (opis && birthDate && plec) {
-
-                        
-                        return true;
-                   
-                }
-
-                return false;
-            }
-
-           function ValidateOpis() {
-           
-                var opisid = document.getElementById('Opis');
-                if (opisid.value != "") {
-
-                    return true;
-                }
-                else {
-                    var opisP = document.getElementById('OpisS');
-                    opisP.innerHTML = "Opis jest pusty";
-                    opisid.style.border = "1px solid #ff0000";
-                    return false;
-                }
-                return false;
-            }
-
-            function ValidateBirthDate() {
-                var birthDate = document.getElementById('DataUrodzin');
-                if (birthDate.value != "") {
-                    var match = birthDate.value.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/);
-                    if (match != null)
-                        return true;
-                    else {
-                        var opisP = document.getElementById('UrodzinyS');
-
-                    }
-                }
-                opisP.innerHTML = "Format urodzin: yyyy-mm-dd";
-                birthDate.style.border = "1px solid #ff0000";
-                return false;
-
-
-            }
-
-            function ValidatePlec() {
-                var plecid = document.getElementById('Plec')
-                var radioButt = plecid.getElementsByTagName("input");
-                var selected;
-                for (ii = 0; ii < radioButt.length; ii++) {
-
-                    if (radioButt[ii].checked) {
-
-                        return true;
-
-                    }
-
-
-
-                }
-                var plecS = document.getElementById('PlecS');
-                plecS.innerHTML = "Wybierz płeć";
-                return false;
-
-
-            }
-        }
+      
 
     </script>
     <script type="text/javascript" src="Scripts/validation_dane.js" ></script>
@@ -124,9 +55,10 @@
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnableScriptGlobalization="true">
     </asp:ScriptManager>
     <ul class="zakladki">
-        <li class="active"><a href="#Zainteresowania" class="active">Zainteresowania</a></li>
+        <li class="active"><a href="#Zdjecie" class="active">Zmiana zdjęcia</a></li>
+        <li><a href="#Zainteresowania">Zainteresowania</a></li>
         <li><a href="#Dane">Dane osobowe</a></li>
-        <li><a href="#Zdjecie">Zmiana zdjęcia</a></li>
+        
         <li><a href="#Wyglad">Wygląd</a></li>
 </ul>
 
@@ -279,20 +211,49 @@
              }
          }
 
+         
 
 
 </script>
+    <script type = "text/javascript">
+        
+</script> 
     <div id="Zdjecie">
             <h3 class="ulubieni" dir="rtl">Zmień zdjęcie</h3>
-Wybierz plik : 
+<h2>Zdjęcie profilowe: </h2>
   
-        </asp:ScriptManager>  
-    <cc1:asyncfileupload ID="AsyncFileUpload1" runat="server" OnClientUploadComplete="uploadComplete"
-            OnUploadedComplete="ProcessUpload" ErrorBackColor="White" UploaderStyle="Modern" ViewStateMode="Disabled" CompleteBackColor="White" Height="33px" />
+        <br />
+   
+        <form id="form2">
+            <asp:FileUpload id="AsyncFileUpload1" runat="server" />
+    <asp:Button runat="server" id="Button3" text="Wyślij" onclick="ProcessUpload" />
+    <br /><br />
+
+
+        </form>
     <asp:Label ID="Label4" runat="server"></asp:Label>
    <asp:Label runat="server" Text=" " ID="Label5" />
-        </div>
 
+        <h2>Galeria</h2>
+   
+    <asp:FileUpload id="FileUploadControl" runat="server" />
+    <asp:Button runat="server" id="UploadButton" text="Wyślij" onclick="UploadButton_Click" />
+    <br /><br />
     
+
+        <asp:Label ID="zlyImg" runat="server"></asp:Label>
+                  <asp:UpdatePanel ID="UpdatePanelGaleria" runat="server"  UpdateMode="Conditional">
+        <ContentTemplate>
+           <div id="insideGaleria" runat="server" >
+            <asp:Label ID="coss"  runat="server"></asp:Label>
+               </div>
+        </ContentTemplate>
+
+
+    </asp:UpdatePanel>
+        </div>
+    
+  
+     
 </asp:Content>
 

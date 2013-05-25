@@ -1,10 +1,10 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" Title="Untitled Page" CodeFile="showprofile.aspx.cs" Inherits="showprofile"%>
 
-<script runat="server">
 
-</script>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+    <script type="text/javascript" src="Scripts/gallery.js"></script>
+    
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
         ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" 
         SelectCommand="SzczegolyProf" SelectCommandType="StoredProcedure">
@@ -34,7 +34,9 @@
             <span class="black">Uprawiany sport:</span> <asp:Label ID="Sporty" runat="server"></asp:Label><br />
             <a href='wyslijwiadomosc.aspx?userid=<%# Eval("userid") %>'> Wyslij wiadomość</a>
          </ItemTemplate>
+        
 </asp:FormView>
+    <div runat="server" id="insideGaleria"></div>
     <p align="center">
     <a href="javascript: history.go(-1)">Powrót</a></p>
 

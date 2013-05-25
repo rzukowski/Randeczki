@@ -11,9 +11,16 @@
     <script type="text/javascript" src="Scripts/jquery-1.7.1.js"></script>
 <script type="text/javascript" src="Scripts/jquery-1.9.1.intellisense.js"></script>
 <script type="text/javascript" src="Scripts/jquery-1.9.1.min.js"></script>
-
+    <script type="text/javascript" src="Scripts/jquery.uploadify.js"></script>
+    <script type="text/javascript" src="highslide/highslide.min.js"></script>
     
+<script type="text/javascript">
+    // override Highslide settings here
+    // instead of editing the highslide.js file
+    hs.graphicsDir = '/highslide/graphics/';
+</script>
     <link href="StyleSheet.css" rel="stylesheet" type="text/css" />
+    <link href="highslide/highslide.css" rel="stylesheet" />
 </head>
 <body><form id="form1" runat="server">
     <div id="Logo"><span class="log">Ktoszuka-tenznajdzie.pl</span><br /><div id="menu"><asp:Menu ID="MenuGlowne" runat="server" DataSourceID="MapaSerwisu" Orientation="Horizontal" CssClass="men" EnableTheming="True" OnMenuItemClick="MenuGlowne_MenuItemClick">
@@ -46,6 +53,9 @@
           <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
         </asp:ContentPlaceHolder>
 
-    </div></form>
+    </div>
+
+
+      </form>
 </body>
 </html>
