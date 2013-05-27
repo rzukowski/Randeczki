@@ -18,7 +18,7 @@ public partial class edytujprofil : BaseClass
     protected void Page_Load(object sender, EventArgs e)
     {
         string userid = Session["userid"].ToString();
-
+        
 
         if (!IsPostBack)
         {
@@ -35,6 +35,7 @@ public partial class edytujprofil : BaseClass
                 BindOpis();
                 CreateImgControls(Usr.GetAllUserPictures(userid));
                 zlyImg.Text = "";
+                
             }
             catch (Exception ex)
             {
@@ -188,37 +189,54 @@ public partial class edytujprofil : BaseClass
             if (FileUploadControl.HasFile)
             {
                 string filename = Path.GetFileName(FileUploadControl.FileName);
-                
-                if(extensions.Any(filename.Contains)){
+
+                if (extensions.Any(filename.Contains))
+                {
 
                     System.Drawing.Image img = System.Drawing.Image.FromStream(FileUploadControl.PostedFile.InputStream);
-                int fileHeight = img.Height;
-                int fileWidth = img.Width;
-                if (fileHeight > Usr.maxImgHeight || fileWidth > Usr.maxImgWidth || FileUploadControl.PostedFile.ContentLength > 3000000 )
-                {
-                    zlyImg.Text = "zły rozmiar pliku";
-                    return;
+                    int fileHeight = img.Height;
+                    int fileWidth = img.Width;
+                    if (fileHeight > Usr.maxImgHeight || fileWidth > Usr.maxImgWidth || FileUploadControl.PostedFile.ContentLength > 3000000)
+                    {
+                        zlyImg.Text = "zły rozmiar pliku (max: " + Usr.maxImgHeight + "px / " + Usr.maxImgWidth + "px)";
+                        return;
 
+                    }
+
+                    string strPath = "gallery\\" + username;
+
+                    //Check if the Upload directory exists in the given path
+                    bool dirExists = Directory.Exists(Server.MapPath("./") + strPath);
+                    //If the directory does not exist, Create it.
+                    if (!dirExists)
+                        Directory.CreateDirectory(Server.MapPath("./") + strPath);
+
+                    string savePath = Server.MapPath("./") + strPath + "\\" + filename;
+
+                    bool updated = Usr.SaveFileToDatabase(userid, strPath + "\\" + filename);
+
+                    if (updated)
+                    {
+                        FileUploadControl.SaveAs(Server.MapPath("./") + strPath + "\\" + filename);
+                        CreateImgControls(Usr.GetAllUserPictures(userid));
+                        zlyImg.Text = "";
+                    }
+                    else
+                    {
+                        zlyImg.Text = "Plik o podanej nazwie znajduje się już w bazie";
+                    }
                 }
-
-                string strPath = "gallery\\" + username;
-
-                //Check if the Upload directory exists in the given path
-                bool dirExists = Directory.Exists(Server.MapPath("./") + strPath);
-                //If the directory does not exist, Create it.
-                if (!dirExists)
-                    Directory.CreateDirectory(Server.MapPath("./") + strPath);
-
-                string savePath = Server.MapPath("./") + strPath + "\\" + filename;
-
-                bool updated = Usr.SaveFileToDatabase(userid, strPath + "\\" + filename);
-
-                if (updated)
-                    FileUploadControl.SaveAs(strPath + "\\" + filename);
-
+                else
+                {
+                    zlyImg.Text = "Niedozwolone rozszerzenie pliku (dozwolone są: jpg, gif, png)";
                 }
             }
-            zlyImg.Text = "Niedozwolone rozszerzenie pliku (dozwolone są: jpg, gif, png)";
+            else
+            {
+                zlyImg.Text = "Aby dodać zdjęcie - wybierz plik";
+
+            }
+            
           
         }
 
