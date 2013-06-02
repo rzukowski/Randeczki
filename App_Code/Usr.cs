@@ -21,9 +21,6 @@ public class Usr
     public static string websiteMailPassword = "kozajemarchew234";
     public static string smtpAddress = "smtp.gmail.com";
     public static int emailPort = 587;
-
-    public static int maxImgHeight = 300;
-    public static int maxImgWidth = 300;
     public static DataClassesDataContext db = new DataClassesDataContext(Usr.ConnectionString);
 
     //dodanie do ulubionych - dodanie do tabeli friends
@@ -105,7 +102,7 @@ public class Usr
             con.Close();
         }
     }
-    //usuwanie wiadomości
+    //usuwanie wiadomości przychodzących
     public static bool DeleteMssg(String msgid)
     {
         SqlConnection con = new SqlConnection(ConnectionString);
@@ -113,6 +110,29 @@ public class Usr
         {
             con.Open();
             SqlCommand cmd = new SqlCommand("delete from message where msgid = @msgid", con);
+            cmd.Parameters.AddWithValue("@msgid", msgid);
+            cmd.ExecuteNonQuery();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+            return false;
+        }
+        finally
+        {
+            con.Close();
+        }
+    }
+
+    //usuwanie wiadomości przychodzących
+    public static bool DeleteSendMssg(String msgid)
+    {
+        SqlConnection con = new SqlConnection(ConnectionString);
+        try
+        {
+            con.Open();
+            SqlCommand cmd = new SqlCommand("delete from message_sent where msgid = @msgid", con);
             cmd.Parameters.AddWithValue("@msgid", msgid);
             cmd.ExecuteNonQuery();
             return true;
@@ -1138,73 +1158,6 @@ public class Usr
 
      }
 
-
-    public static bool SaveFileToDatabase(string userid, string path){
-        bool updated = false;
-        SqlConnection con = new SqlConnection(Usr.ConnectionString);
-        SqlCommand cmd = new SqlCommand("Insert into Galeria VALUES(@userid,@path)", con);
-        cmd.Parameters.AddWithValue("@userid", userid);
-        cmd.Parameters.AddWithValue("@path", path);
-        con.Open();
-
-        try
-        {
-            if (cmd.ExecuteNonQuery() == 1)
-                updated = true;
-           
-        }
-        catch (Exception ex)
-        {
-
-            HttpContext.Current.Trace.Write(ex.Message);
-
-        }
-
-        finally
-        {
-            con.Close();
-        }
-
-        return updated;
-
-
-    }
-
-
-    public static List<string> GetAllUserPictures(string userid)
-    {
-        List<string> photos = new List<string>();
-        SqlConnection con = new SqlConnection(Usr.ConnectionString);
-        con.Open();
-        SqlCommand cmd = new SqlCommand("SELECT path FROM Galeria where userid = @userid", con);
-        cmd.Parameters.AddWithValue("@userid", userid);
-
-        try
-        {
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-                photos.Add(reader.GetString(0));
-
-
-        }
-        catch (Exception ex)
-        {
-
-            HttpContext.Current.Trace.Write(ex.Message);
-
-        }
-
-        finally
-        {
-
-            con.Close();
-        }
-
-
-        return photos;
-
-        
-    }
 
 
 

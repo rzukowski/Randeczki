@@ -8,30 +8,34 @@
     
 </head>
 <body>
+    <div class="container">
     <div id="Logo">
-    
-       <span class="log">ktoszuka-tenznajdzie.pl</span><div class="men"></div></div>
-      <form id="form1" runat="server">
-        <div style="width:307px; margin-left:auto; margin-right:auto">
-       </div>
-          
+       <h3 class="muted" id="log">ktoszuka-tenznajdzie.pl</h3><div class="men"></div></div>
+      <form id="form1" runat="server" class="form-signin">
+         
 <div id="ObszarLogowania">
+     <ul class="nav nav-tabs">
+        <li class="active"><a href="Zaloguj.aspx" data-toggle="tab">Logowanie</a></li>
+        <li id="rejestracja_link" class="xxx"><a href="Zarejestruj.aspx" data-toggle="tab">Rejestracja</a></li>
+    </ul>
+
  Login: <asp:TextBox ID="UserName" runat="server"></asp:TextBox><br />
    Hasło: <asp:TextBox ID="UserPass" runat="server" TextMode="Password"></asp:TextBox><br />
-    Zapamiętaj <asp:CheckBox ID="RememberMe" runat="server" /><br />
-          <asp:Button ID="Loguj" runat="server" OnClick="TryToLog" Text="Zaloguj" />
+            <label class="checkbox">
+    Zapamiętaj <asp:CheckBox ID="RememberMe" runat="server" type="checkbox" /><br />
+            </label>
+          <asp:Button ID="Loguj" runat="server" OnClick="TryToLog" Text="Zaloguj"  class="btn btn-large btn-primary" />
           </div>
-          <div id="Center">
-   <p><a href="odzyskajhaslo.aspx">Zapomniałem hasła</a></p>
-     <p>Nie masz konta? <a href="Zarejestruj.aspx">Zarejestruj się</a></p>
-              <p> <a href="ChangePass.aspx">Zresetuj hasło</a></p>
-      <p><asp:Label runat="server" ID="Wrong" Visible="false" Text="Złe hasło lub login"></asp:Label>      </p>
 
-              
-              </div>
+          <div id="zapomnialem">
+   <p><a href="odzyskajhaslo.aspx">Zapomniałem hasła</a> | 
+     <a href="ChangePass.aspx">Zresetuj hasło</a></p>
+        <p style="float:right;">Nie masz konta? <a href="Zarejestruj.aspx">Zarejestruj się</a></p>
+          </div>
+    <p style="text-align:center">
+     <asp:Label runat="server" ID="Wrong" Visible="false" Text="Błąd! Zły login lub hasło" CssClass="alert alert-error"></asp:Label>
+    </p>
         </form>
-
-    
-   
+     </div>
     </body>
 </html>

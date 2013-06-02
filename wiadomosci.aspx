@@ -11,7 +11,10 @@
 
 
 
-    <h2>Skrzynka pocztowa</h2>
+    <ul class="nav nav-tabs">
+        <li class="active"><a><i class="icon-envelope"></i> Skrzynka Odbiorcza</a></li>
+        <li><a href="./wiadomosciWyslane.aspx"><i class="icon-share"></i> Wiadomości Wysłane</a></li>
+    </ul>
 
 
     <asp:ScriptManager   
@@ -34,22 +37,24 @@
           <td>
           Wiadomość od: <span class="wiadod"> <a href='showprofile.aspx?userid=<%# Eval("userid") %>&username=<%# Eval("username") %>'><%# Eval("username") %></a></span>   [<%# Eval("sentdate") %>]
           <pre><%# Eval("mssg") %></pre>
-          <a href='wyslijwiadomosc.aspx?userid=<%# Eval("userid")%>'>Odpowiedz</a> 
+          <a href='wyslijwiadomosc.aspx?userid=<%# Eval("userid")%>' class="btn btn-small btn-info">Odpowiedz</a> 
           &nbsp;
-          <a href='usunwiadomosc.aspx?msgid=<%# Eval("msgid")%>'>Usuń</a>
+          <a href='usunwiadomosc.aspx?msgid=<%# Eval("msgid")%>' class="btn btn-small btn-danger">Usuń</a>
           </td>
           </tr>
           </table>
         </ItemTemplate>
     </asp:DataList>
             <asp:HiddenField runat="server" ID="CurrPage" />
-             <div id="links" runat="server"></div>
+              <div class="pagination pagination-centered" style="clear:both;"> 
+                <ul>
+                   <div id="links" runat="server"></div>
+                </ul>
+              </div>
         </ContentTemplate>
   
 
         </asp:UpdatePanel>
-
-    <p align="center"> <a href="javascript: history.go(-1)">Powrót</a></p>
     
 </asp:Content>
 

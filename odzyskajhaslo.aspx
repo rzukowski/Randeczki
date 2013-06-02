@@ -8,13 +8,15 @@
     <link href="StyleSheet.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
+   <div class="container">
     <div id="Logo">
-        <span class="log">ktoszuka-tenznajdzie.pl</span></div>
-    <form id="form1" runat="server">
-    <div style="width:348px; margin-left:auto; margin-right:auto; margin-top:10px">
-        <asp:PasswordRecovery ID="PasswordRecovery1" runat="server" AnswerLabelText="Odpowiedź:" AnswerRequiredErrorMessage="Odpowiedź jest wymagana." GeneralFailureText="Niepowodzenie. Spróbuj podobnie." QuestionInstructionText="" QuestionLabelText="Pytanie:" SubmitButtonText="Wyślij" SuccessText="Hasło zostało wysłane." UserNameFailureText="Proszę spróbować ponownie." UserNameInstructionText="Podaj nazwę użytkownika aby odzyskać hasło." UserNameLabelText="Nazwa użytkownika:" UserNameRequiredErrorMessage="Nazwa użytkownika jest wymagana." UserNameTitleText="Zapomniałeś hasła?" BackColor="#99FF99" BorderColor="#CCCC99" Font-Bold="True" ForeColor="White" Height="130px" Width="345px" BorderWidth="1px" QuestionFailureText="Zła odpowiedź" QuestionTitleText="Potwierdzenie tożsamości"></asp:PasswordRecovery>
-    </div>
-    </form>
-    <p align="center"> <a href="Zaloguj.aspx">Powrót</a></p>
+       <h3 class="muted" id="log">ktoszuka-tenznajdzie.pl</h3><div class="men"></div></div>
+            <form id="form1" runat="server" class="form-signin">
+                <asp:PasswordRecovery ID="PasswordRecovery1" runat="server" AnswerLabelText="Odpowiedź:" AnswerRequiredErrorMessage="Odpowiedź jest wymagana." GeneralFailureText="Niepowodzenie. Spróbuj podobnie." QuestionInstructionText="" QuestionLabelText="Pytanie:" SubmitButtonText="Wyślij" SuccessText="Hasło zostało wysłane." UserNameFailureText="Proszę spróbować ponownie." UserNameLabelText="Login:" UserNameRequiredErrorMessage="Nazwa użytkownika jest wymagana." UserNameTitleText="Zapomniałeś hasła?" QuestionFailureText="Zła odpowiedź" QuestionTitleText="Potwierdzenie tożsamości" UserNameInstructionText=" " LabelStyle-HorizontalAlign="NotSet" SubmitButtonStyle-CssClass="btn btn-large btn-primary pull-right" LabelStyle-VerticalAlign="NotSet" LabelStyle-Wrap="False" RenderOuterTable="False" TitleTextStyle-HorizontalAlign="Left" TitleTextStyle-Wrap="False" EnableTheming="True" EnableViewState="True" TextLayout="TextOnLeft" TitleTextStyle-BorderStyle="NotSet" TitleTextStyle-Height="50px" TitleTextStyle-VerticalAlign="Top" FailureTextStyle-CssClass="alert alert-error" BorderPadding="1" Enabled="True" FailureTextStyle-Wrap="False" FailureTextStyle-ForeColor="#B94A48"></asp:PasswordRecovery><br />
+        <div id="zapomnialem">
+            <p>Powrót na <a href="Zaloguj.aspx">Stronę logowania</a></p>
+        </div>
+            </form>
+   </div>
 </body>
 </html>

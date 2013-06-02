@@ -8,7 +8,6 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Data.SqlClient;
 using Base;
-using System.IO;
 
 
 public partial class edytujprofil : BaseClass
@@ -17,7 +16,6 @@ public partial class edytujprofil : BaseClass
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        string userid = Session["userid"].ToString();
         
 
         if (!IsPostBack)
@@ -33,9 +31,6 @@ public partial class edytujprofil : BaseClass
                 FillWaga();
                 FillBMI();
                 BindOpis();
-                CreateImgControls(Usr.GetAllUserPictures(userid));
-                zlyImg.Text = "";
-                
             }
             catch (Exception ex)
             {
@@ -165,9 +160,9 @@ public partial class edytujprofil : BaseClass
 
     }
     //metoda wykonująca inserta do user_sport
+    
 
-
-    protected void ProcessUpload(object sender, EventArgs e)
+    protected void ProcessUpload(object sender, AjaxControlToolkit.AsyncFileUploadEventArgs e)
     {
         //ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "size", "top.$get(\"" + uploadResult.ClientID + "\").innerHTML = 'Uploaded size: " + AsyncFileUpload1.FileBytes.Length.ToString() + "';", true);
         string fileName = Server.MapPath("./") + "photos\\" + Session["username"] + "image.jpg";
@@ -178,78 +173,6 @@ public partial class edytujprofil : BaseClass
         //      "top.document.getElementById('photos').src='"+fileName+"';",
         //      true);
     }
-
-    public void UploadButton_Click(object sender, EventArgs e)
-    {
-        string username = Session["username"].ToString();
-        string userid = Session["userid"].ToString();
-        string[] extensions = { ".gif", ".jpg", ".png" };
-        try
-        {
-            if (FileUploadControl.HasFile)
-            {
-                string filename = Path.GetFileName(FileUploadControl.FileName);
-
-                if (extensions.Any(filename.Contains))
-                {
-
-                    System.Drawing.Image img = System.Drawing.Image.FromStream(FileUploadControl.PostedFile.InputStream);
-                    int fileHeight = img.Height;
-                    int fileWidth = img.Width;
-                    if (fileHeight > Usr.maxImgHeight || fileWidth > Usr.maxImgWidth || FileUploadControl.PostedFile.ContentLength > 3000000)
-                    {
-                        zlyImg.Text = "zły rozmiar pliku (max: " + Usr.maxImgHeight + "px / " + Usr.maxImgWidth + "px)";
-                        return;
-
-                    }
-
-                    string strPath = "gallery\\" + username;
-
-                    //Check if the Upload directory exists in the given path
-                    bool dirExists = Directory.Exists(Server.MapPath("./") + strPath);
-                    //If the directory does not exist, Create it.
-                    if (!dirExists)
-                        Directory.CreateDirectory(Server.MapPath("./") + strPath);
-
-                    string savePath = Server.MapPath("./") + strPath + "\\" + filename;
-
-                    bool updated = Usr.SaveFileToDatabase(userid, strPath + "\\" + filename);
-
-                    if (updated)
-                    {
-                        FileUploadControl.SaveAs(Server.MapPath("./") + strPath + "\\" + filename);
-                        CreateImgControls(Usr.GetAllUserPictures(userid));
-                        zlyImg.Text = "";
-                    }
-                    else
-                    {
-                        zlyImg.Text = "Plik o podanej nazwie znajduje się już w bazie";
-                    }
-                }
-                else
-                {
-                    zlyImg.Text = "Niedozwolone rozszerzenie pliku (dozwolone są: jpg, gif, png)";
-                }
-            }
-            else
-            {
-                zlyImg.Text = "Aby dodać zdjęcie - wybierz plik";
-
-            }
-            
-          
-        }
-
-        catch (Exception ex)
-        {
-
-            throw ex;
-
-        }
-
-    }
-
-
     protected string Sub(string str)
     {
         return (str.Length > 0) ? str.Substring(0, 10) : "";
@@ -480,35 +403,4 @@ public partial class edytujprofil : BaseClass
 
     }
 
-
-    protected void CreateImgControls(List<string> photos)
-    {
-
-        //insideGaleria.InnerHtml = "<ul class='galery'>";
-        insideGaleria.InnerHtml = "<div id=\"imgbox\"></div><ul class=\"galeria\">";
-        foreach (string item in photos)
-        {
-
-
-            insideGaleria.InnerHtml += "<li><img class=\"thumb\" src='" + item.ToString() + "' onmouseover=\"Large(this)\"/></li>";
-            
-            
-            coss.Text = DateTime.Now.ToString();
-        }
-        try {
-            insideGaleria.InnerHtml += "</ul>";
-
-
-        
-        }
-
-        catch(Exception ex){
-            HttpContext.Current.Trace.Write(ex.Message);
-
-        }
-
-
-    }
-
-    
 }

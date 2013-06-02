@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="szukajprzyjaciol.aspx.cs" Inherits="szukajprzyjaciol" Title="Untitled Page" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="szukajprzyjaciol.aspx.cs" Inherits="szukajprzyjaciol" Title="Szukaj" %>
 <%@ Register assembly="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" namespace="System.Web.UI.WebControls" tagprefix="asp" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="AjaxControlToolkit" %>
@@ -55,7 +55,7 @@
 
             if (object.parent().hasClass('rozsun')) {
                 object.parent().animate({
-                    height: "200px",
+                    height: "15px",
                 }, 150);
                 object.parent().removeClass('rozsun').addClass('nowe');
 
@@ -78,12 +78,6 @@
 
 
         }
-            
-        
-
-      
-
-       
         
         </script>
         <script type="text/jscript" src="Scripts/OnHoverShowOpis.js"></script>
@@ -97,10 +91,12 @@
             >  
         </asp:ScriptManager>  
   
+<form class="form-horizontal">
+  <div class="span4" style="width:100%;">
 
-    <h2>Szukaj</h2>
-    <p>&nbsp;<p>Wiek od :&nbsp;&nbsp;&nbsp;&nbsp;
-    <asp:DropDownList ID="DropDownList2" runat="server">
+      <div class="control-group">
+    <p>Wiek od :&nbsp;&nbsp;&nbsp;&nbsp;
+    <asp:DropDownList ID="DropDownList2" runat="server" CssClass="span1">
         <asp:ListItem>16</asp:ListItem>
         <asp:ListItem>17</asp:ListItem>
         <asp:ListItem>18</asp:ListItem>
@@ -177,7 +173,7 @@
         <asp:ListItem>89</asp:ListItem>
     </asp:DropDownList>
 &nbsp;&nbsp;&nbsp;&nbsp; do&nbsp;&nbsp;&nbsp;&nbsp;
-    <asp:DropDownList ID="DropDownList3" runat="server">
+    <asp:DropDownList ID="DropDownList3" runat="server"  CssClass="span1">
         <asp:ListItem>16</asp:ListItem>
         <asp:ListItem>17</asp:ListItem>
         <asp:ListItem>18</asp:ListItem>
@@ -254,21 +250,28 @@
         <asp:ListItem>89</asp:ListItem>
     </asp:DropDownList>
         &nbsp;</p>
+        </div>
 
     <p>Płeć:
-    <asp:DropDownList id="DropDownList1" runat="server" >
-  <asp:listitem Value="2">Kobieta</asp:listitem>
-  <asp:listitem Value="1">Mężczyzna</asp:listitem>
-</asp:DropDownList>
+    <asp:DropDownList id="DropDownList1" runat="server"  CssClass="span2">
+        <asp:listitem Value="2">Kobieta</asp:listitem>
+        <asp:listitem Value="1">Mężczyzna</asp:listitem>
+    </asp:DropDownList>
     </p>
-        </p>
     
     <%-- Check box rozwijany z wojewodztwami --%>
-   
+   <div class="woje" style="display:inline-block;float:left;width:180px;">
     <div class="rozsun">
-        <div id="divDDL2" class="divDDL2" runat="server">
-        Województwo<div id="divDDL3" runat="server" height="1px"></div>
-       </div></div> 
+        <div id="divDDL2" class="divDDL2" runat="server" style="cursor:pointer;width:100px;">
+            <div class="btn-group">
+             <a class="btn dropdown-toggle">
+             Województwo:  
+             <span class="caret"></span>
+             </a>
+            </div>
+            <div id="divDDL3" runat="server" height="1px"></div>
+        </div>
+    </div> 
     <asp:Panel ID="pnlWojewodztwa" runat="server" CssClass="MultipleSelectionDDL" >
             <asp:CheckBoxList ID="cblWojewodztwa" runat="server" >
             </asp:CheckBoxList>
@@ -279,34 +282,53 @@
         </cc1:PopupControlExtender>
       
     <br />
-    <div class="rozsun">
-    <div id="divDDL" class="divDDL2" runat="server">
-        Proszę wybrać…<div id="divDDLinner" runat="server"></div>
-       </div></div>
-    <asp:Panel ID="pnlCustomers" runat="server" CssClass="MultipleSelectionDDL">
+    </div>
+    <div class="zain" style="display:inline-block;margin-left:10px;width:180px;">
+        <div class="rozsun">
+            <div id="divDDL" class="divDDL2" runat="server">
+            <div class="btn-group">
+             <a class="btn dropdown-toggle">
+                Zainteresowania: 
+                 <span class="caret"></span>
+             </a>
+            </div>
+             <div id="divDDLinner" runat="server"></div>
+            </div>
+        </div>
+        <asp:Panel ID="pnlCustomers" runat="server" CssClass="MultipleSelectionDDL">
             <asp:CheckBoxList ID="cblCustomerList" runat="server" onclick="CountSelected(this)">
             </asp:CheckBoxList>
         </asp:Panel>
-        <br />
+    </div>
+
         <cc1:PopupControlExtender ID="PopupControlExtender1" runat="server" TargetControlID="divDDLinner"
                PopupControlID="pnlCustomers" Position="Bottom" OffsetY="3" BehaviorID="popSport" >
         </cc1:PopupControlExtender>
-    <p>
-        Budowa ciała: <asp:RadioButtonList ID="DDLWyglad" runat="server" DataTextField="budowa_opis" DataValueField="budowa_id" Width="200px" AppendDataBoundItems="True"></asp:RadioButtonList>
+    <div class="bud" style="display:inline-block;margin-left:10px;">
+            <div class="btn-group">
+             <a class="btn dropdown-toggle">
+             Budowa ciała:  
+             <span class="caret"></span>
+             </a>
+            </div>
+        <asp:RadioButtonList ID="DDLWyglad" runat="server" DataTextField="budowa_opis" DataValueField="budowa_id" Width="200px" AppendDataBoundItems="True"></asp:RadioButtonList>
 
-    </p>
-    <p class="center" >
-
-
-        <asp:Button ID="btnSearch" runat="server" Text="Szukaj" OnCommand="FillSzukane" CommandArgument="1" />
-    &nbsp;</p>
+    </div>
+    <div style="clear:both">
+        <asp:Button ID="btnSearch" runat="server" Text="Szukaj" OnCommand="FillSzukane" CommandArgument="1" CssClass="btn btn-success" />
+        <a href="javascript: history.go(-1)" class="btn btn-warning">Powrót</a>
+    </div>
+      <br />
+    </div>
+</form>
+      <div class="span4" style="width:100%;margin-left:-3px;">
     <p>
         <asp:UpdatePanel runat="server" id="UpdatePanel1" updatemode="Conditional">
           
          <ContentTemplate>
                <script type="text/javascript">
                    Sys.Application.add_load(BindEvents);
-     </script>
+               </script>
         <asp:ListView ID="ListView1" runat="server" GroupItemCount ="1">
         <GroupTemplate>
          <tr>
@@ -318,26 +340,26 @@
                 <tr id="groupPlaceHolder" runat="server"></tr>
             </table>
           </LayoutTemplate>
-          
           <ItemTemplate>
-          <td>
-             <table>
-                <tr><h3> <%# Eval("username") %></h3></tr>
-                 <tr>
-                  <td> <img src='photos/<%# Eval("username") %>image.jpg' id='<%# Eval("username") %>p' alt="No Photo"  width="100px" height="100px" /></td>
-                  <td> 
+          <li class="span3" style="list-style: none outside none;margin-left:10px;margin-bottom:10px;">
+              <div class="thumbnail">
+                  <img src='photos/<%# Eval("username") %>image.jpg' id='<%# Eval("username") %>p' alt="No Photo" class="img-polaroid2" style="width:100px; height:100px;"/>
+                 <div class="caption">
+                   <h3><%# Eval("username") %></h3>
                      <p class="opis" id='<%# Eval("username") %>'><%# Eval("opis") %></p>
-                     <a href='showprofile.aspx?userid=<%# Eval("userid") %>&username=<%# Eval("username") %>'>Pokaż profil</a> <br />
-                     <a href='addfriend.aspx?userid=<%# Eval("userid") %>&username=<%# Eval("username") %>'> Dodaj do ulubionych</a> <br />
-                       <a href='wyslijwiadomosc.aspx?userid=<%# Eval("userid") %>'> Wyslij wiadomość</a>
-                  </td>
-                </tr>
-             </table>
-             </td>
+                      <p align="center"><a href='showprofile.aspx?userid=<%# Eval("userid") %>&username=<%# Eval("username") %>' class="btn btn-primary btn-block">Pokaż profil</a></p>
+                        <p align="center"><a href='addfriend.aspx?userid=<%# Eval("userid") %>&username=<%# Eval("username") %>' class="btn btn-success btn-block"> Dodaj do ulubionych</a></p>
+                          <p align="center"><a href='wyslijwiadomosc.aspx?userid=<%# Eval("userid") %>' class="btn btn-info btn-block"> Wyslij wiadomość</a></p>
+                 </div>
+              </div>
+             </li>
           </ItemTemplate>
        </asp:ListView>
-
-             <div id="links" runat="server"></div>
+            <div class="pagination pagination-centered" style="clear:both;"> 
+                <ul>
+                    <div id="links" runat="server" style="clear:both;"></div>
+                </ul>
+            </div>
         </ContentTemplate>
         </asp:UpdatePanel>
 
@@ -356,7 +378,7 @@
             </SelectParameters>
         </asp:SqlDataSource>
     </p>
-   <p align="center"> <a href="javascript: history.go(-1)">Powrót</a></p>
+    </div>
 </asp:Content>
 
 

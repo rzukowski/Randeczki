@@ -9,53 +9,70 @@
         
     </style>
     <script type="text/javascript" src="Scripts/jquery-1.7.1.js"></script>
-<script type="text/javascript" src="Scripts/jquery-1.9.1.intellisense.js"></script>
-<script type="text/javascript" src="Scripts/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="Scripts/jquery.uploadify.js"></script>
-    <script type="text/javascript" src="highslide/highslide.min.js"></script>
-    
-<script type="text/javascript">
-    // override Highslide settings here
-    // instead of editing the highslide.js file
-    hs.graphicsDir = '/highslide/graphics/';
-</script>
-    <link href="StyleSheet.css" rel="stylesheet" type="text/css" />
-    <link href="highslide/highslide.css" rel="stylesheet" />
-</head>
-<body><form id="form1" runat="server">
-    <div id="Logo"><span class="log">Ktoszuka-tenznajdzie.pl</span><br /><div id="menu"><asp:Menu ID="MenuGlowne" runat="server" DataSourceID="MapaSerwisu" Orientation="Horizontal" CssClass="men" EnableTheming="True" OnMenuItemClick="MenuGlowne_MenuItemClick">
-            <DynamicHoverStyle CssClass="ZaznaczonyElementMenu" />
-            <DynamicMenuItemStyle CssClass="ElementMenuRozwijanego" />
-            <StaticHoverStyle CssClass="ZaznaczonyElementMenu" />
-            <StaticMenuItemStyle CssClass="ElementMenuNadrzednego" />
-         
-        </asp:Menu><asp:Label ID="NowaWiadomosc" runat="server" CssClass="noweWiadomosci"></asp:Label></div>
-      
-        </div>
+    <script type="text/javascript" src="Scripts/jquery-1.9.1.intellisense.js"></script>
+    <script type="text/javascript" src="Scripts/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="Scripts/jquery.nivo.slider.js"></script>
 
-        
-        
-  
-    <div id="Menu">
-    <div id="ObszarLogowania">
-       Witaj <asp:Label runat="server" Id="user"></asp:Label>
-        | <asp:LinkButton OnClick="LogOut" Text="Wyloguj" runat="server"></asp:LinkButton>
+    <link href="StyleSheet.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+ <div class="container">
+    <form id="form1" runat="server">
+        <p class="navbar-text pull-right">
+              Witaj <asp:Label runat="server" Id="user"></asp:Label>
+        | <i class="icon-off"></i> <asp:LinkButton ID="LinkButton1" OnClick="LogOut" Text="Wyloguj" runat="server"></asp:LinkButton>
+            </p>
+    <div id="Logo">
+      <h3 class="muted" id="log">ktoszuka-tenznajdzie.pl</h3><br />
+      <div class="navbar">
+        <div class="navbar-inner">
+        <asp:Menu runat="server" DataSourceID="MapaSerwisu" Orientation="Horizontal"  EnableTheming="True" OnMenuItemClick="MenuGlowne_MenuItemClick" CssClass="container" StaticMenuStyle-CssClass="nav" DynamicEnableDefaultPopOutImage="True" DynamicMenuItemStyle-BorderStyle="NotSet">
+            <DynamicHoverStyle CssClass="nav li active" />
+            <DynamicMenuItemStyle CssClass="dropdown-menu" />
+            <StaticHoverStyle CssClass="nav li:hover" />
+            <StaticMenuItemStyle CssClass="navbar nav active" />
+        </asp:Menu>
+        </div>
+      </div>
     </div>
         
-     <p id="photo">  <asp:Image ID="photo" runat="server"  Width="100px" Height="100px"/></p> 
+  <div class="span4 well" style="width:130px">
+    <div id="Menu">
+        <span class="pull-right" style="margin-top:-5px;margin-right: -10px;">
+            <a href="wiadomosci.aspx" style="font-size:11px;">
+                <i class="icon-comment"></i> <asp:Label ID="NowaWiadomosc" runat="server"></asp:Label>
+            </a>
+        </span>
+     <p>
+         <asp:Image ID="photo" runat="server"  Width="100px" Height="100px"  CssClass="img-polaroid"/>
+     </p> 
       
             <asp:SiteMapDataSource ID="MapaSerwisu" runat="server" ShowStartingNode="False" />
-       
-        Odwiedzili:<a href="Odwiedzili.aspx"><asp:Label runat="server" ID="OdwiedziliNew"></asp:Label><asp:Label runat="server" ID="OdwiedziliTotal"></asp:Label></a>
+
+        <span class="badge badge-info">
+            <a href="Odwiedzili.aspx" style="color:yellow;">
+                <asp:Label runat="server" ID="OdwiedziliNew"></asp:Label>
+                <asp:Label runat="server" ID="OdwiedziliTotal"></asp:Label>
+            </a> odwiedzin
+        </span>
+        <br />
 
        </div>
-    <div id="Content">
-          <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
-        </asp:ContentPlaceHolder>
-
+   </div>
+    <div class="span9" style="border:1px solid rgb(229, 229, 229);box-shadow: 1px 2px rgba(0, 0, 0, 0.05);background-color:rgb(245, 245, 245);">
+        <div id="Content">
+          <div class="span4" style="width:100%;margin-left:0px;margin-top:5px;">
+            <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+          </div>
+        </div>
     </div>
 
-
-      </form>
+    </form>
+    <script type="text/javascript">
+        $(window).load(function () {
+            $('#slider').nivoSlider();
+        });
+    </script>
+  </div>
 </body>
 </html>

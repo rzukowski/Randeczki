@@ -6,7 +6,12 @@
 </script>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-    <h2>Wiadomości wysłane</h2>
+
+    <ul class="nav nav-tabs">
+        <li><a href="./wiadomosci.aspx"><i class="icon-envelope"></i> Skrzynka Odbiorcza</a></li>
+        <li class="active"><a><i class="icon-share"></i> Wiadomości Wysłane</a></li>
+    </ul>
+
     <asp:ScriptManager   
             ID="ScriptManager1"  
             runat="server"  
@@ -28,22 +33,26 @@
           <td>
           Wiadomość do: <span class="wiadod"> <a href='showprofile.aspx?userid=<%# Eval("userid") %>&username=<%# Eval("username") %>'><%# Eval("username") %></a></span>   [<%# Eval("sentdate") %>]
           <pre><%# Eval("mssg") %></pre>
-          <a href='wyslijwiadomosc.aspx?userid=<%# Eval("userid")%>'>Wyślij wiadomość</a> 
+          <a href='wyslijwiadomosc.aspx?userid=<%# Eval("userid")%>' class="btn btn-small btn-info">Wyślij wiadomość</a> 
           &nbsp;
-          <a href='usunwiadomosc.aspx?msgid=<%# Eval("msgid")%>'>Usuń</a>
+          <a href='usunwiadomosc_sent.aspx?msgid=<%# Eval("msgid")%>' class="btn btn-small btn-danger">Usuń</a>
           </td>
           </tr>
           </table>
         </ItemTemplate>
     </asp:DataList>
+
             <asp:HiddenField ID="CurrPage" runat="server" />
-             <div id="links" runat="server"></div>
+            <div class="pagination pagination-centered" style="clear:both;"> 
+                <ul>
+                    <div id="links" runat="server"></div>
+                </ul>
+            </div>
         </ContentTemplate>
   
 
         </asp:UpdatePanel>
     
-    <p align="center"> <a href="javascript: history.go(-1)">Powrót</a></p>
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
         ConnectionString="<%$ ConnectionStrings:FriendsConnectionString %>" 
         SelectCommand="PobierzWyslaneWiadomosc" SelectCommandType="StoredProcedure">

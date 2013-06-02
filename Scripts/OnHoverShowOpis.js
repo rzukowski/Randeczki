@@ -1,4 +1,5 @@
 ﻿function BindEvents() {
+
     $(document).ready(function () {
         $(".opis").each(function () {
             $(this).hide();
@@ -6,7 +7,8 @@
     });
     //tutaj skrypt do nadawania obiektom z klasa 'opis' i 'id' status visible (lub tez dopisywanie nowej klasy
     //powodującej ze 'opis' bedzie jako chmurka
-    $("img").mouseover(function (e) {
+    $(".img-polaroid2").mouseover(function (e) {
+
         var href = $(this).attr('id');
         var id = href.substring(0, href.length - 1);
         var text = $("#" + id).text();
