@@ -41,7 +41,9 @@
           </div>
          </ItemTemplate>
 </asp:FormView>
+        <div runat="server" id="insideGaleria"></div>
     <p align="center">
+        
     </p>
 </div>
 </asp:Content>

@@ -33,6 +33,7 @@ public partial class showprofile : BaseClass
         string odwiedzanyid = Request.QueryString["userid"];
         string odwiedzilid = Session["userid"].ToString();
         Usr.SaveVisited(odwiedzanyid, odwiedzilid);
+        FillUsrGallery();
 
     }
 
@@ -70,7 +71,7 @@ public partial class showprofile : BaseClass
         string userid = Request.QueryString["userid"];
         int wzrost = Usr.GetWzrost(userid);
         Label WzrostL = (Label)FormView1.FindControl("Wzrost");
-        if (wzrost != null && wzrost!= 0)
+        if (wzrost != null && wzrost!=0)
         {
 
             WzrostL.Text = "Wzrost: " + wzrost.ToString() + " cm" + "<br \\>";
@@ -121,6 +122,37 @@ public partial class showprofile : BaseClass
 
         }
 
+
+    }
+
+
+    public void FillUsrGallery()
+    {
+        string userid = Request.QueryString["userid"];
+
+        List<string> photos = Usr.GetAllUserPictures(userid);
+        //insideGaleria.InnerHtml = "<ul class='galery'>";
+        insideGaleria.InnerHtml = "<div id=\"imgbox\"></div><ul class=\"galeria\">";
+        foreach (string item in photos)
+        {
+
+
+            insideGaleria.InnerHtml += "<li><img class=\"thumb\" src='" + item.ToString() + "' onmouseover=\"Large(this)\"/></li>";
+
+        }
+        try
+        {
+            insideGaleria.InnerHtml += "</ul>";
+
+        }
+
+        catch (Exception ex)
+        {
+            HttpContext.Current.Trace.Write(ex.Message);
+
+        }
+
+           
 
     }
 }

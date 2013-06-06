@@ -123,9 +123,9 @@
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnableScriptGlobalization="true">
     </asp:ScriptManager>
     <ul class="nav nav-tabs" id="zakladki">
-        <li class="active"><a href="#Zainteresowania" class="active"><i class="icon-thumbs-up"></i> Zainteresowania</a></li>
+        <li class="active"><a href="#Zdjecie" class="active"><i class="icon-picture" ></i> Zmiana zdjęcia</a></li>
+        <li ><a href="#Zainteresowania"><i class="icon-thumbs-up"></i> Zainteresowania</a></li>
         <li><a href="#Dane"><i class="icon-user"></i> Dane osobowe</a></li>
-        <li><a href="#Zdjecie"><i class="icon-picture"></i> Zmiana zdjęcia</a></li>
         <li><a href="#Wyglad"><i class="icon-eye-open"></i> Wygląd</a></li>
     </ul>
 
@@ -314,12 +314,35 @@
         <div class="span4">
                 Wybierz plik : 
   
-    <cc1:asyncfileupload ID="AsyncFileUpload1" runat="server" OnClientUploadComplete="uploadComplete"
-            OnUploadedComplete="ProcessUpload" ErrorBackColor="White" UploaderStyle="Modern" ViewStateMode="Disabled" CompleteBackColor="White" Height="33px" />
+   <asp:FileUpload id="AsyncFileUpload1" runat="server" />
+    <asp:Button runat="server" id="Button3" text="Wyślij" onclick="ProcessUpload" />
+    <br /><br />
     <asp:Label ID="Label4" runat="server"></asp:Label>
     <asp:Label runat="server" Text=" " ID="Label5" />
             <br />
         </div>
+            <br />
+            <p>
+            <h2>Galeria</h2>
+   </p>
+    <asp:FileUpload id="FileUploadControl" runat="server" />
+    <asp:Button runat="server" id="UploadButton" text="Wyślij" onclick="UploadButton_Click" />
+    <br /><br />
+    
+        
+
+        <asp:Label ID="zlyImg" runat="server"></asp:Label>
+                  <asp:UpdatePanel ID="UpdatePanelGaleria" runat="server"  UpdateMode="Conditional">
+        <ContentTemplate>
+           <div id="insideGaleria" runat="server" >
+            <asp:Label ID="coss"  runat="server"></asp:Label>
+               </div>
+        </ContentTemplate>
+
+
+    </asp:UpdatePanel>
+
+
         </center>
     </div>
 

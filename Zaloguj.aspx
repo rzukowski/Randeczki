@@ -28,7 +28,7 @@
           </div>
 
           <div id="zapomnialem">
-   <p><a href="odzyskajhaslo.aspx">Zapomniałem hasła</a> | 
+   <p>
      <a href="ChangePass.aspx">Zresetuj hasło</a></p>
         <p style="float:right;">Nie masz konta? <a href="Zarejestruj.aspx">Zarejestruj się</a></p>
           </div>
