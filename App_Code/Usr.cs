@@ -23,6 +23,13 @@ public class Usr
     public static int emailPort = 587;
     public static DataClassesDataContext db = new DataClassesDataContext(Usr.ConnectionString);
 
+    public static int maxImgHeight = 500;
+    public static int maxImgWidth = 500;
+
+    //name of default photo
+
+    public static string defaultUserPhoto = "photos\\default.jpg";
+
     //dodanie do ulubionych - dodanie do tabeli friends
     public static bool AddFriend(String userid, String friendid)
     {
@@ -148,6 +155,37 @@ public class Usr
         }
     }
 
+    public static bool SaveFileToDatabase(string userid, string path)
+    {
+        bool updated = false;
+        SqlConnection con = new SqlConnection(Usr.ConnectionString);
+        SqlCommand cmd = new SqlCommand("Insert into Galeria VALUES(@userid,@path)", con);
+        cmd.Parameters.AddWithValue("@userid", userid);
+        cmd.Parameters.AddWithValue("@path", path);
+        con.Open();
+
+        try
+        {
+            if (cmd.ExecuteNonQuery() == 1)
+                updated = true;
+
+        }
+        catch (Exception ex)
+        {
+
+            HttpContext.Current.Trace.Write(ex.Message);
+
+        }
+
+        finally
+        {
+            con.Close();
+        }
+
+        return updated;
+
+
+    }
 
     public static bool IncrementNotification(String userid)
     {
@@ -1158,7 +1196,40 @@ public class Usr
 
      }
 
+     public static List<string> GetAllUserPictures(string userid)
+     {
+         List<string> photos = new List<string>();
+         SqlConnection con = new SqlConnection(Usr.ConnectionString);
+         con.Open();
+         SqlCommand cmd = new SqlCommand("SELECT path FROM Galeria where userid = @userid", con);
+         cmd.Parameters.AddWithValue("@userid", userid);
 
+         try
+         {
+             SqlDataReader reader = cmd.ExecuteReader();
+             while (reader.Read())
+                 photos.Add(reader.GetString(0));
+
+
+         }
+         catch (Exception ex)
+         {
+
+             HttpContext.Current.Trace.Write(ex.Message);
+
+         }
+
+         finally
+         {
+
+             con.Close();
+         }
+
+
+         return photos;
+
+
+     }
 
 
 
