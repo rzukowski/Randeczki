@@ -10,3 +10,4 @@ Co do pliku .sln --> stwórz u siebie prosze nowy website, i z menu wybierz --> 
 CheckBox wyglada na razie okropnie, Krystian - liczę na Ciebie w tej kwestii.
 Krystian: jeszcze jedno - na stronie masterPage możesz zauważyć kontrolkę:<asp:Label ID="NowaWiadomosc" runat="server"></asp:Label>.
 W momencie gdy user dostaje wiadomość do swojej skrzynki, kontrolka ta zmienia się w liczbę prezentującą liczbę nieprzeczytanych wiadomości. Spróbuj ją jakoś sensownie ustawić (możesz to zrobić używając css'a ustawiając atrybut CssClass czyli: <asp:Label ID="NowaWiadomosc" runat="server" CssClass="">
+saqwq
