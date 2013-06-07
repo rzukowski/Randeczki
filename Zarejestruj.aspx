@@ -6,6 +6,18 @@
 <head runat="server">
     <title>Rejestracja</title>
     <link href="StyleSheet.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="Scripts/jquery-1.9.1.js" ></script>
+    <script type="text/javascript" src="Scripts/jquery.flexslider.js" ></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.flexslider').flexslider({
+                animation: "slide",
+                start: function (slider) {
+                    $('body').removeClass('loading');
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 <div class="container">
@@ -13,13 +25,36 @@
     <div id="Logo">
         <h3 class="muted" id="log">ktoszuka-tenznajdzie.pl</h3><div class="men"></div>
     </div>
-
+     <section class="slider" style="width:600px;height:400px!important;">
+        <div class="flexslider">
+          <ul class="slides">
+            <li>
+  	    	    <img src="./images/slajdy/1.jpg" />
+  	    	</li>
+  	    	<li>
+  	    	    <img src="./images/slajdy/2.jpg" />
+  	    	</li>
+  	    	<li>
+  	    	    <img src="./images/slajdy/3.jpg" />
+  	    	</li>
+  	    	<li>
+  	    	    <img src="./images/slajdy/4.jpg" />
+  	    	</li>
+            <li>
+  	    	    <img src="./images/slajdy/5.jpg" />
+  	    	</li>
+            <li>
+  	    	    <img src="./images/slajdy/6.jpg" />
+  	    	</li>
+          </ul>
+        </div>
+      </section>
    <form id="form1" runat="server" class="form-signup">
         <ul class="nav nav-tabs">
            <li><a href="Zaloguj.aspx" data-toggle="tab">Logowanie</a></li>
            <li class="active"><a href="Zarejestruj.aspx" data-toggle="tab">Rejestracja</a></li>
         </ul>
-        <asp:CreateUserWizard class="span3" ID="CreateUserWizard1" runat="server" AnswerLabelText="Odpowiedź:" AnswerRequiredErrorMessage="Odpowiedź jest wymagana." CancelButtonText="Anuluj" CompleteSuccessText="Twoje konto zostało utworzone." ConfirmPasswordCompareErrorMessage="Hasło oraz potwierdzenie hasła muszą do siebie pasować." ConfirmPasswordLabelText="Potwierdzenie hasła:" ConfirmPasswordRequiredErrorMessage="Potwierdzenie hasła jest wymagane." ContinueButtonText="Kontynuuj" CreateUserButtonText="Zarejestruj" DuplicateEmailErrorMessage="E-mail w użyciu. Podaj inny e-mail." DuplicateUserNameErrorMessage="Podana nazwa już w użyciu. Podaj inną nazwę użytkownika." EmailRegularExpressionErrorMessage="Podaj poprawny e-mail." EmailRequiredErrorMessage="E-mail wymagany" FinishCompleteButtonText="Utwórz" FinishPreviousButtonText="Poprzedni" InvalidAnswerErrorMessage="Proszę podać poprawne hasło" InvalidEmailErrorMessage="Proszę podać poprawny email" InvalidPasswordErrorMessage="Minimalna długość hasła: {0}. Wymagany symbol nie alfanumeryczny: {1}." InvalidQuestionErrorMessage="Proszę podać inne pytanie" PasswordLabelText="Hasło: " PasswordRegularExpressionErrorMessage="Proszę podać inne hasło" PasswordRequiredErrorMessage="Hasło jest wymagane" QuestionLabelText="Pytanie zabezpieczające:" QuestionRequiredErrorMessage="Pytanie zabezpieczające jest wymagane." UnknownErrorMessage="Twoje konto nie zostało utworzone." UserNameLabelText="Nazwa użytkownika:" UserNameRequiredErrorMessage="Nazwa użytkownika jest wymagana." ContinueDestinationPageUrl="~/Zaloguj.aspx" CreateUserButtonStyle-CssClass="btn btn-large btn-primary">
+        <asp:CreateUserWizard class="span3" ID="CreateUserWizard1" runat="server" AnswerLabelText="Odpowiedź:" AnswerRequiredErrorMessage="Odpowiedź jest wymagana." CancelButtonText="Anuluj" CompleteSuccessText="Twoje konto zostało utworzone." ConfirmPasswordCompareErrorMessage="Hasło oraz potwierdzenie hasła muszą do siebie pasować." ConfirmPasswordLabelText="Potwierdzenie hasła:" ConfirmPasswordRequiredErrorMessage="Potwierdzenie hasła jest wymagane." ContinueButtonText="Kontynuuj" CreateUserButtonText="Zarejestruj" DuplicateEmailErrorMessage="E-mail w użyciu. Podaj inny e-mail." DuplicateUserNameErrorMessage="<span class='alert alert-error' style='line-height:20px;display:block;'>Podana nazwa już w użyciu. Podaj inną nazwę użytkownika.</span>" EmailRegularExpressionErrorMessage="Podaj poprawny e-mail." EmailRequiredErrorMessage="E-mail wymagany" FinishCompleteButtonText="Utwórz" FinishPreviousButtonText="Poprzedni" InvalidAnswerErrorMessage="Proszę podać poprawne hasło" InvalidEmailErrorMessage="Proszę podać poprawny email" InvalidPasswordErrorMessage="<span class='alert alert-error' style='line-height:20px;display:block;'>Minimalna długość hasła: {0}. Wymagany symbol nie alfanumeryczny: {1}.</span>" InvalidQuestionErrorMessage="Proszę podać inne pytanie" PasswordLabelText="Hasło: " PasswordRegularExpressionErrorMessage="Proszę podać inne hasło" PasswordRequiredErrorMessage="Hasło jest wymagane" QuestionLabelText="Pytanie zabezpieczające:" QuestionRequiredErrorMessage="Pytanie zabezpieczające jest wymagane." UnknownErrorMessage="Twoje konto nie zostało utworzone." UserNameLabelText="Nazwa użytkownika:" UserNameRequiredErrorMessage="Nazwa użytkownika jest wymagana." ContinueDestinationPageUrl="~/Zaloguj.aspx" CreateUserButtonStyle-CssClass="btn btn-large btn-primary" ErrorMessageStyle-CssClass="alert alert-info">
             <WizardSteps>
                 <asp:CreateUserWizardStep runat="server" >
                     <ContentTemplate>                       
@@ -71,6 +106,13 @@
             </WizardSteps>
         </asp:CreateUserWizard> 
     </form>
+        <hr class="glowna" style="margin-top:100px;" />
+        <h3 class="glowna_info">
+            Wiemy, że nie chcesz po prostu umówić się na randkę.<br />
+            Chcesz umówić się na niezapomniane spotkanie z osobą, która naprawdę do Ciebie pasuje! <br />
+            > Nigdy więcej krępującego milczenia. <br />
+            > Nigdy więcej braku wspólnych tematów do rozmów.
+        </h3>
 </div>
 </body>
 </html>

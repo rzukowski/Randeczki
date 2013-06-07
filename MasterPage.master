@@ -12,8 +12,27 @@
     <script type="text/javascript" src="Scripts/jquery-1.9.1.intellisense.js"></script>
     <script type="text/javascript" src="Scripts/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="Scripts/jquery.nivo.slider.js"></script>
+    <script type="text/javascript" src="Scripts/jquery.fancybox.js"></script>
+
 
     <link href="StyleSheet.css" rel="stylesheet" type="text/css" />
+    <link href="Content/themes/base/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".fancybox")
+                .attr('rel', 'gallery')
+                .fancybox({
+                    beforeShow: function () {
+                        /* Add watermark */
+                        $('<div class="watermark"></div>')
+                            .bind("contextmenu", function (e) {
+                                return false; /* Disables right click */
+                            })
+                            .prependTo($.fancybox.inner);
+                    }
+                });
+        });
+    </script>
 </head>
 <body>
  <div class="container">

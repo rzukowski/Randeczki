@@ -4,26 +4,30 @@
 
     protected void btnDelete_Click(object sender, EventArgs e)
     {
-        String userid = Session["userid"].ToString();
-        String friendid = ddlFriends.SelectedItem.Value;
-        if (Usr.DeleteFriend(userid, friendid))
-            Response.Redirect("default.aspx");
-        else
-            lbl.Text = "Błąd usuwania!";
+        if (ddlFriends.SelectedItem != null)
+        {
+            String userid = Session["userid"].ToString();
+            String friendid = ddlFriends.SelectedItem.Value;
+            if (Usr.DeleteFriend(userid, friendid))
+                Response.Redirect("default.aspx");
+            else
+                lbl.Text = "Błąd usuwania!";
+        }
     }
 </script>
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-    <h2>Zarządzanie ulubionymi</h2>
-    <p>Wybierz profil do usunięcia z ulubionych :
+    <center>
+    <h5>Wybierz profil do usunięcia z ulubionych :</h5><br />
+    <p>
         <asp:DropDownList ID="ddlFriends" runat="server" 
             DataSourceID="SqlDataSource1" DataTextField="UserName" 
-            DataValueField="userid" Height="22px" Width="150px">
+            DataValueField="userid" Height="35px" Width="150px">
         </asp:DropDownList>
-&nbsp;<asp:Button ID="btnDelete" runat="server" onclick="btnDelete_Click" 
-            Text="Delete" />
-  </p>
+&nbsp;<asp:Button ID="btnDelete" runat="server" onclick="btnDelete_Click" Text="Usuń" CssClass="btn btn-large btn-danger" />
+    </p>
+    </center>
     <p>
         <asp:Label ID="lbl" runat="server"></asp:Label>
     </p>

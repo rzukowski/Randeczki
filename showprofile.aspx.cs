@@ -137,7 +137,7 @@ public partial class showprofile : BaseClass
         {
 
 
-            insideGaleria.InnerHtml += "<li><img class=\"thumb\" src='" + item.ToString() + "' onmouseover=\"Large(this)\"/></li>";
+            insideGaleria.InnerHtml += "<li><a class=\"fancybox\" href='" + item.ToString() +"' target=\"_blank\"><img class=\"thumb img-circle\" src='" + item.ToString() + "' onmouseover=\"Large(this)\"/></a></li>";
 
         }
         try

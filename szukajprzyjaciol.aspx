@@ -308,17 +308,13 @@
             <div class="btn-group">
              <a class="btn dropdown-toggle">
              Budowa ciała:  
-             <span class="caret"></span>
              </a>
             </div>
         <asp:RadioButtonList ID="DDLWyglad" runat="server" DataTextField="budowa_opis" DataValueField="budowa_id" Width="200px" AppendDataBoundItems="True"></asp:RadioButtonList>
-
     </div>
     <div style="clear:both">
         <asp:Button ID="btnSearch" runat="server" Text="Szukaj" OnCommand="FillSzukane" CommandArgument="1" CssClass="btn btn-success" />
-        <a href="javascript: history.go(-1)" class="btn btn-warning">Powrót</a>
     </div>
-      <br />
     </div>
 </form>
       <div class="span4" style="width:100%;margin-left:-3px;">

@@ -1231,6 +1231,42 @@ public class Usr
 
      }
 
+     public static bool CheckIfUserIsInFriends(string odwiedzilId, string odwiedzanyId)
+     {
+         bool isInTable = false;
+         SqlConnection con = new SqlConnection(Usr.ConnectionString);
+         con.Open();
+         SqlCommand cmd = new SqlCommand("SELECT * FROM friends where userid = @userid AND friendid=@odwiedzanyId", con);
+         cmd.Parameters.AddWithValue("@userid", odwiedzilId);
+         cmd.Parameters.AddWithValue("@odwiedzanyId", odwiedzanyId);
+         try
+         {
+
+             if (cmd.ExecuteNonQuery() > 0)
+                 isInTable = true;
+
+         }
+         catch (Exception ex)
+         {
+
+             HttpContext.Current.Trace.Write(ex.Message);
+
+         }
+
+         finally
+         {
+
+             con.Close();
+         }
+
+
+         return isInTable;
+
+
+
+
+     }
+
      
 
 

@@ -173,6 +173,7 @@ public partial class edytujprofil : BaseClass
         AsyncFileUpload1.FileName.ToString();
         AsyncFileUpload1.SaveAs(fileName);
         ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "image", "top.$get(\"photo\").src = 'photos/" + Session["username"] + "image.jpg" + "';", true);
+        Response.Redirect("Default.aspx");
         //  ScriptManager.RegisterClientScriptBlock(AsyncFileUpload1, AsyncFileUpload1.GetType(), "img",
         //      "top.document.getElementById('photos').src='"+fileName+"';",
         //      true);
@@ -481,12 +482,12 @@ public partial class edytujprofil : BaseClass
     {
 
         //insideGaleria.InnerHtml = "<ul class='galery'>";
-        insideGaleria.InnerHtml = "<div id=\"imgbox\"></div><ul class=\"galeria\">";
+        insideGaleria.InnerHtml = "<div id=\"imgbox\"></div><ul class=\"thumbnails\">";
         foreach (string item in photos)
         {
 
 
-            insideGaleria.InnerHtml += "<li><img class=\"thumb\" src='" + item.ToString() + "' /></li>";
+            insideGaleria.InnerHtml += "<li class=\"span3\"><a class=\"fancybox thumbnail\" href='" + item.ToString() + "' target=\"_blank\"><img src='" + item.ToString() + "' /></a></li>";
             
             
             coss.Text = DateTime.Now.ToString();

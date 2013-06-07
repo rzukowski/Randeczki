@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" Title="Untitled Page" CodeFile="showprofile.aspx.cs" Inherits="showprofile"%>
-
+   
 <script runat="server">
 
 </script>
@@ -19,7 +19,12 @@
           <div class="row">
             <div class="span2">
                 <img src='photos/<%# Eval("username") %>image.jpg' alt="No Photo" width="100px" height="100px" class="img-polaroid" />
-                <br /><span class="black">O mnie:</span> <%# Eval("opis") %>
+                <br /><br />
+                <span class="label label-info">O mnie:</span><br />
+                <pre><%# Eval("opis") %></pre>
+                <br />
+                <a href='wyslijwiadomosc.aspx?userid=<%# Eval("userid") %>' class="btn btn-success"> Wyslij wiadomość</a>
+
             </div>
             <div class="span5">
                 <h3><%# Eval("username") %></h3>
@@ -35,15 +40,9 @@
                 <asp:Label ID="Waga" runat="server"> <br /></asp:Label>   
                 <span class="black">Uprawiany sport:</span> <asp:Label ID="Sporty" runat="server"></asp:Label>
             </div>
-              <br />
-                    <a href='wyslijwiadomosc.aspx?userid=<%# Eval("userid") %>' class="btn btn-success"> Wyslij wiadomość</a>
-                    <a href="javascript: history.go(-1)" class="btn btn-warning">Powrót</a>
           </div>
          </ItemTemplate>
 </asp:FormView>
-        <div runat="server" id="insideGaleria"></div>
-    <p align="center">
-        
-    </p>
+        <div runat="server" id="insideGaleria" style="margin-left:150px;margin-top:-50px;margin-bottom:20px;"></div>
 </div>
 </asp:Content>

@@ -32,7 +32,8 @@
         </div>
       </div>
     </div>
-    <div class="form-signin">
+        <br />
+    <div class="change-pass">
 
    Hasło: <p><asp:TextBox ID="UserPass" runat="server" TextMode="Password"></asp:TextBox></p>
     Nowe hasło: <p><asp:TextBox ID="UserPassNew" runat="server" TextMode="Password"></asp:TextBox></p>

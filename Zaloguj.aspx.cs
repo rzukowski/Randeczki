@@ -71,7 +71,25 @@ public partial class Zaloguj : System.Web.UI.Page
 
     }
 
+    // Create a hash of the given password and salt.
+    public string CreateHash(string password, string salt)
+    {
 
+        byte[] bytes = Encoding.Unicode.GetBytes(password);
+        byte[] src = Convert.FromBase64String(salt);
+        byte[] dst = new byte[src.Length + bytes.Length];
+        System.Buffer.BlockCopy(src, 0, dst, 0, src.Length);
+        System.Buffer.BlockCopy(bytes, 0, dst, src.Length, bytes.Length);
+
+        HashAlgorithm hash = HashAlgorithm.Create("SHA1");
+
+        byte[] hashed = hash.ComputeHash(dst);
+
+        string hashedPass = Convert.ToBase64String(hashed);
+
+        return hashedPass.ToUpper();
+            
+    }
 
     // Check to see if the given password and salt hash to the same value
     // as the given hash.
@@ -93,7 +111,7 @@ public partial class Zaloguj : System.Web.UI.Page
 
         if (Usr.SaveTokenToDb(guid.ToString().ToUpper(),username))
         {
-            cookie.Value = username + "|" + Usr.CreateHash(guid.ToString().ToUpper(), salt);
+            cookie.Value = username + "|" + CreateHash(guid.ToString().ToUpper(), salt);
             cookie.Expires = DateTime.Now.AddDays(1);
         }
         return cookie;
@@ -114,7 +132,7 @@ public partial class Zaloguj : System.Web.UI.Page
         string tokenUser = Usr.GetUserToken(username);
         string salt = Usr.GetSaltFromUser(username);
         // Check the password and salt against the hash.
-        return IsMatchingHash(tokenSalted, Usr.CreateHash(tokenUser.ToUpper(),salt));
+        return IsMatchingHash(tokenSalted, CreateHash(tokenUser.ToUpper(),salt));
     }
 
 

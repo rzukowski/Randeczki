@@ -22,6 +22,11 @@ public partial class MasterPage : System.Web.UI.MasterPage
     public static string ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["FriendsConnectionString"].ConnectionString;
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Session["username"] == null)
+        {
+            Response.Redirect("~/Zaloguj.aspx");
+        }
+
         if (!IsPostBack)
             user.Text = Session["username"].ToString();
 
